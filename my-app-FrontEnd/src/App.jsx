@@ -9,9 +9,13 @@ import Dashboard from './scenes/dashboard/index';
 import Team from "./scenes/team";
 import Form from "./scenes/form";
 import Calendar from './scenes/calendar';
+import KanbanBoard from './components/KanbanBoard';
+import NewKanbanBoard from './components/newKanbanBoard/NewKanbanBoard';
+// import NewKanbanBoard from './components/NewKanbanBoard';
 
 import Invoices from "./scenes/invoices";
 import Contacts from "./scenes/contacts";
+import New from "./scenes/new";
 
 import Bar from "./scenes/bar";
 import Line from "./scenes/line";
@@ -47,6 +51,9 @@ function App() {
             <Route path="/geography" element={<Geography />} />
             <Route path="/contacts" element={<Contacts />} />
             <Route path="/invoices" element={<Invoices />} />
+            <Route path="/new" element={<New />} />
+            <Route path="/KanbanBoard" element={<KanbanBoard />} />
+            <Route path="/NewKanbanBoard" element={<NewKanbanBoard />} />
           </Routes>
         </main>
       </div>
