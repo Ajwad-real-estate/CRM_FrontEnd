@@ -1,0 +1,67 @@
+Backend (Node.js with Express and MongoDB)
+Define the Commission Schema: Create a schema to store commission transaction details.
+
+javascript
+Copy code
+// models/Commission.js
+const mongoose = require('mongoose');
+
+const commissionSchema = new mongoose.Schema({
+  agentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Agent', required: true },
+  amount: { type: Number, required: true },
+  datePaid: { type: Date, default: Date.now },
+  status: { type: String, enum: ['Pending', 'Paid'], default: 'Pending' },
+  description: { type: String },
+});
+
+module.exports = mongoose.model('Commission', commissionSchema);
+Set up Routes to Handle Commission Transactions:
+
+javascript
+Copy code
+// routes/commissions.js
+const express = require('express');
+const Commission = require('../models/Commission');
+const router = express.Router();
+
+// Route to add a commission transaction
+router.post('/add', async (req, res) => {
+  try {
+    const { agentId, amount, description } = req.body;
+    const commission = new Commission({ agentId, amount, description });
+    await commission.save();
+    res.status(201).json({ message: 'Commission recorded successfully', commission });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
+
+// Route to get all transactions
+router.get('/', async (req, res) => {
+  try {
+    const commissions = await Commission.find().populate('agentId');
+    res.status(200).json(commissions);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
+
+module.exports = router;
+Connect the Routes to Your Express App:
+
+javascript
+Copy code
+// server.js
+const express = require('express');
+const mongoose = require('mongoose');
+const commissionRoutes = require('./routes/commissions');
+
+const app = express();
+app.use(express.json());
+
+mongoose.connect('mongodb://localhost:27017/crm', { useNewUrlParser: true, useUnifiedTopology: true });
+
+app.use('/api/commissions', commissionRoutes);
+
+app.listen(5000, () => console.log('Server running on port 5000'));
+Frontend (React)
