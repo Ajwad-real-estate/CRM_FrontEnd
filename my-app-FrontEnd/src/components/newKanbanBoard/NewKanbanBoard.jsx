@@ -1,10 +1,13 @@
-// src/components/NewKanbanBoard.jsx
 import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import PipelineColumn from './PipelineColumn';
 import LeadCard from './LeadCard';
 import LeadModal from './LeadModal';
 import { pipelineData } from '../../data/sampleData';
+
+import { Box, Typography, useTheme, useMediaQuery, Button, TextField } from "@mui/material";
+import { tokens } from "../../theme";
+import Header from "../../components/Header";
 
 const transformData = (pipelineData) => {
     const columns = {};
@@ -39,6 +42,8 @@ const NewKanbanBoard = () => {
     const [data, setData] = useState(initialData);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedLead, setSelectedLead] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isListView, setIsListView] = useState(false); // State for view mode
 
     const handleDoubleClick = (lead) => {
         setSelectedLead(lead);
@@ -103,7 +108,6 @@ const NewKanbanBoard = () => {
         }
     };
 
-    // Function to add a new lead
     const addNewLead = (columnId) => {
         const title = prompt('Enter lead title:');
         const value = prompt('Enter lead value:');
@@ -135,8 +139,6 @@ const NewKanbanBoard = () => {
         }
     };
 
-
-
     const onSaveLead = (updatedLead) => {
         setData((prevData) => {
             const updatedLeads = {
@@ -147,60 +149,119 @@ const NewKanbanBoard = () => {
         });
     };
 
+    const isNonMobile = useMediaQuery("(min-width:600px)");
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
 
-
+    // Filter leads based on search query
+    const filteredLeads = Object.values(data.leads).filter(lead =>
+        lead.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        lead.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        lead.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
 
     return (
         <>
-            <DragDropContext onDragEnd={onDragEnd}>
-                <div style={{ display: 'flex', overflowX: 'auto' }}>
-                    {Object.values(data.columns).map((column) => (
-                        <Droppable key={column.id} droppableId={column.id}>
-                            {(provided) => (
-                                <div
-                                    ref={provided.innerRef}
-                                    {...provided.droppableProps}
-                                    style={{ margin: '0 8px', minWidth: 250 }}
+            <Box m="20px">
+                <Header title="Contacts" subtitle="Manage your tasks effectively" />
+                <Box
+                    m="40px 0 0 0"
+                    height="100%"
+                    sx={{
+                        "& .MuiDataGrid-root": {
+                            border: "none",
+                        },
+                        fontSize: isNonMobile ? '14px' : '8px',
+                        backgroundColor: colors.primary[400],
+                        padding: "20px",
+                        borderRadius: "8px",
+                        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)"
+                    }}
+                >
+                    {/* <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, width: '100%', justifyContent: 'space-between' }}> */}
+
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, justifyContent: 'space-between'}}>
+                            <TextField
+                                variant="outlined"
+                                label="Search Leads"
+                                fullWidth
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                sx={{ mr: 2, padding: '10px 0px' , width: '50%', display: 'flex'}}
+                            />
+                            <Button
+                                variant="contained"
+                                onClick={() => setIsListView(!isListView)}
+                                sx={{ ml: 2, padding: '10px 0px', width: '25%', display: 'flex' }}
+                                
                                 >
-                                    <PipelineColumn title={column.title} onAdd={() => addNewLead(column.id)}>
-                                        {column.leadIds.map((leadId, index) => (
-                                            <Draggable key={leadId} draggableId={leadId} index={index}>
-                                                {(provided) => (
-                                                    <div
-                                                        ref={provided.innerRef}
-                                                        {...provided.draggableProps}
-                                                        {...provided.dragHandleProps}
-                                                        style={{
-                                                            ...provided.draggableProps.style,
-                                                            marginBottom: '8px',
-                                                        }}
-                                                        onDoubleClick={() => handleDoubleClick(data.leads[leadId])}
-                                                    >
-                                                        <LeadCard
-                                                            lead={data.leads[leadId]}
-                                                        // onAdd={() => addNewLead(column.id)} // Pass columnId to addNewLead
-                                                        />
-                                                    </div>
-                                                )}
-                                            </Draggable>
-                                        ))}
-                                        {provided.placeholder}
-                                    </PipelineColumn>
-                                </div>
-                            )}
-                        </Droppable>
-                    ))}
-                </div>
-            </DragDropContext>
-            {isModalOpen && (
-                <LeadModal
-                    lead={selectedLead}
-                    onClose={handleCloseModal}
-                    onSave={onSaveLead}
-                />
-            )}
+                                {isListView ? 'Switch to Kanban View' : 'Switch to List View'}
+                            </Button>
+                                {/* </Box> */}
+                        </Box>
+                    {isListView ? (
+                        // Render List View
+                        <Box>
+                            {filteredLeads.map((lead) => (
+                                <Box key={lead.id} sx={{ mb: 2 }}>
+                                    <LeadCard
+                                        lead={lead}
+                                        onDoubleClick={() => handleDoubleClick(lead)}
+                                    />
+                                </Box>
+                            ))}
+                        </Box>
+                    ) : (
+                        // Render Kanban View
+                        <DragDropContext onDragEnd={onDragEnd}>
+                            <div style={{ display: 'flex', overflowX: 'auto' }}>
+                                {Object.values(data.columns).map((column) => (
+                                    <Droppable key={column.id} droppableId={column.id}>
+                                        {(provided) => (
+                                            <div
+                                                ref={provided.innerRef}
+                                                {...provided.droppableProps}
+                                                style={{ margin: '0 8px', minWidth: 250 }}
+                                            >
+                                                <PipelineColumn title={column.title} onAdd={() => addNewLead(column.id)}>
+                                                    {filteredLeads.filter(lead => column.leadIds.includes(lead.id.toString())).map((leadId, index) => (
+                                                        <Draggable key={leadId.id} draggableId={leadId.id} index={index}>
+                                                            {(provided) => (
+                                                                <div
+                                                                    ref={provided.innerRef}
+                                                                    {...provided.draggableProps}
+                                                                    {...provided.dragHandleProps}
+                                                                    style={{
+                                                                        ...provided.draggableProps.style,
+                                                                        marginBottom: '8px',
+                                                                    }}
+                                                                    onDoubleClick={() => handleDoubleClick(leadId)}
+                                                                >
+                                                                    <LeadCard lead={leadId} />
+                                                                </div>
+                                                            )}
+                                                        </Draggable>
+                                                    ))}
+                                                    {provided.placeholder}
+                                                </PipelineColumn>
+                                            </div>
+                                        )}
+                                    </Droppable>
+                                ))}
+                            </div>
+                        </DragDropContext>
+                    )}
+                    {isModalOpen && (
+                        <LeadModal
+                            lead={selectedLead}
+                            onClose={handleCloseModal}
+                            onSave={onSaveLead}
+                        />
+                    )}
+                </Box>
+            </Box>
         </>
     );
 };
 
 export default NewKanbanBoard;
+

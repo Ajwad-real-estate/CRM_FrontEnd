@@ -1,61 +1,33 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import ProjectCard from './AgentCard';
-import './InventoryPage.css'; // Import the CSS file
+// components/Transaction/Agents.jsx
+import React, { useState } from 'react';
+import AgentCard from './AgentCard';
+import TransactionList from './TransactionList';
 
-const projectsData = {
-  elo_sokna: {
-    description: "Detailed description of Project 1.",
-    apartments: [
-      { name: "Apartment 101", price: "$250,000", size: "1200 sq ft", bedrooms: 2, bathrooms: 2 },
-      { name: "Apartment 101", price: "$250,000", size: "1200 sq ft", bedrooms: 2, bathrooms: 2 },
-      { name: "Apartment 101", price: "$250,000", size: "1200 sq ft", bedrooms: 2, bathrooms: 2 },
-      // More apartments...
-    ],
-  },
-  soly_Coast: {
-    description: "Detailed description of Project 1.",
-    apartments: [
-      { name: "Apartment 101", price: "$250,000", size: "1200 sq ft", bedrooms: 2, bathrooms: 2 },
-      { name: "Apartment 101", price: "$250,000", size: "1200 sq ft", bedrooms: 2, bathrooms: 2 },
-      { name: "Apartment 101", price: "$250,000", size: "1200 sq ft", bedrooms: 2, bathrooms: 2 },
-      // More apartments...
-    ],
-  },
-  Project1: {
-    description: "Detailed description of Project 1.",
-    apartments: [
-      { name: "Apartment 101", price: "$250,000", size: "1200 sq ft", bedrooms: 2, bathrooms: 2 },
-      { name: "Apartment 101", price: "$250,000", size: "1200 sq ft", bedrooms: 2, bathrooms: 2 },
-      { name: "Apartment 101", price: "$250,000", size: "1200 sq ft", bedrooms: 2, bathrooms: 2 },
-      // More apartments...
-    ],
-  },
-  Project2: {
-    description: "Detailed description of Project 2.",
-    apartments: [
-      { name: "Apartment 201", price: "$300,000", size: "1500 sq ft", bedrooms: 3, bathrooms: 2 },
-      { name: "Apartment 301", price: "$300,000", size: "500 sq ft", bedrooms: 3, bathrooms: 2 },
-      { name: "Apartment 201", price: "$300,000", size: "1500 sq ft", bedrooms: 3, bathrooms: 2 },
-      // More apartments...
-    ],
-  },
-  // More projects...
-};
+const Agents = ({ agents }) => {
+  const [selectedAgent, setSelectedAgent] = useState(null);
 
-const Agents = () => {
+  const handleAgentClick = (agent) => {
+    setSelectedAgent(agent); // Set the selected agent to fetch transactions
+  };
+
   return (
     <div className="container">
       <div className="header">
-        <h1>Real Estate Projects</h1>
+        <h1>Agents</h1>
       </div>
       <div className="project-cards">
-        {Object.keys(projectsData).map((projectName) => (
-          <Link key={projectName} to={`/projects/${projectName}`} className="project-card">
-            <ProjectCard projectName={projectName} />
-          </Link>
+        {agents.map((agent) => (
+          <div key={agent.id} onClick={() => handleAgentClick(agent)}>
+            <AgentCard agent={agent} />
+          </div>
         ))}
       </div>
+      {selectedAgent && (
+        <div className="transactions">
+          <h2>Transactions for {selectedAgent.name}</h2>
+          <TransactionList agentId={selectedAgent.id} />
+        </div>
+      )}
     </div>
   );
 };

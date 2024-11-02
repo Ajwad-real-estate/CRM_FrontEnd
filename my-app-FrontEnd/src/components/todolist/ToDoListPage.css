@@ -1,0 +1,28 @@
+/* ToDoListPage.css */
+
+input[type="text"] {
+    padding: 5px;
+    margin-right: 10px;
+    width: 200px;
+}
+
+button {
+    padding: 5px 10px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+/* Optional styles for To-Do items */
+.todo-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f1f1f1;
+}
+
+.todo-item.completed {
+    text-decoration: line-through !important;
+    /* background-color: #d1ffd1; */
+}

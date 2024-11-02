@@ -135,19 +135,13 @@ const TheSideBar = () => {
       </Box>
      )}
      <Box paddingLeft={isCollapsed ? undefined : "10%"}>
-      <Item
-       title="Dashboard"
-       to="/"
-       icon={<HomeOutlinedIcon />}
-       selected={selected}
-       setSelected={setSelected}
-      ></Item>
+      
       <Typography
        variant="h6"
        color={colors.grey[300]}
        sx={{ m: "15px 0 5px 20px" }}
       >
-       New Pages
+       Pages To sales Agent
       </Typography>
       <Item
        title="NewKanbanBoard"
@@ -170,7 +164,122 @@ const TheSideBar = () => {
        selected={selected}
        setSelected={setSelected}
       />
-    
+      <Item
+       title="To-Do List
+"
+       to="/todolist"
+       icon={<ReceiptOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      />
+      <Item
+       title="Calendar"
+       to="/calendar"
+       icon={<CalendarTodayOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      />
+      <Item
+       title="FAQ Page"
+       to="/faq"
+       icon={<HelpOutlineOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      />
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <Typography
+       variant="h6"
+       color={colors.grey[300]}
+       sx={{ m: "15px 0 5px 20px" }}
+      >
+       Pages To sales Manager
+      </Typography>
+      <Item
+       title="Dashboard"
+       to="/"
+       icon={<HomeOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      ></Item>
+      <Item
+       title="NewKanbanBoard"
+       to="/NewKanbanBoard"
+       icon={<ContactsOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      />
+      <Item
+       title="Inventory"
+       to="/projects"
+       icon={<MapOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      />
+      <Item
+       title="commission"
+       to="/commission"
+       icon={<ReceiptOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      />
+      <Item
+       title="To-Do List
+"
+       to="/todolist"
+       icon={<ReceiptOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      />
+      <Item
+       title="Calendar"
+       to="/calendar"
+       icon={<CalendarTodayOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      />
+      <Item
+       title="FAQ Page"
+       to="/faq"
+       icon={<HelpOutlineOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       <Typography
        variant="h6"
        color={colors.grey[300]}

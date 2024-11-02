@@ -25,6 +25,7 @@ import Geography from "./scenes/geography";
 import InventoryPage from './components/inventory/InventoryPage';
 import ProjectDetails from './components/inventory/ProjectDetails';
 import CommissionPage from './components/Transaction/CommissionPage';
+import ToDoListPage from './components/todolist/ToDoListPage';
 
 
 function App() {
@@ -60,6 +61,7 @@ function App() {
             <Route path="/projects" element={<InventoryPage />} />
             <Route path="/projects/:projectName" element={<ProjectDetails />} />
             <Route path="/commission" element={<CommissionPage />} />
+            <Route path="/todolist" element={<ToDoListPage />} />
 
           </Routes>
         </main>
