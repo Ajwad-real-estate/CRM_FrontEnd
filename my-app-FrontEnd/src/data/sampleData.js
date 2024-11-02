@@ -11,7 +11,7 @@ export const pipelineData = [
         id: 'qualified',
         title: 'Qualified',
         leads: [
-            { id: 2, title: 'Global Solutions: Furnitures', value: '3,800 LE', company: 'Ready Mat', tags: ['Design'] },
+            { id: 2, title: 'Global Solutions: Furniture', value: '3,800 LE', company: 'Ready Mat', tags: ['Design'] },
             // Add more leads as needed
         ],
     },
@@ -32,3 +32,5 @@ export const pipelineData = [
         ],
     },
 ];
+
+export default pipelineData;

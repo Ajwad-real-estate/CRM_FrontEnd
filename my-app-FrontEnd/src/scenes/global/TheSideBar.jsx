@@ -126,7 +126,7 @@ const TheSideBar = () => {
          fontWeight="bold"
          sx={{ m: "10px 0 0 0" }}
         >
-         yousef
+         Sherif
         </Typography>
         <Typography variant="h5" color={colors.greenAccent[500]}>
          Role : Sales Agent
@@ -135,7 +135,21 @@ const TheSideBar = () => {
       </Box>
      )}
      <Box paddingLeft={isCollapsed ? undefined : "10%"}>
-      
+
+      <Typography
+       variant="h6"
+       color={colors.grey[300]}
+       sx={{ m: "15px 0 5px 20px" }}
+      >
+       Pages To finace Deparment
+      </Typography>
+      <Item
+       title="commission"
+       to="/commission"
+       icon={<ReceiptOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      />
       <Typography
        variant="h6"
        color={colors.grey[300]}
@@ -158,8 +172,8 @@ const TheSideBar = () => {
        setSelected={setSelected}
       />
       <Item
-       title="commission"
-       to="/commission"
+       title="RequestCommissionPage"
+       to="/RequestCommissionPage"
        icon={<ReceiptOutlinedIcon />}
        selected={selected}
        setSelected={setSelected}

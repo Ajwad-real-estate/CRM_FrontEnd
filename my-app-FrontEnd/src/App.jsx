@@ -11,6 +11,7 @@ import Form from "./scenes/form";
 import Calendar from './scenes/calendar';
 import KanbanBoard from './components/KanbanBoard';
 import NewKanbanBoard from './components/newKanbanBoard/NewKanbanBoard';
+import RequestCommissionPage from './components/TransactionForSalesAgent/RequestCommissionPage';
 // import NewKanbanBoard from './components/NewKanbanBoard';
 
 import Invoices from "./scenes/invoices";
@@ -24,7 +25,8 @@ import FAQ from "./scenes/faq";
 import Geography from "./scenes/geography";
 import InventoryPage from './components/inventory/InventoryPage';
 import ProjectDetails from './components/inventory/ProjectDetails';
-import CommissionPage from './components/Transaction/CommissionPage';
+import CommissionPage from './components/TransactionForFinace/CommissionPage';
+// import RequestCommissionPage from './components/TransactionForSalesAgent/RequestCommissionPage';
 import ToDoListPage from './components/todolist/ToDoListPage';
 
 
@@ -62,6 +64,7 @@ function App() {
             <Route path="/projects/:projectName" element={<ProjectDetails />} />
             <Route path="/commission" element={<CommissionPage />} />
             <Route path="/todolist" element={<ToDoListPage />} />
+            <Route path="/RequestCommissionPage" element={<RequestCommissionPage />} />
 
           </Routes>
         </main>
