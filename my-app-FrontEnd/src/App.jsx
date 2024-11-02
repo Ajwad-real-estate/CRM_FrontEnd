@@ -22,6 +22,9 @@ import Line from "./scenes/line";
 import Pie from "./scenes/pie";
 import FAQ from "./scenes/faq";
 import Geography from "./scenes/geography";
+import InventoryPage from './components/inventory/InventoryPage';
+import ProjectDetails from './components/inventory/ProjectDetails';
+import CommissionPage from './components/Transaction/CommissionPage';
 
 
 function App() {
@@ -54,6 +57,10 @@ function App() {
             <Route path="/new" element={<New />} />
             <Route path="/KanbanBoard" element={<KanbanBoard />} />
             <Route path="/NewKanbanBoard" element={<NewKanbanBoard />} />
+            <Route path="/projects" element={<InventoryPage />} />
+            <Route path="/projects/:projectName" element={<ProjectDetails />} />
+            <Route path="/commission" element={<CommissionPage />} />
+
           </Routes>
         </main>
       </div>

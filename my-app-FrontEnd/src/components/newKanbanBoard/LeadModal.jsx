@@ -1,16 +1,68 @@
-// src/components/LeadModal.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-const LeadModal = ({ lead, onClose }) => {
+const LeadModal = ({ lead, onClose, onSave }) => {
+    const [title, setTitle] = useState('');
+    const [amount, setAmount] = useState('');
+    const [company, setCompany] = useState('');
+    const [tags, setTags] = useState('');
+
+    useEffect(() => {
+        if (lead) {
+            setTitle(lead.title);
+            setAmount(lead.amount);
+            setCompany(lead.company || '');
+            setTags(lead.tags.join(', ') || '');
+        }
+    }, [lead]);
+
+    const handleSave = () => {
+        const updatedLead = {
+            ...lead,
+            title,
+            amount,
+            company,
+            tags: tags.split(',').map(tag => tag.trim()),
+        };
+        onSave(updatedLead); // Call the onSave function with updated lead
+        onClose();
+    };
+
     if (!lead) return null; // Return null if no lead is passed
 
     return (
         <div style={modalStyles.overlay}>
             <div style={modalStyles.modal}>
-                <h2>{lead.title}</h2>
-                <p><strong>Value:</strong> {lead.amount}</p>
-                <p><strong>Company:</strong> {lead.company || 'N/A'}</p>
-                <p><strong>Tags:</strong> {lead.tags.join(', ') || 'N/A'}</p>
+                <h2>Edit Lead</h2>
+                <p>
+                    <strong>Title:</strong>
+                    <input
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
+                </p>
+                <p>
+                    <strong>Value:</strong>
+                    <input
+                        type="number"
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                    />
+                </p>
+                <p>
+                    <strong>Company:</strong>
+                    <input
+                        value={company}
+                        onChange={(e) => setCompany(e.target.value)}
+                    />
+                </p>
+                <p>
+                    <strong>Tags:</strong>
+                    <input
+                        value={tags}
+                        onChange={(e) => setTags(e.target.value)}
+                    />
+                </p>
+                <button onClick={handleSave}>Save</button>
                 <button onClick={onClose}>Close</button>
             </div>
         </div>
@@ -31,7 +83,7 @@ const modalStyles = {
         zIndex: 1000,
     },
     modal: {
-        background: 'red',
+        background: 'black',
         padding: '20px',
         borderRadius: '8px',
         minWidth: '300px',

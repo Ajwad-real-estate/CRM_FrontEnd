@@ -113,7 +113,7 @@ const NewKanbanBoard = () => {
         if (title && value) {
             const newLeadId = (Object.keys(data.leads).length + 1).toString();
             const newLead = {
-                id: newLeadId,
+                id: parseInt(newLeadId, 10),
                 title,
                 value,
                 company,
@@ -134,6 +134,21 @@ const NewKanbanBoard = () => {
             alert('Please fill out all fields.');
         }
     };
+
+
+
+    const onSaveLead = (updatedLead) => {
+        setData((prevData) => {
+            const updatedLeads = {
+                ...prevData.leads,
+                [updatedLead.id]: updatedLead,
+            };
+            return { ...prevData, leads: updatedLeads };
+        });
+    };
+
+
+
 
     return (
         <>
@@ -177,7 +192,13 @@ const NewKanbanBoard = () => {
                     ))}
                 </div>
             </DragDropContext>
-            {isModalOpen && <LeadModal lead={selectedLead} onClose={handleCloseModal} />}
+            {isModalOpen && (
+                <LeadModal
+                    lead={selectedLead}
+                    onClose={handleCloseModal}
+                    onSave={onSaveLead}
+                />
+            )}
         </>
     );
 };
