@@ -14,6 +14,8 @@ import NewKanbanBoard from './components/newKanbanBoard/NewKanbanBoard';
 import RequestCommissionPage from './components/TransactionForSalesAgent/RequestCommissionPage';
 // import NewKanbanBoard from './components/NewKanbanBoard';
 
+
+
 import Invoices from "./scenes/invoices";
 import Contacts from "./scenes/contacts";
 import New from "./scenes/new";
@@ -30,6 +32,7 @@ import CommissionPage from './components/TransactionForFinace/CommissionPage';
 import ToDoListPage from './components/todolist/ToDoListPage';
 import ContactPage from './components/contact/Contact';
 import ContactDetailForNewKanbanBoard from './components/newKanbanBoard/contactDetailForNewKanbanBoard/ContactDetailForNewKanbanBoard';
+import SalesProcessPage from './components/salesProcessPage/SalesProcessPage';
 
 
 function App() {
@@ -69,6 +72,7 @@ function App() {
             <Route path="/todolist" element={<ToDoListPage />} />
             <Route path="/RequestCommissionPage" element={<RequestCommissionPage />} />
             <Route path="/Contact" element={<ContactPage />} />
+            <Route path="/SalesProcess" element={<SalesProcessPage />} />
 
           </Routes>
         </main>

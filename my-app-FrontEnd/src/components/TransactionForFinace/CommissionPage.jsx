@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import agentsData from '../../data/agentsData';
 import transactionsData from '../../data/transactionsData';
 import AgentCard from './AgentCard';
