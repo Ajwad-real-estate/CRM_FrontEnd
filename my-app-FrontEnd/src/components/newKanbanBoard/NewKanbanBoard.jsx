@@ -8,6 +8,7 @@ import { pipelineData } from '../../data/sampleData';
 import { Box, Typography, useTheme, useMediaQuery, Button, TextField } from "@mui/material";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
+import { useNavigate } from 'react-router-dom';
 
 const transformData = (pipelineData) => {
     const columns = {};
@@ -27,6 +28,8 @@ const transformData = (pipelineData) => {
                 title: lead.title,
                 amount: lead.value,
                 company: lead.company || '',
+                phoneNumber: lead.phoneNumber || '',
+                email: lead.email || '',
                 tags: lead.tags || [],
             };
             columns[pipeline.id].leadIds.push(lead.id.toString());
@@ -44,8 +47,16 @@ const NewKanbanBoard = () => {
     const [selectedLead, setSelectedLead] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [isListView, setIsListView] = useState(false); // State for view mode
+    const navigate = useNavigate();
 
     const handleDoubleClick = (lead) => {
+        navigate(`/NewKanbanBoard/${lead.id}`); // Navigate to contact detail page
+
+    };
+
+
+    const handleEditClick = (lead) => {
+
         setSelectedLead(lead);
         setIsModalOpen(true);
     };
@@ -112,6 +123,8 @@ const NewKanbanBoard = () => {
         const title = prompt('Enter lead title:');
         const value = prompt('Enter lead value:');
         const company = prompt('Enter company name:');
+        const phoneNumber = prompt('Enter PhoneNumber :');
+        const email = prompt('Enter Email :');
         const tags = prompt('Enter tags (comma separated):').split(',');
 
         if (title && value) {
@@ -121,6 +134,8 @@ const NewKanbanBoard = () => {
                 title,
                 value,
                 company,
+                phoneNumber,
+                email,
                 tags: tags.map(tag => tag.trim()),
             };
 
@@ -151,12 +166,14 @@ const NewKanbanBoard = () => {
 
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
+    const colors = tokens(theme.palette.mode); // Get colors based on the current theme
 
     // Filter leads based on search query
     const filteredLeads = Object.values(data.leads).filter(lead =>
         lead.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         lead.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        lead.phoneNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
         lead.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
@@ -172,32 +189,29 @@ const NewKanbanBoard = () => {
                             border: "none",
                         },
                         fontSize: isNonMobile ? '14px' : '8px',
-                        backgroundColor: colors.primary[400],
+                        backgroundColor: colors.primary[400], // Use theme colors
                         padding: "20px",
                         borderRadius: "8px",
                         boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)"
                     }}
                 >
-                    {/* <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, width: '100%', justifyContent: 'space-between' }}> */}
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, justifyContent: 'space-between' }}>
+                        <TextField
+                            variant="outlined"
+                            label="Search Leads"
+                            fullWidth
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            sx={{ mr: 2, padding: '10px 0px', width: '50%', display: 'flex' }} // Use theme colors
+                        />
+                        <Button
+                            variant="contained"
+                            onClick={() => setIsListView(!isListView)}
+                            sx={{ ml: 2, padding: '10px 0px', width: '25%', display: 'flex' }}
+                        >
+                            {isListView ? 'Switch to Kanban View' : 'Switch to List View'}
+                        </Button>
+                    </Box>
 
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, justifyContent: 'space-between'}}>
-                            <TextField
-                                variant="outlined"
-                                label="Search Leads"
-                                fullWidth
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                sx={{ mr: 2, padding: '10px 0px' , width: '50%', display: 'flex'}}
-                            />
-                            <Button
-                                variant="contained"
-                                onClick={() => setIsListView(!isListView)}
-                                sx={{ ml: 2, padding: '10px 0px', width: '25%', display: 'flex' }}
-                                
-                                >
-                                {isListView ? 'Switch to Kanban View' : 'Switch to List View'}
-                            </Button>
-                                {/* </Box> */}
-                        </Box>
                     {isListView ? (
                         // Render List View
                         <Box>
@@ -206,6 +220,7 @@ const NewKanbanBoard = () => {
                                     <LeadCard
                                         lead={lead}
                                         onDoubleClick={() => handleDoubleClick(lead)}
+                                        sx={{ backgroundColor: colors.primary[500] }} // Use theme colors
                                     />
                                 </Box>
                             ))}
@@ -220,7 +235,7 @@ const NewKanbanBoard = () => {
                                             <div
                                                 ref={provided.innerRef}
                                                 {...provided.droppableProps}
-                                                style={{ margin: '0 8px', minWidth: 250 }}
+                                                style={{ margin: '0 8px', minWidth: 250, borderRadius: '8px' }} // Use theme colors
                                             >
                                                 <PipelineColumn title={column.title} onAdd={() => addNewLead(column.id)}>
                                                     {filteredLeads.filter(lead => column.leadIds.includes(lead.id.toString())).map((leadId, index) => (
@@ -233,6 +248,8 @@ const NewKanbanBoard = () => {
                                                                     style={{
                                                                         ...provided.draggableProps.style,
                                                                         marginBottom: '8px',
+                                                                        backgroundColor: colors.primary[500], // Use theme colors
+                                                                        borderRadius: '4px',
                                                                     }}
                                                                     onDoubleClick={() => handleDoubleClick(leadId)}
                                                                 >
@@ -264,4 +281,3 @@ const NewKanbanBoard = () => {
 };
 
 export default NewKanbanBoard;
-

@@ -194,6 +194,13 @@ const TheSideBar = () => {
        setSelected={setSelected}
       />
       <Item
+       title="Contact"
+       to="/contact"
+       icon={<HelpOutlineOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      />
+      <Item
        title="FAQ Page"
        to="/faq"
        icon={<HelpOutlineOutlinedIcon />}

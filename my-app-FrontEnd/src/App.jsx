@@ -28,6 +28,8 @@ import ProjectDetails from './components/inventory/ProjectDetails';
 import CommissionPage from './components/TransactionForFinace/CommissionPage';
 // import RequestCommissionPage from './components/TransactionForSalesAgent/RequestCommissionPage';
 import ToDoListPage from './components/todolist/ToDoListPage';
+import ContactPage from './components/contact/Contact';
+import ContactDetailForNewKanbanBoard from './components/newKanbanBoard/contactDetailForNewKanbanBoard/ContactDetailForNewKanbanBoard';
 
 
 function App() {
@@ -60,11 +62,13 @@ function App() {
             <Route path="/new" element={<New />} />
             <Route path="/KanbanBoard" element={<KanbanBoard />} />
             <Route path="/NewKanbanBoard" element={<NewKanbanBoard />} />
+            <Route path="/NewKanbanBoard/:ContactDetail" element={<ContactDetailForNewKanbanBoard />} />
             <Route path="/projects" element={<InventoryPage />} />
             <Route path="/projects/:projectName" element={<ProjectDetails />} />
             <Route path="/commission" element={<CommissionPage />} />
             <Route path="/todolist" element={<ToDoListPage />} />
             <Route path="/RequestCommissionPage" element={<RequestCommissionPage />} />
+            <Route path="/Contact" element={<ContactPage />} />
 
           </Routes>
         </main>
