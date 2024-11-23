@@ -7,7 +7,7 @@ import './RequestCommissionPage.css';
 const RequestCommissionPage = () => {
   const [requests, setRequests] = useState(commissionRequests);
   const [newRequest, setNewRequest] = useState({
-    agentName: 'sherif -0-',
+    agentName: 'Ahmed Elsisy -0-',
     date: new Date().toISOString().slice(0, 10),  // Auto-set today's date
     amount: '',
     notes: '',
@@ -37,7 +37,7 @@ const RequestCommissionPage = () => {
     const requestWithId = { ...newRequest, id: (requests.length + 1).toString(), status: "Pending" };
     setRequests([...requests, requestWithId]);
     setNewRequest({
-      agentName: 'Sherif -1-',
+      agentName: 'Ahmed Elsisy -1-',
       date: new Date().toISOString().slice(0, 10),  // Reset to today's date
       amount: '',
       notes: '',
@@ -88,7 +88,7 @@ const RequestCommissionPage = () => {
           fullWidth
           margin="normal"
         >
-          <p>sales Agent : Sherif</p>
+          <p>Sales Manager : Ahmed Elsisy</p>
         </Box>
 
         <TextField

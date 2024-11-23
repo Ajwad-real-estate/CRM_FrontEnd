@@ -126,17 +126,17 @@ const TheSideBar = () => {
          fontWeight="bold"
          sx={{ m: "10px 0 0 0" }}
         >
-         Sherif
+         Ahmed Elsisy
         </Typography>
         <Typography variant="h5" color={colors.greenAccent[500]}>
-         Role : Sales Agent
+         Role : Sales Manager
         </Typography>
        </Box>
       </Box>
      )}
      <Box paddingLeft={isCollapsed ? undefined : "10%"}>
 
-      <Typography
+      {/* <Typography
        variant="h6"
        color={colors.grey[300]}
        sx={{ m: "15px 0 5px 20px" }}
@@ -149,13 +149,13 @@ const TheSideBar = () => {
        icon={<ReceiptOutlinedIcon />}
        selected={selected}
        setSelected={setSelected}
-      />
+      /> */}
       <Typography
        variant="h6"
        color={colors.grey[300]}
        sx={{ m: "15px 0 5px 20px" }}
       >
-       Pages To sales Agent
+       Pages To Sales Manager
       </Typography>
       <Item
        title="NewKanbanBoard"
@@ -171,13 +171,13 @@ const TheSideBar = () => {
        selected={selected}
        setSelected={setSelected}
       />
-      <Item
+      {/* <Item
        title="RequestCommissionPage"
        to="/RequestCommissionPage"
        icon={<ReceiptOutlinedIcon />}
        selected={selected}
        setSelected={setSelected}
-      />
+      /> */}
       <Item
        title="To-Do List
 "
@@ -196,7 +196,7 @@ const TheSideBar = () => {
       <Item
        title="Contact"
        to="/contact"
-       icon={<HelpOutlineOutlinedIcon />}
+       icon={<ContactsOutlinedIcon />}
        selected={selected}
        setSelected={setSelected}
       />
@@ -234,13 +234,20 @@ const TheSideBar = () => {
        selected={selected}
        setSelected={setSelected}
       ></Item>
-      <Item
+       <Item
+        title="Contact"
+        to="/contact"
+        icon={<ContactsOutlinedIcon />}
+        selected={selected}
+        setSelected={setSelected}
+       />
+      {/* <Item
        title="NewKanbanBoard"
        to="/NewKanbanBoard"
        icon={<ContactsOutlinedIcon />}
        selected={selected}
        setSelected={setSelected}
-      />
+      /> */}
       <Item
        title="Inventory"
        to="/projects"
@@ -248,13 +255,13 @@ const TheSideBar = () => {
        selected={selected}
        setSelected={setSelected}
       />
-      <Item
+      {/* <Item
        title="commission"
        to="/commission"
        icon={<ReceiptOutlinedIcon />}
        selected={selected}
        setSelected={setSelected}
-      />
+      /> */}
       <Item
        title="To-Do List
 "
@@ -267,6 +274,13 @@ const TheSideBar = () => {
        title="Calendar"
        to="/calendar"
        icon={<CalendarTodayOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      />
+      <Item
+       title="Manage Team"
+       to="/team"
+       icon={<PeopleOutlinedIcon />}
        selected={selected}
        setSelected={setSelected}
       />
@@ -300,21 +314,14 @@ const TheSideBar = () => {
 
 
 
-
-      <Typography
+      {/* <Typography
        variant="h6"
        color={colors.grey[300]}
        sx={{ m: "15px 0 5px 20px" }}
       >
        Data
       </Typography>
-      <Item
-       title="Manage Team"
-       to="/team"
-       icon={<PeopleOutlinedIcon />}
-       selected={selected}
-       setSelected={setSelected}
-      />
+     
       <Item
        title="Contacts Information"
        to="/contacts"
@@ -393,7 +400,7 @@ const TheSideBar = () => {
        icon={<MapOutlinedIcon />}
        selected={selected}
        setSelected={setSelected}
-      />
+      /> */}
 
 
 
