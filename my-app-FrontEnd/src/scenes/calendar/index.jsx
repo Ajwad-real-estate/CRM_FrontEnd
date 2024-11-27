@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -15,65 +15,25 @@ import {
 } from "@mui/material";
 import Header from "../../components/Header";
 import { tokens } from "../../theme";
-import { useSelector } from "react-redux";
-
-// Helper Function to Combine Date and Time
-const combineDateTime = (date, time) => {
-  if (!date || !time || typeof time !== "string") return null;
-
-  try {
-    const [hourMinute, period] = time.split(" ");
-    if (!hourMinute || !period) return null;
-
-    let [hours, minutes] = hourMinute.split(":").map(Number);
-    if (isNaN(hours) || isNaN(minutes)) return null;
-
-    if (period.toLowerCase() === "pm" && hours < 12) hours += 12;
-    if (period.toLowerCase() === "am" && hours === 12) hours = 0;
-
-    return `${date}T${hours.toString().padStart(2, "0")}:${minutes
-      .toString()
-      .padStart(2, "0")}:00`;
-  } catch (error) {
-    console.error("Error combining date and time:", error);
-    return null;
-  }
-};
 
 const Calendar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const tasks = useSelector((state) => state.todolist.todos);
-
   const [currentEvents, setCurrentEvents] = useState([]);
-
-  // Format Redux Todos for Calendar and List
-  useEffect(() => {
-    const formattedTasks = tasks.map((task) => ({
-      id: task.id,
-      title: task.title,
-      start: combineDateTime(task.startDate, task.startTime),
-      end: combineDateTime(task.endDate, task.endTime),
-    }));
-
-    setCurrentEvents(formattedTasks);
-  }, [tasks]);
 
   const handleDateClick = (selected) => {
     const title = prompt("Please enter a new title for your event");
     const calendarApi = selected.view.calendar;
+    console.log(title);
     calendarApi.unselect();
-
     if (title) {
-      const newEvent = {
+      calendarApi.addEvent({
         id: `${selected.dateStr}-${title}`,
         title,
         start: selected.startStr,
         end: selected.endStr,
         allDay: selected.allDay,
-      };
-      setCurrentEvents([...currentEvents, newEvent]);
-      calendarApi.addEvent(newEvent);
+      });
     }
   };
 
@@ -84,9 +44,6 @@ const Calendar = () => {
       )
     ) {
       selected.event.remove();
-      setCurrentEvents(
-        currentEvents.filter((event) => event.id !== selected.event.id)
-      );
     }
   };
 
@@ -151,7 +108,10 @@ const Calendar = () => {
             select={handleDateClick}
             eventClick={handleEventClick}
             eventsSet={(events) => setCurrentEvents(events)}
-            initialEvents={currentEvents}
+            initialEvents={[
+              { id: "1234", title: "All-day event", date: "2024-06-02" },
+              { id: "4321", title: "Timed event", date: "2024-06-20" },
+            ]}
           />
         </Box>
       </Box>

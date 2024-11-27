@@ -22,9 +22,9 @@ import { useDispatch } from "react-redux";
 import { deleteTask, handleEditTask } from "../../GlobalState/todolistSlice";
 import delet from "./delet.mp3";
 import FormRow from "../../ui/FormRow";
-import { checkTaskDateValidation } from "../../helpers/dates";
-import toast from "react-hot-toast";
+
 import styled from "styled-components";
+import ShowMoreLess from "./ShowMoreLess";
 const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -107,210 +107,222 @@ const ToDoItem = ({ todo }) => {
   );
   return (
     <Box
-      display="flex"
-      alignItems="center"
-      marginInline="auto"
-      justifyContent="space-between"
-      width="80%"
       p="10px"
       mb="10px"
-      borderRadius="4px"
       aria-controls="panel1-content"
       id="panel1-header"
+      borderRadius="4px"
       sx={{
+        display: "flex",
+        flexDirection: "column",
+
+        alignItems: "center",
+        justifyContent: "center",
+        width: "90%",
         backgroundColor: colors.grey[900],
         boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
       }}
     >
-      <Checkbox
-        checked={todo.completed}
-        onChange={() => onDelete(todo.id)}
-        sx={{
-          color: colors.greenAccent[500],
-          "&.Mui-checked": {
-            color: colors.greenAccent[600],
-          },
-        }}
-      />
-      <Typography
-        variant="body1"
-        width="200px"
-        sx={{
-          textDecoration: todo.completed ? "line-through" : "none",
-          color: colors.grey[100],
-          flexGrow: 1,
-          marginLeft: "10px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "start",
-        }}
-      >
-        {todo.title}
-      </Typography>
       <Box
         display="flex"
-        flex={1}
         alignItems="center"
-        justifyContent="space-between"
-        padding="auto"
         marginInline="auto"
-        borderRadius="4px"
-        width="60%"
+        justifyContent="space-between"
+        width="100%"
       >
-        <Typography
-          variant="body1"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
+        <Checkbox
+          checked={todo.completed}
+          onChange={() => onDelete(todo.id)}
           sx={{
-            color: colors.grey[100],
-            marginLeft: "0",
-            fontSize: "1rem",
+            color: colors.greenAccent[500],
+            "&.Mui-checked": {
+              color: colors.greenAccent[600],
+            },
           }}
-        >
-          {todo.startTime}
-        </Typography>
+        />
         <Typography
           variant="body1"
+          width="200px"
           sx={{
+            textDecoration: todo.completed ? "line-through" : "none",
             color: colors.grey[100],
             flexGrow: 1,
-            marginLeft: "6px",
-            fontSize: "1rem",
+            marginLeft: "10px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "start",
           }}
         >
-          {todo.startDate}
+          {todo.title}
         </Typography>
-      </Box>
-      <Box
-        display="flex"
-        flex={1}
-        alignItems="center"
-        justifyContent="space-between"
-        padding="auto"
-        marginInline="auto"
-        borderRadius="4px"
-        width="60%"
-      >
-        <Typography
-          variant="body1"
+        <Box
           display="flex"
+          flex={1}
           alignItems="center"
-          justifyContent="center"
-          sx={{
-            color: colors.grey[100],
-            marginLeft: "0",
-            fontSize: "1rem",
-          }}
+          justifyContent="space-between"
+          padding="auto"
+          marginInline="auto"
+          borderRadius="4px"
+          width="60%"
         >
-          {todo.deadLineTime}
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{
-            color: colors.grey[100],
-            flexGrow: 1,
-            marginLeft: "6px",
-            fontSize: "1rem",
-          }}
-        >
-          {todo.deadLineDate}
-        </Typography>
-
-        <EditIcon onClick={handleClickOpen} sx={{ cursor: "pointer" }} />
-
-        {/* Separate ---------------------------------------- */}
-        <BootstrapDialog
-          onClose={handleClose}
-          aria-labelledby="customized-dialog-title"
-          open={open}
-        >
-          <IconButton
-            aria-label="close"
-            onClick={handleClose}
-            sx={(theme) => ({
-              position: "absolute",
-              right: 8,
-              top: 8,
-              color: theme.palette.grey[500],
-            })}
+          <Typography
+            variant="body1"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            sx={{
+              color: colors.grey[100],
+              marginLeft: "0",
+              fontSize: "1rem",
+            }}
           >
-            <CloseIcon />
-          </IconButton>
-          <Form>
-            <FormRow label="Title">
-              <TextField
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Enter new task"
-                variant="outlined"
-                size="small"
-                sx={{ width: "60%", marginRight: "10px" }}
-              />
-            </FormRow>
-            <FormRow label={"Start Time"}>
-              <TextField
-                id="outlined-basic"
-                variant="outlined"
-                type="date"
-                placeholder={"YYYY-MM-DD"}
-                size={"small"}
-                width={"40%"}
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
+            {todo.startTime}
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              color: colors.grey[100],
+              flexGrow: 1,
+              marginLeft: "6px",
+              fontSize: "1rem",
+            }}
+          >
+            {todo.startDate}
+          </Typography>
+        </Box>
+        <Box
+          display="flex"
+          flex={1}
+          alignItems="center"
+          justifyContent="space-between"
+          padding="auto"
+          marginInline="auto"
+          borderRadius="4px"
+          width="60%"
+        >
+          <Typography
+            variant="body1"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            sx={{
+              color: colors.grey[100],
+              marginLeft: "0",
+              fontSize: "1rem",
+            }}
+          >
+            {todo.deadLineTime}
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              color: colors.grey[100],
+              flexGrow: 1,
+              marginLeft: "6px",
+              fontSize: "1rem",
+            }}
+          >
+            {todo.deadLineDate}
+          </Typography>
 
-              <TextField
-                id="outlined-basic"
-                variant="outlined"
-                type="time"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-                placeholder={"00:00 AM/PM"}
-                size={"small"}
-                width={"40%"}
-              />
-            </FormRow>
-            <FormRow label={"Deadline"}>
-              <TextField
-                id="outlined-basic"
-                variant="outlined"
-                type="date"
-                placeholder={"YYYY-MM-DD"}
-                size={"small"}
-                width={"40%"}
-                value={deadLineDate}
-                onChange={(e) => setDeadLineDate(e.target.value)}
-              />
-              <TextField
-                id="outlined-basic"
-                variant="outlined"
-                type="time"
-                value={deadLineTime}
-                onChange={(e) => setDeadLineTime(e.target.value)}
-                placeholder={"00:00 AM/PM"}
-                size={"small"}
-                width={"40%"}
-              />
-            </FormRow>
-            <FormRow label="Task Details">
-              <TextField
-                placeholder="Enter Details....."
-                multiline
-                rows={4}
-                value={taskDetails}
-                onChange={(e) => setTaskDetails(e.target.value)}
-                sx={{
-                  width: "400px",
-                }}
-              />
-            </FormRow>
+          <EditIcon onClick={handleClickOpen} sx={{ cursor: "pointer" }} />
 
-            <Button variant="contained" onClick={handleEdit}>
-              Edit
-            </Button>
-          </Form>
-        </BootstrapDialog>
+          {/* Separate ---------------------------------------- */}
+          <BootstrapDialog
+            onClose={handleClose}
+            aria-labelledby="customized-dialog-title"
+            open={open}
+          >
+            <IconButton
+              aria-label="close"
+              onClick={handleClose}
+              sx={(theme) => ({
+                position: "absolute",
+                right: 8,
+                top: 8,
+                color: theme.palette.grey[500],
+              })}
+            >
+              <CloseIcon />
+            </IconButton>
+            <Form>
+              <FormRow label="Title">
+                <TextField
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Enter new task"
+                  variant="outlined"
+                  size="small"
+                  sx={{ width: "60%", marginRight: "10px" }}
+                />
+              </FormRow>
+              <FormRow label={"Start Time"}>
+                <TextField
+                  id="outlined-basic"
+                  variant="outlined"
+                  type="date"
+                  placeholder={"YYYY-MM-DD"}
+                  size={"small"}
+                  width={"40%"}
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
+
+                <TextField
+                  id="outlined-basic"
+                  variant="outlined"
+                  type="time"
+                  value={startTime}
+                  onChange={(e) => setStartTime(e.target.value)}
+                  placeholder={"00:00 AM/PM"}
+                  size={"small"}
+                  width={"40%"}
+                />
+              </FormRow>
+              <FormRow label={"Deadline"}>
+                <TextField
+                  id="outlined-basic"
+                  variant="outlined"
+                  type="date"
+                  placeholder={"YYYY-MM-DD"}
+                  size={"small"}
+                  width={"40%"}
+                  value={deadLineDate}
+                  onChange={(e) => setDeadLineDate(e.target.value)}
+                />
+                <TextField
+                  id="outlined-basic"
+                  variant="outlined"
+                  type="time"
+                  value={deadLineTime}
+                  onChange={(e) => setDeadLineTime(e.target.value)}
+                  placeholder={"00:00 AM/PM"}
+                  size={"small"}
+                  width={"40%"}
+                />
+              </FormRow>
+              <FormRow label="Task Details">
+                <TextField
+                  placeholder="Enter Details....."
+                  multiline
+                  rows={4}
+                  value={taskDetails}
+                  onChange={(e) => setTaskDetails(e.target.value)}
+                  sx={{
+                    width: "400px",
+                  }}
+                />
+              </FormRow>
+
+              <Button variant="contained" onClick={handleEdit}>
+                Edit
+              </Button>
+            </Form>
+          </BootstrapDialog>
+        </Box>
+      </Box>
+      <Box sx={{ width: "90%" }}>
+        <ShowMoreLess text={todo.taskDetails} />
       </Box>
     </Box>
   );
