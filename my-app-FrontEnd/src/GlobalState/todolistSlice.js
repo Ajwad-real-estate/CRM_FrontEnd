@@ -1,39 +1,158 @@
 import { createSlice } from "@reduxjs/toolkit";
+import todoData from "../data/todoData";
+import { checkTaskDateValidation } from "../helpers/dates";
+import toast from "react-hot-toast";
 
-const initialState = {};
+const initialState = {
+  todos: [...todoData],
+};
 
 const todolistSlice = createSlice({
   name: "todolist",
   initialState,
   reducers: {
-    getTitle(state, action) {
-      state.balance += action.payload;
-      state.isLoading = false;
-    },
-    DeadLineDateGet(state, action) {
-      state.balance -= action.payload;
-    },
-    requestLoan: {
-      prepare(amount, purpose) {
-        return { payload: { amount, purpose } };
+    addTask: {
+      prepare(
+        title,
+        deadLineDate,
+        deadLineTime,
+        startDate,
+        startTime,
+        taskDetails
+      ) {
+        return {
+          payload: {
+            title,
+            deadLineDate,
+            deadLineTime,
+            startDate,
+            startTime,
+            taskDetails,
+          },
+        };
       },
       reducer(state, action) {
-        if (state.loan > 0) return;
-        state.loan = action.payload.amount;
-        state.loanPurpose = action.payload.purpose;
+        if (
+          !action.payload.deadLineDate ||
+          !action.payload.deadLineTime ||
+          !action.payload.title
+        ) {
+          return;
+        }
+        const newTodo = {
+          id: (state.todos.length + 1).toString(),
+          title: action.payload.title,
+          deadLineDate: action.payload.deadLineDate,
+          deadLineTime: action.payload.deadLineTime,
+          completed: false,
+          startTime: action.payload.startTime,
+          startDate: action.payload.startDate,
+          taskDetails: action.payload.taskDetails,
+        };
+        if (action.payload.startDate && action.payload.startTime) {
+          if (
+            !checkTaskDateValidation(
+              action.payload.startDate,
+              action.payload.startTime,
+              action.payload.deadLineDate,
+              action.payload.deadLineTime
+            )
+          ) {
+            toast.error("Task Time is not valid");
+            return;
+          }
+        }
+        toast.success("Task added Successfully");
 
-        state.balance += state.loan;
+        state.todos = [...state.todos, newTodo];
       },
     },
-    payLoan(state, action) {
-      state.balance -= state.loan;
-      state.loan = 0;
-      state.loanPurpose = "";
+    markTaskCompleted: (state, action) => {
+      const task = state.todos.find((todo) => todo.id === action.payload);
+      if (task) {
+        task.completed = true; // Mark task as completed
+      }
     },
-    convertingCurrency(state) {
-      state.isLoading = true;
+    deleteTaskImmediate: (state, action) => {
+      state.todos = state.todos.filter((todo) => todo.id !== action.payload);
+    },
+    handleEditTask: {
+      prepare(
+        title,
+        deadLineDate,
+        deadLineTime,
+        startDate,
+        startTime,
+        taskDetails,
+        id
+      ) {
+        return {
+          payload: {
+            title,
+            deadLineDate,
+            deadLineTime,
+            startDate,
+            startTime,
+            taskDetails,
+            id,
+          },
+        };
+      },
+      reducer: (state, action) => {
+        if (
+          !action.payload.deadLineDate ||
+          !action.payload.deadLineTime ||
+          !action.payload.title
+        ) {
+          return;
+        }
+
+        if (action.payload.startDate && action.payload.startTime) {
+          if (
+            !checkTaskDateValidation(
+              action.payload.startDate,
+              action.payload.startTime,
+              action.payload.deadLineDate,
+              action.payload.deadLineTime
+            )
+          ) {
+            toast.error("Task Time is not valid");
+            return;
+          }
+        }
+        state.todos = state.todos.map((todo) =>
+          todo.id === action.payload.id
+            ? {
+                ...todo,
+                title: action.payload.title,
+                deadLineDate: action.payload.deadLineDate,
+                deadLineTime: action.payload.deadLineTime,
+                completed: false,
+                startTime: action.payload.startTime,
+                startDate: action.payload.startDate,
+                taskDetails: action.payload.taskDetails,
+              }
+            : todo
+        );
+        toast.success("Task Edited Successfully");
+      },
     },
   },
 });
-export const { withdraw, requestLoan, payLoan } = accountSlice.actions;
-export default accountSlice.reducer;
+
+export const {
+  addTask,
+  markTaskCompleted,
+  deleteTaskImmediate,
+  handleEditTask,
+} = todolistSlice.actions;
+
+// Async thunk for delayed deletion
+export const deleteTask = (id) => (dispatch) => {
+  dispatch(markTaskCompleted(id)); // Mark as completed first
+  setTimeout(() => {
+    dispatch(deleteTaskImmediate(id)); // Delete after 1 second
+    toast.success("Task deleted successfully!");
+  }, 400); // Delay of 1 second
+};
+export default todolistSlice.reducer;

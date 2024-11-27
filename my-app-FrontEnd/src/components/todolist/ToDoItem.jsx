@@ -1,23 +1,41 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 //pop Imports
-import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
+import { styled as sty } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import IconButton from "@mui/material/IconButton";
+
 import CloseIcon from "@mui/icons-material/Close";
-import { blueGrey } from "@mui/material/colors";
 
 //
 
-import { Box, Typography, Checkbox } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Checkbox,
+  Button,
+  TextField,
+  IconButton,
+} from "@mui/material";
 import { tokens } from "../../theme";
 import { useTheme } from "@emotion/react";
-import DescriptionIcon from "@mui/icons-material/Description";
+import EditIcon from "@mui/icons-material/Edit";
+import { useDispatch } from "react-redux";
+import { deleteTask, handleEditTask } from "../../GlobalState/todolistSlice";
+import delet from "./delet.mp3";
+import FormRow from "../../ui/FormRow";
+import { checkTaskDateValidation } from "../../helpers/dates";
+import toast from "react-hot-toast";
+import styled from "styled-components";
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.8rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40px 70px;
+`;
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+const BootstrapDialog = sty(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
   },
@@ -26,10 +44,18 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-const ToDoItem = ({ todo, onComplete, handleStopPropagation }) => {
+const ToDoItem = ({ todo }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-
+  const [dltSound, setDltSound] = useState(false);
+  const [title, setTitle] = useState(todo.title);
+  const [deadLineDate, setDeadLineDate] = useState(todo.deadLineDate);
+  const [deadLineTime, setDeadLineTime] = useState(todo.deadLineTime);
+  const [startTime, setStartTime] = useState(todo.startTime);
+  const [startDate, setStartDate] = useState(todo.startDate);
+  const [taskDetails, setTaskDetails] = useState(todo.taskDetails);
+  //Edit Functions Stuff
+  const dispatch = useDispatch();
   //Pop up stuff
 
   const [open, setOpen] = useState(false);
@@ -42,7 +68,43 @@ const ToDoItem = ({ todo, onComplete, handleStopPropagation }) => {
   };
 
   //
+  const handleEdit = () => {
+    dispatch(
+      handleEditTask(
+        title,
+        deadLineDate,
+        deadLineTime,
+        startDate,
+        startTime,
+        taskDetails,
+        todo.id
+      )
+    );
+    handleClose();
+  };
 
+  //
+
+  const handleCheckboxChange = (id) => {
+    dispatch(deleteTask(id));
+  };
+  function onDelete(id) {
+    handleCheckboxChange(id);
+    setDltSound(true);
+  }
+  useEffect(
+    function () {
+      const playSound = function () {
+        if (dltSound) {
+          const sound = new Audio(delet);
+          sound.play();
+        }
+        setDltSound(false);
+      };
+      playSound();
+    },
+    [dltSound, setDltSound]
+  );
   return (
     <Box
       display="flex"
@@ -62,7 +124,7 @@ const ToDoItem = ({ todo, onComplete, handleStopPropagation }) => {
     >
       <Checkbox
         checked={todo.completed}
-        onChange={() => onComplete(todo.id)}
+        onChange={() => onDelete(todo.id)}
         sx={{
           color: colors.greenAccent[500],
           "&.Mui-checked": {
@@ -155,7 +217,7 @@ const ToDoItem = ({ todo, onComplete, handleStopPropagation }) => {
           {todo.deadLineDate}
         </Typography>
 
-        <DescriptionIcon onClick={handleClickOpen} sx={{ cursor: "pointer" }} />
+        <EditIcon onClick={handleClickOpen} sx={{ cursor: "pointer" }} />
 
         {/* Separate ---------------------------------------- */}
         <BootstrapDialog
@@ -163,19 +225,6 @@ const ToDoItem = ({ todo, onComplete, handleStopPropagation }) => {
           aria-labelledby="customized-dialog-title"
           open={open}
         >
-          <DialogTitle
-            sx={{
-              m: 0,
-              p: 2,
-              fontSize: "28px",
-              fontWeight: "600",
-              backgroundColor: "#17253e",
-              boxShadow: "3px 5px 11px #000919bc",
-            }}
-            id="customized-dialog-title"
-          >
-            {todo.title}
-          </DialogTitle>
           <IconButton
             aria-label="close"
             onClick={handleClose}
@@ -188,11 +237,79 @@ const ToDoItem = ({ todo, onComplete, handleStopPropagation }) => {
           >
             <CloseIcon />
           </IconButton>
-          <DialogContent sx={{ backgroundColor: "#1a2b49" }}>
-            <Typography sx={{ fontSize: "19px" }} gutterBottom>
-              {todo.taskDetails}
-            </Typography>
-          </DialogContent>
+          <Form>
+            <FormRow label="Title">
+              <TextField
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Enter new task"
+                variant="outlined"
+                size="small"
+                sx={{ width: "60%", marginRight: "10px" }}
+              />
+            </FormRow>
+            <FormRow label={"Start Time"}>
+              <TextField
+                id="outlined-basic"
+                variant="outlined"
+                type="date"
+                placeholder={"YYYY-MM-DD"}
+                size={"small"}
+                width={"40%"}
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+
+              <TextField
+                id="outlined-basic"
+                variant="outlined"
+                type="time"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                placeholder={"00:00 AM/PM"}
+                size={"small"}
+                width={"40%"}
+              />
+            </FormRow>
+            <FormRow label={"Deadline"}>
+              <TextField
+                id="outlined-basic"
+                variant="outlined"
+                type="date"
+                placeholder={"YYYY-MM-DD"}
+                size={"small"}
+                width={"40%"}
+                value={deadLineDate}
+                onChange={(e) => setDeadLineDate(e.target.value)}
+              />
+              <TextField
+                id="outlined-basic"
+                variant="outlined"
+                type="time"
+                value={deadLineTime}
+                onChange={(e) => setDeadLineTime(e.target.value)}
+                placeholder={"00:00 AM/PM"}
+                size={"small"}
+                width={"40%"}
+              />
+            </FormRow>
+            <FormRow label="Task Details">
+              <TextField
+                placeholder="Enter Details....."
+                multiline
+                rows={4}
+                value={taskDetails}
+                onChange={(e) => setTaskDetails(e.target.value)}
+                sx={{
+                  width: "400px",
+                }}
+              />
+            </FormRow>
+
+            <Button variant="contained" onClick={handleEdit}>
+              Edit
+            </Button>
+          </Form>
         </BootstrapDialog>
       </Box>
     </Box>

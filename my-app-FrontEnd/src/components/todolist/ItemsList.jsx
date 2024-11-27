@@ -1,14 +1,17 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import ToDoItem from "./ToDoItem";
-import { useListInfo } from "./Contexts/TempContext";
 import { useState } from "react";
-function ItemsList() {
-  const { todos, handleComplete, HandleNavigate } = useListInfo();
-  const [searchQuery, setSearchQuery] = useState();
-  const handleStopPropagation = (event) => {
-    event.stopPropagation(); // Stops the click from expanding the accordion
-  };
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import delet from "./delet.mp3";
 
+function ItemsList() {
+  const [searchQuery, setSearchQuery] = useState();
+  const navigate = useNavigate();
+  const todos = useSelector((state) => state.todolist.todos);
+  function HandleNavigate() {
+    navigate("addtask");
+  }
   return (
     <div>
       <Box
@@ -33,14 +36,7 @@ function ItemsList() {
       </Box>
       <Box mt="20px " sx={{ minHeight: "50vh" }}>
         {todos.length > 0 ? (
-          todos.map((todo) => (
-            <ToDoItem
-              key={todo.id}
-              todo={todo}
-              onComplete={handleComplete}
-              handleStopPropagation={handleStopPropagation}
-            />
-          ))
+          todos.map((todo) => <ToDoItem key={todo.id} todo={todo} />)
         ) : (
           <Typography
             variant="h2"

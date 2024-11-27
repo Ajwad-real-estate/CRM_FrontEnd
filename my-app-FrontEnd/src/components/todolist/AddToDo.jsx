@@ -1,34 +1,41 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, TextField, Button } from "@mui/material";
 import FormRow from "../../ui/FormRow";
 import Form from "../../ui/Form";
-import { Input } from "../../ui/Input";
-import { useListInfo } from "./Contexts/TempContext";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addTask } from "../../GlobalState/todolistSlice";
+import add from "./add.mp3";
 
 const AddToDo = () => {
   const [title, setTitle] = useState("");
-  const { onAdd } = useListInfo();
   const [deadLineDate, setDeadLineDate] = useState("");
   const [deadLineTime, setDeadLineTime] = useState("");
   const [startTime, setStartTime] = useState("");
   const [startDate, setStartDate] = useState("");
   const [taskDetails, setTaskDetails] = useState("");
+  const [addsound, setAddSound] = useState(false);
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleBack = () => {
     navigate(-1);
   };
   const handleAdd = () => {
     if (title.trim()) {
-      onAdd(
-        title,
-        deadLineDate,
-        deadLineTime,
-        startDate,
-        startTime,
-        taskDetails
+      dispatch(
+        addTask(
+          title,
+          deadLineDate,
+          deadLineTime,
+          startDate,
+          startTime,
+          taskDetails
+        )
       );
+      setAddSound(true);
       setTitle("");
       setDeadLineDate("");
       setDeadLineTime("");
@@ -37,6 +44,19 @@ const AddToDo = () => {
       setTaskDetails("");
     }
   };
+  useEffect(
+    function () {
+      const playSound = function () {
+        if (addsound) {
+          const sound = new Audio(add);
+          sound.play();
+        }
+        setAddSound(false);
+      };
+      playSound();
+    },
+    [addsound, setAddSound]
+  );
   return (
     <Box sx={{}}>
       <Button
@@ -64,39 +84,48 @@ const AddToDo = () => {
             />
           </FormRow>
           <FormRow label={"Start Time"}>
-            <Input
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
               type="date"
-              value={startDate}
-              onChange={setStartDate}
               placeholder={"YYYY-MM-DD"}
               size={"small"}
-              width={"30%"}
+              width={"40%"}
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
             />
-            <Input
+
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
               type="time"
               value={startTime}
-              onChange={setStartTime}
+              onChange={(e) => setStartTime(e.target.value)}
               placeholder={"00:00 AM/PM"}
               size={"small"}
               width={"40%"}
             />
           </FormRow>
           <FormRow label={"Deadline"}>
-            <Input
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
               type="date"
-              value={deadLineDate}
-              onChange={setDeadLineDate}
               placeholder={"YYYY-MM-DD"}
               size={"small"}
               width={"40%"}
+              value={deadLineDate}
+              onChange={(e) => setDeadLineDate(e.target.value)}
             />
-            <Input
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
               type="time"
               value={deadLineTime}
-              onChange={setDeadLineTime}
+              onChange={(e) => setDeadLineTime(e.target.value)}
               placeholder={"00:00 AM/PM"}
               size={"small"}
-              width={"30%"}
+              width={"40%"}
             />
           </FormRow>
           <FormRow label="Task Details">

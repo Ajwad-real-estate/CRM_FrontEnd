@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import add from "../add.mp3";
-import delet from "../delet.mp3";
+import add from "./add.mp3";
+import delet from "./delet.mp3";
 import { checkTaskDateValidation } from "../../../helpers/dates";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -11,8 +11,6 @@ const ToDoContext = createContext();
 function ToDoListProvider({ children }) {
   //YourStates Here-->
   const [todos, setTodos] = useState(todoData);
-  const [dltSound, setDltSound] = useState(false);
-  const [addsound, setAddSound] = useState(false);
   const navigate = useNavigate();
 
   function HandleNavigate() {
@@ -74,7 +72,6 @@ function ToDoListProvider({ children }) {
     );
 
     updatedTodos = updatedTodos.filter((todo) => todo.id !== id);
-    setDltSound(true);
     setTodos(updatedTodos);
   };
   useEffect(
