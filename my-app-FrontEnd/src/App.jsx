@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { useState } from "react";
+import './index.css';
 import {
   createTheme,
   ThemeProvider,
@@ -39,6 +40,8 @@ import SalesProcessPage from "./components/salesProcessPage/SalesProcessPage";
 import AddToDo from "./components/todolist/AddToDo";
 import ItemsList from "./components/todolist/ItemsList";
 import { Toaster } from "react-hot-toast";
+
+import SignIn from './components/SignIn';
 
 function App() {
   const mode = useSelector((state) => state.theme.mode);
@@ -93,6 +96,9 @@ function App() {
             />
             <Route path="/Contact" element={<ContactPage />} />
             <Route path="/SalesProcess" element={<SalesProcessPage />} />
+
+            {/* SignIn page */}
+            <Route path="/signin" element={<SignIn />} />
           </Routes>
         </main>
       </div>
