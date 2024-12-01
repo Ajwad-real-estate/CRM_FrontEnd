@@ -4,7 +4,7 @@ import { checkTaskDateValidation } from "../helpers/dates";
 import toast from "react-hot-toast";
 
 const initialState = {
-  todos: [...todoData],
+  todos: [],
 };
 
 const todolistSlice = createSlice({
@@ -18,7 +18,8 @@ const todolistSlice = createSlice({
         deadLineTime,
         startDate,
         startTime,
-        taskDetails
+        taskDetails,
+        priority
       ) {
         return {
           payload: {
@@ -28,6 +29,7 @@ const todolistSlice = createSlice({
             startDate,
             startTime,
             taskDetails,
+            priority,
           },
         };
       },
@@ -48,6 +50,7 @@ const todolistSlice = createSlice({
           startTime: action.payload.startTime,
           startDate: action.payload.startDate,
           taskDetails: action.payload.taskDetails,
+          priority: action.payload.priority,
         };
         if (action.payload.startDate && action.payload.startTime) {
           if (
@@ -65,6 +68,8 @@ const todolistSlice = createSlice({
         toast.success("Task added Successfully");
 
         state.todos = [...state.todos, newTodo];
+
+        state.todos.sort((a, b) => b.priority - a.priority);
       },
     },
     markTaskCompleted: (state, action) => {
@@ -84,7 +89,8 @@ const todolistSlice = createSlice({
         startDate,
         startTime,
         taskDetails,
-        id
+        id,
+        priority
       ) {
         return {
           payload: {
@@ -95,6 +101,7 @@ const todolistSlice = createSlice({
             startTime,
             taskDetails,
             id,
+            priority,
           },
         };
       },
@@ -131,10 +138,12 @@ const todolistSlice = createSlice({
                 startTime: action.payload.startTime,
                 startDate: action.payload.startDate,
                 taskDetails: action.payload.taskDetails,
+                priority: action.payload.priority,
               }
             : todo
         );
         toast.success("Task Edited Successfully");
+        state.todos.sort((a, b) => b.priority - a.priority);
       },
     },
   },

@@ -14,6 +14,8 @@ import {
   Button,
   TextField,
   IconButton,
+  Tooltip,
+  Slider,
 } from "@mui/material";
 import { tokens } from "../../theme";
 import { useTheme } from "@emotion/react";
@@ -54,6 +56,7 @@ const ToDoItem = ({ todo }) => {
   const [startTime, setStartTime] = useState(todo.startTime);
   const [startDate, setStartDate] = useState(todo.startDate);
   const [taskDetails, setTaskDetails] = useState(todo.taskDetails);
+  const [priority, setPriority] = useState(todo.priority);
   //Edit Functions Stuff
   const dispatch = useDispatch();
   //Pop up stuff
@@ -66,7 +69,9 @@ const ToDoItem = ({ todo }) => {
   const handleClose = () => {
     setOpen(false);
   };
-
+  const handleChange = (event, newValue) => {
+    setPriority(newValue);
+  };
   //
   const handleEdit = () => {
     dispatch(
@@ -77,7 +82,8 @@ const ToDoItem = ({ todo }) => {
         startDate,
         startTime,
         taskDetails,
-        todo.id
+        todo.id,
+        priority
       )
     );
     handleClose();
@@ -142,7 +148,7 @@ const ToDoItem = ({ todo }) => {
         />
         <Typography
           variant="body1"
-          width="200px"
+          width="190px"
           sx={{
             textDecoration: todo.completed ? "line-through" : "none",
             color: colors.grey[100],
@@ -163,7 +169,6 @@ const ToDoItem = ({ todo }) => {
           padding="auto"
           marginInline="auto"
           borderRadius="4px"
-          width="60%"
         >
           <Typography
             variant="body1"
@@ -190,6 +195,7 @@ const ToDoItem = ({ todo }) => {
             {todo.startDate}
           </Typography>
         </Box>
+
         <Box
           display="flex"
           flex={1}
@@ -198,7 +204,7 @@ const ToDoItem = ({ todo }) => {
           padding="auto"
           marginInline="auto"
           borderRadius="4px"
-          width="60%"
+          // width="50%"
         >
           <Typography
             variant="body1"
@@ -224,6 +230,52 @@ const ToDoItem = ({ todo }) => {
           >
             {todo.deadLineDate}
           </Typography>
+          <Tooltip
+            title={`${
+              todo.priority === 1
+                ? "Follow Up"
+                : priority === 2
+                ? "Routine"
+                : "Urgent"
+            }`}
+            arrow
+            placement="top"
+            PopperProps={{
+              modifiers: [
+                {
+                  name: "offset",
+                  options: {
+                    offset: [0, 8],
+                  },
+                },
+              ],
+            }}
+            componentsProps={{
+              tooltip: {
+                sx: {
+                  fontSize: "1.1rem", // Make the font larger
+                  padding: "5px 10px", // Add padding around the content
+                },
+              },
+            }}
+          >
+            <Box
+              sx={{
+                background: `${
+                  todo.priority === 1
+                    ? "grey"
+                    : priority === 2
+                    ? "#1976d2"
+                    : "red"
+                }`,
+                cursor: "pointer",
+                height: "14px",
+                width: "14px",
+                borderRadius: "50%",
+                marginRight: "60px",
+              }}
+            ></Box>
+          </Tooltip>
 
           <EditIcon onClick={handleClickOpen} sx={{ cursor: "pointer" }} />
 
@@ -300,6 +352,104 @@ const ToDoItem = ({ todo }) => {
                   size={"small"}
                   width={"40%"}
                 />
+              </FormRow>
+              <FormRow label={"Priority Level"}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-around",
+                  }}
+                >
+                  <Slider
+                    value={priority}
+                    onChange={handleChange}
+                    valueLabelDisplay="auto"
+                    valueLabelFormat={(value) => {
+                      if (value === 1) return "Follow Up";
+                      if (value === 2) return "Routine";
+                      if (value === 3) return "Urgent";
+                    }}
+                    step={1}
+                    marks={[
+                      { value: 1, label: "Follow Up" },
+                      { value: 2, label: "Routine" },
+                      { value: 3, label: "Urgent" },
+                    ]}
+                    min={1}
+                    max={3}
+                    sx={{
+                      height: 5,
+                      width: "60%",
+                      "& .MuiSlider-thumb": {
+                        width: 15,
+                        height: 15,
+                        backgroundColor:
+                          priority === 1
+                            ? "grey"
+                            : priority === 2
+                            ? "#1976d2"
+                            : "red",
+                      },
+                      "& .MuiSlider-rail": {
+                        backgroundColor: "#e0e0e0",
+                      },
+                      "& .MuiSlider-track": {
+                        backgroundColor:
+                          priority === 1
+                            ? "grey"
+                            : priority === 2
+                            ? "#1976d2"
+                            : "red",
+                      },
+                    }}
+                  />
+                  <Tooltip
+                    title={`${
+                      priority === 1
+                        ? "Follow Up"
+                        : priority === 2
+                        ? "Routine"
+                        : "Urgent"
+                    }`}
+                    arrow
+                    placement="top"
+                    PopperProps={{
+                      modifiers: [
+                        {
+                          name: "offset",
+                          options: {
+                            offset: [0, 8],
+                          },
+                        },
+                      ],
+                    }}
+                    componentsProps={{
+                      tooltip: {
+                        sx: {
+                          fontSize: "1.2rem", // Make the font larger
+                          padding: "8px 16px", // Add padding around the content
+                        },
+                      },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        background: `${
+                          priority === 1
+                            ? "grey"
+                            : priority === 2
+                            ? "#1976d2"
+                            : "red"
+                        }`,
+                        cursor: "pointer",
+                        height: "14px",
+                        width: "14px",
+                        borderRadius: "50%",
+                      }}
+                    ></Box>
+                  </Tooltip>
+                </Box>
               </FormRow>
               <FormRow label="Task Details">
                 <TextField

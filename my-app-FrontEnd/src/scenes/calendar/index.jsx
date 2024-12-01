@@ -15,37 +15,21 @@ import {
 } from "@mui/material";
 import Header from "../../components/Header";
 import { tokens } from "../../theme";
+import { useSelector } from "react-redux";
 
 const Calendar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [currentEvents, setCurrentEvents] = useState([]);
+  const tasks = useSelector((state) => state.todolist.todos);
+  //const [currentEvents, setCurrentEvents] = useState([]);
 
-  const handleDateClick = (selected) => {
-    const title = prompt("Please enter a new title for your event");
-    const calendarApi = selected.view.calendar;
-    console.log(title);
-    calendarApi.unselect();
-    if (title) {
-      calendarApi.addEvent({
-        id: `${selected.dateStr}-${title}`,
-        title,
-        start: selected.startStr,
-        end: selected.endStr,
-        allDay: selected.allDay,
-      });
-    }
-  };
-
-  const handleEventClick = (selected) => {
-    if (
-      window.confirm(
-        `Are you sure you want to delete the event '${selected.event.title}'`
-      )
-    ) {
-      selected.event.remove();
-    }
-  };
+  const formattedEvents = tasks.map((task) => ({
+    id: task.id, // Ensure each task has a unique ID
+    title: task.title, // Task title
+    start: task.startDate, // Task start date (should be in ISO format)
+    end: task.deadLineDate, // Task end date (optional, should be in ISO format)
+    allDay: task.allDay || false, // Whether the event is all-day
+  }));
 
   return (
     <Box m="20px">
@@ -60,7 +44,7 @@ const Calendar = () => {
         >
           <Typography variant="h5">Events</Typography>
           <List>
-            {currentEvents.map((event) => (
+            {formattedEvents.map((event) => (
               <ListItem
                 key={event.id}
                 sx={{
@@ -104,14 +88,11 @@ const Calendar = () => {
             editable={true}
             selectable={true}
             selectMirror={true}
-            dayMaxEvents={true}
-            select={handleDateClick}
-            eventClick={handleEventClick}
-            eventsSet={(events) => setCurrentEvents(events)}
-            initialEvents={[
-              { id: "1234", title: "All-day event", date: "2024-06-02" },
-              { id: "4321", title: "Timed event", date: "2024-06-20" },
-            ]}
+            dayMaxEvents={false}
+            //select={handleDateClick}
+            // eventClick={handleEventClick}
+            // eventsSet={(events) => setCurrentEvents(events)}
+            events={formattedEvents}
           />
         </Box>
       </Box>
@@ -120,3 +101,29 @@ const Calendar = () => {
 };
 
 export default Calendar;
+
+//   const handleDateClick = (selected) => {
+//     const title = prompt("Please enter a new title for your event");
+//     const calendarApi = selected.view.calendar;
+//     console.log(title);
+//     calendarApi.unselect();
+//     if (title) {
+//       calendarApi.addEvent({
+//         id: `${selected.dateStr}-${title}`,
+//         title,
+//         start: selected.startStr,
+//         end: selected.endStr,
+//         allDay: selected.allDay,
+//       });
+//     }
+//   };
+
+//   const handleEventClick = (selected) => {
+//     if (
+//       window.confirm(
+//         `Are you sure you want to delete the event '${selected.event.title}'`
+//       )
+//     ) {
+//       selected.event.remove();
+//     }
+//   };
