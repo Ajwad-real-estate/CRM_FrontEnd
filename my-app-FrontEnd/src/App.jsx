@@ -64,6 +64,10 @@ function App() {
           style={{ maxWidth: "100%", overflowX: "hidden" }}
         >
           <Topbar setIsSidebar={setIsSidebar} />
+        <Routes>
+          <Route path="/signin" element={<SignIn />} />
+
+        </Routes>
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/team" element={<Team />} />
@@ -98,7 +102,7 @@ function App() {
             <Route path="/SalesProcess" element={<SalesProcessPage />} />
 
             {/* SignIn page */}
-            <Route path="/signin" element={<SignIn />} />
+            {/* <Route path="/signin" element={<SignIn />} /> */}
           </Routes>
         </main>
       </div>

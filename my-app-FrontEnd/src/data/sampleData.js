@@ -19,16 +19,16 @@ export const pipelineData = [
     ],
   },
   {
-    id: 'proposition',
-    title: 'Proposition',
+    id: 'reservation',
+    title: 'reservation',
     leads: [
       { id: 3, title: 'Modern Open Space', phoneNumber: '01005307393', email: 'proposition@example.com', value: '4,500 LE', company: '', tags: ['Information'] },
       // Add more leads as needed
     ],
   },
   {
-    id: 'won',
-    title: 'Won',
+    id: 'done_deal',
+    title: 'done_deal',
     leads: [
       { id: 4, title: 'Need 20 Desks', phoneNumber: '01005307394', email: 'won@example.com', value: '60,000 LE', company: '', tags: ['Consulting'] },
       { id: 5, title: 'Office Chairs', phoneNumber: '01005307395', email: 'won2@example.com', value: '15,000 LE', company: 'Office Supplies Co.', tags: ['Furniture'] },

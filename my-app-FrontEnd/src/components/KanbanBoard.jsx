@@ -7,9 +7,10 @@ const initialData = {
     columns: {
         new: { id: 'new', title: 'New', leadIds: ['1', '2'] },
         qualified: { id: 'qualified', title: 'Qualified', leadIds: ['3', '4'] },
-        proposition: { id: 'proposition', title: 'Proposition', leadIds: ['5'] },
-        won: { id: 'won', title: 'Won', leadIds: ['6'] }
+        reservation: { id: 'reservation', title: 'reservation', leadIds: ['5'] },
+        done_deal: { id: 'done_deal', title: 'done_deal', leadIds: ['6'] }
     },
+    
     leads: {
         '1': { id: '1', title: 'Distributor Contract', amount: '19,800 LE' },
         '2': { id: '2', title: 'Global Solutions', amount: '3,800 LE' },

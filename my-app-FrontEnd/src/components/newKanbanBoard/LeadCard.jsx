@@ -40,10 +40,7 @@ const LeadCard = ({ lead }) => (
                     <span>No tags</span>
                 )}
             </Box>
-            <Box sx={{ marginTop: 2 }}>
-                <Button variant="outlined" color="secondary" sx={{ marginRight: 1 }}>Edit</Button>
-                <Button variant="outlined" color="secondary">Delete</Button>
-            </Box>
+
         </CardContent>
     </Card>
 );
