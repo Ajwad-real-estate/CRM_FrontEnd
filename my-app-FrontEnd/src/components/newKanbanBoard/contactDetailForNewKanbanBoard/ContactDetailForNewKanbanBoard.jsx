@@ -1,8 +1,13 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Card, CardContent, Typography, Button, Box, Divider, TextField } from '@mui/material';
+import { Card, CardContent, Typography, Button, Box, Divider, TextField, Autocomplete, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import Header from '../../Header';
-
+const actions = [
+ { value: 'follow_up', label: 'Follow Up' },
+ { value: 'meeting', label: 'Meeting' },
+ { value: 'cancellation', label: 'Cancellation' },
+ // ... other actions
+];
 // Sample data for demonstration purposes
 const contactData = [
  { id: '1', name: 'John Doe', email: 'john@example.com', phone: '123-456-7890', company: 'Example Inc.' },
@@ -32,9 +37,9 @@ const ContactDetailForNewKanbanBoard = () => {
   );
  }
 
-  const [editableContact, setEditableContact] = useState({ 
-  ...contact, 
-  notes: 'Initial note for the contact', 
+ const [editableContact, setEditableContact] = useState({
+  ...contact,
+  notes: 'Initial note for the contact',
   contactInfo: {
    contactName: 'John Doe',
    title: 'Manager',
@@ -48,7 +53,7 @@ const ContactDetailForNewKanbanBoard = () => {
   },
   expectedRevenue: '10000',
   probability: '75'
-  });
+ });
 
  const handleChange = (e) => {
   const { name, value } = e.target;
@@ -60,6 +65,34 @@ const ContactDetailForNewKanbanBoard = () => {
   console.log('Saved contact:', editableContact);
   navigate(-1); // Navigate back after saving
  };
+ // Action Select
+
+ // const handleChangeOnAction = (event) => {
+ //  setSelectedCountry(event.target.value);
+ // };
+ // const [selectedAction, setSelectedAction] = useState('');
+ const [selectedAction, setSelectedAction] = useState(editableContact.action || '');
+
+ const handleActionChange = (event) => {
+  setSelectedAction(event.target.value);
+  // handleChange({ ...editableContact, action: event.target.value }); // Update contact object with selected action
+
+  // Implement action logic here
+  if (event.target.value === 'follow_up') {
+   console.log('Follow Up action triggered');
+   // Perform follow-up logic (e.g., send email, create task)
+  } else if (event.target.value === 'meeting') {
+   console.log('Meeting action triggered');
+   // Schedule a meeting
+  } else if (event.target.value === 'cancellation') {
+   console.log('Cancellation action triggered');
+   // Handle cancellation logic
+  }
+  // ... handle other actions
+ };
+
+
+
 
  return (
   <Box m="20px">
@@ -92,7 +125,7 @@ const ContactDetailForNewKanbanBoard = () => {
         variant="outlined"
         value={editableContact.phone}
         onChange={handleChange}
-        sx={{ marginBottom: 2 ,width: '45%'}}
+        sx={{ marginBottom: 2, width: '45%' }}
        />
       </Box>
       <Divider sx={{ my: 2 }} />
@@ -163,8 +196,29 @@ const ContactDetailForNewKanbanBoard = () => {
          onChange={handleChange}
          sx={{ marginBottom: 2, width: '45%' }}
         />
+        <Divider sx={{ my: 2 }} />
+
+        <FormControl sx={{ width: '45%' }}>
+         <InputLabel id="action-label">Action</InputLabel>
+         <Select
+          labelId="action-label"
+          id="action"
+          value={selectedAction}
+          label="Action"
+          onChange={handleActionChange}
+          
+         >
+          {actions.map((action) => (
+           <MenuItem key={action.value} value={action.value}>
+            {action.label}
+           </MenuItem>
+          ))}
+         </Select>
+        </FormControl>
+       
        </Box>
        <Divider sx={{ my: 2 }} />
+
        <Typography variant="h6" sx={{ fontWeight: 'medium', mb: 1 }}>Contact Information:</Typography>
        <Typography>Contact Name: {editableContact.contactInfo.contactName}</Typography>
        <Typography>Title: {editableContact.contactInfo.title}</Typography>
@@ -188,7 +242,6 @@ const ContactDetailForNewKanbanBoard = () => {
         onChange={handleChange}
         sx={{ marginBottom: 2 }}
        />
-
        <Box display="flex" justifyContent="space-between" sx={{ marginTop: 3 }}>
         <Button variant="outlined" onClick={() => navigate(-1)}>Back</Button>
         <Button variant="contained" onClick={handleSave}>Save</Button>
@@ -197,6 +250,10 @@ const ContactDetailForNewKanbanBoard = () => {
      </Card>
     </Box >
    </Box>
+
+
+
+
   </Box>
   // </Box >
  );
