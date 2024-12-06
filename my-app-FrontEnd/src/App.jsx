@@ -9,7 +9,7 @@ import {
   CssBaseline,
   useMediaQuery,
 } from "@mui/material";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { themeSettings } from "./theme";
 import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/TheSideBar";
@@ -44,6 +44,7 @@ import ItemsList from "./components/todolist/ItemsList";
 import { Toaster } from "react-hot-toast";
 
 import SignIn from './components/SignIn';
+import SignUp from './components/signUp/signUp';
 
 function App() {
   const dispatch = useDispatch();
@@ -63,6 +64,12 @@ function App() {
   // Use useMediaQuery to check if the screen width is less than 600px
   const isSmallScreen = useMediaQuery("(max-width:600px)");
 
+  // Get the current location
+  const location = useLocation();
+
+  // Check if the current route is "/signup" or "/signin"
+  const isAuthPage = location.pathname === "/signin" || location.pathname === "/signup";
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -70,16 +77,21 @@ function App() {
         className="app"
         style={{ fontSize: isSmallScreen ? "10px" : "inherit" }}
       >
-        <Sidebar isSidebar={isSidebar} />
+        {/* Only render Sidebar if not on the auth pages */}
+        {!isAuthPage && <Sidebar isSidebar={isSidebar} />}
+
         <main
           className="content"
           style={{ maxWidth: "100%", overflowX: "hidden" }}
         >
-          <Topbar setIsSidebar={setIsSidebar} />
-        <Routes>
-          <Route path="/signin" element={<SignIn />} />
+          {/* Only render Topbar if not on the auth pages */}
+          {!isAuthPage && <Topbar setIsSidebar={setIsSidebar} />}
 
-        </Routes>
+          <Routes>
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+          </Routes>
+
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/team" element={<Team />} />
@@ -112,9 +124,6 @@ function App() {
             />
             <Route path="/Contact" element={<ContactPage />} />
             <Route path="/SalesProcess" element={<SalesProcessPage />} />
-
-            {/* SignIn page */}
-            {/* <Route path="/signin" element={<SignIn />} /> */}
           </Routes>
         </main>
       </div>
@@ -141,5 +150,6 @@ function App() {
     </ThemeProvider>
   );
 }
+
 
 export default App;

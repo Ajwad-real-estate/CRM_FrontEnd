@@ -1,6 +1,45 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';  // For navigation after login
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 
+
+const apiUrl = import.meta.env.VITE_API_URL;
+const websiteUrl = import.meta.env.VITE_APP_WEBSITE_URL;
 export default function SignIn() {
+  console.log(apiUrl); // https://api.example.com
+  
+  console.log(websiteUrl); // https://www.example.com
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();  // Hook to navigate after successful login
+
+  // Handle form submission
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    // Make sure both fields are filled
+    if (!email || !password) {
+      setError('Please fill in both fields.');
+      return;
+    }
+
+    try {
+      // Make the POST request to the backend
+      const response = await axios.post('/api/auth/login', { email, password });
+
+      // If successful, you can store the token and redirect the user
+      if (response.data.token) {
+        localStorage.setItem('authToken', response.data.token);  // Store token in local storage (for example)
+        navigate('/dashboard');  // Redirect user to the dashboard (or another page)
+      }
+    } catch (err) {
+      // Handle errors (e.g., invalid credentials)
+      setError('Invalid email or password');
+    }
+  };
+
   return (
     <section>
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -12,12 +51,10 @@ export default function SignIn() {
             </h1>
           </div>
           {/* Contact form */}
-          <form className="mx-auto max-w-[400px]">
+          <form className="mx-auto max-w-[400px]" onSubmit={handleSubmit}>
             <div className="space-y-5">
               <div>
-                <label
-                  className="mb-1 block text-sm font-medium text-[#4cceac]/65"
-                  htmlFor="email">
+                <label className="mb-1 block text-sm font-medium text-[#4cceac]/65" htmlFor="email">
                   Email
                 </label>
                 <input
@@ -25,28 +62,27 @@ export default function SignIn() {
                   type="email"
                   className="form-input w-full p-2 rounded"
                   placeholder="Your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
-                <div className="flex justify-between">
-                  <Link
-                    className="mb-1 text-sm font-medium text-[#4cceac]/65"
-                    href="#"
-                    htmlFor="password"
-                    >Password</Link>
-                  <Link
-                    className="text-sm font-medium text-[#4cceac]"
-                    href="#"
-                  >
-                    Forgot?
-                  </Link>
-                </div>
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-[#4cceac]/65" htmlFor="password">
+                  Password
+                </label>
                 <input
                   id="password"
                   type="password"
                   className="form-input w-full p-2 rounded"
                   placeholder="Your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
             </div>
+            {/* Display error if any */}
+            {error && <div className="text-red-500 text-center">{error}</div>}
+
             <div className="mt-6 space-y-5">
               <button className="btn p-2 rounded w-full bg-gradient-to-t from-[#4cceac] to-[#4cceac] bg-[length:100%_100%] bg-[bottom] text-white shadow-[inset_0px_1px_0px_0px_theme(colors.white/.16)] hover:bg-[length:100%_150%]">
                 Sign in
@@ -61,8 +97,8 @@ export default function SignIn() {
           </form>
           {/* Bottom link */}
           <div className="mt-6 text-center text-sm text-[#4cceac]/65">
-            Don&apos;t you have an account?{" "}
-            <Link className="font-medium text-[#4cceac]" href="#">
+            Don't you have an account?{" "}
+            <Link className="font-medium text-[#4cceac]" to="/signup">
               Sign Up
             </Link>
           </div>
