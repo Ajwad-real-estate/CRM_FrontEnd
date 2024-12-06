@@ -10,6 +10,8 @@ import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleMode } from '../../themeSlice';
 import { themeSettings, tokens } from '../../theme';
+import { useLocation } from "react-router-dom";
+import Header from "../../components/Header";
 
 
 
@@ -21,9 +23,46 @@ const Topbar = () => {
     dispatch(toggleMode());
   };
   const colors = tokens(theme.palette.mode);
+  // title of page
+  // const location = useLocation();
+
+  // const getPageTitle = (pathname) => {
+  //   switch (pathname) {
+  //     case "/home":
+  //       return "Home";
+  //     case "/about":
+  //       return "About Us";
+  //     case "/contact":
+  //       return "Contact Us";
+  //     case "/NewKanbanBoard":
+  //       return "NewKanbanBoard Us";
+  //     default:
+  //       return "Page Not Found";
+  //   }
+  // };
+  // title and subtitle
+
+  // Object to map page paths to titles and subtitles
+  const pageInfo = {
+    "/home": { title: "Home", subtitle: "Welcome to the Home Page" },
+    "/about": { title: "About Us", subtitle: "Learn more about us" },
+    "/contact": { title: "Contact Us", subtitle: "Get in touch with us" },
+    "/NewKanbanBoard": {
+      title: "Contacts Board", subtitle: "Manage your tasks effectively"
+    },
+  };
+  // Function to get page info
+  const getPageInfo = (pathname) => {
+    return pageInfo[pathname] || { title: "Page Not Found", subtitle: "Subtitle Not Found" };
+  };
+
+  const { title, subtitle } = getPageInfo(location.pathname);
+
+
 
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
+      <Header title={title}  />
       {/* Search Bar */}
       <Box>
         <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />

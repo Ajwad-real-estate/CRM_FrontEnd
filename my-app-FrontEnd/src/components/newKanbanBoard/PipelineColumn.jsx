@@ -7,7 +7,7 @@ const PipelineColumn = ({ title, children, onAdd }) => {
 
     return (
         <Box backgroundColor="primary"
-            sx={{ width: 250, padding: 1, borderRadius: 1 }}>
+            sx={{ width: '100%', padding: 1, borderRadius: 1 }}>
 
             <Typography variant="h6" align="center" gutterBottom
             sx={{mb:3, mt:2}}>
