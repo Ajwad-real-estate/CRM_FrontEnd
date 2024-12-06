@@ -95,59 +95,7 @@ const ContactDetailForNewKanbanBoard = () => {
 
 
  return (
-  <Box m="20px">
-   <Header title="Contact Detail" subtitle="View and manage contact information" />
-   <Box display="flex" justifyContent="center" sx={{ marginTop: 3 }}>
-    <Card sx={{ width: '100%', boxShadow: 3 }}>
-     <CardContent>
-      <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 2 }}>{editableContact.name}</Typography>
-      <Divider sx={{ mb: 2 }} />
-      <Box display="flex" flexDirection="column" gap={1}>
-       <TextField
-        label="Company"
-        name="company"
-        variant="outlined"
-        value={editableContact.company}
-        onChange={handleChange}
-        sx={{ marginBottom: 2, width: '45%' }}
-       />
-       <TextField
-        label="Email"
-        name="email"
-        variant="outlined"
-        value={editableContact.email}
-        onChange={handleChange}
-        sx={{ marginBottom: 2, width: '45%' }}
-       />
-       <TextField
-        label="Phone"
-        name="phone"
-        variant="outlined"
-        value={editableContact.phone}
-        onChange={handleChange}
-        sx={{ marginBottom: 2, width: '45%' }}
-       />
-      </Box>
-      <Divider sx={{ my: 2 }} />
-      <Typography variant="h6" sx={{ fontWeight: 'medium', mb: 1, width: '100%' }}>Notes:</Typography>
-      <TextField
-       label="Add a note"
-       name="notes"
-       variant="outlined"
-       multiline
-       rows={4}
-       value={editableContact.notes}
-       onChange={handleChange}
-       sx={{ marginBottom: 2 }}
-      />
-
-      <Box display="flex" justifyContent="space-between" sx={{ marginTop: 3 }}>
-       <Button variant="outlined" onClick={() => navigate(-1)}>Back</Button>
-       <Button variant="contained" onClick={handleSave}>Save</Button>
-      </Box>
-     </CardContent>
-    </Card>
-   </Box >
+ 
    <Box m="20px">
     <Header title="Contact Detail" subtitle="View and manage contact information" />
     <Box display="flex" justifyContent="center" sx={{ marginTop: 3 }}>
@@ -206,7 +154,7 @@ const ContactDetailForNewKanbanBoard = () => {
           value={selectedAction}
           label="Action"
           onChange={handleActionChange}
-          
+
          >
           {actions.map((action) => (
            <MenuItem key={action.value} value={action.value}>
@@ -254,7 +202,6 @@ const ContactDetailForNewKanbanBoard = () => {
 
 
 
-  </Box>
   // </Box >
  );
 };
