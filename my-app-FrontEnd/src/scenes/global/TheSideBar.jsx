@@ -159,7 +159,7 @@ const TheSideBar = () => {
       </Typography>
       <Item
        title="NewKanbanBoard"
-       to="/NewKanbanBoard"
+       to="/NewNewKanbanBoard"
        icon={<ContactsOutlinedIcon />}
        selected={selected}
        setSelected={setSelected}
@@ -234,13 +234,13 @@ const TheSideBar = () => {
        selected={selected}
        setSelected={setSelected}
       ></Item>
-       <Item
-        title="Contact"
-        to="/contact"
-        icon={<ContactsOutlinedIcon />}
-        selected={selected}
-        setSelected={setSelected}
-       />
+      <Item
+       title="Contact"
+       to="/contact"
+       icon={<ContactsOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      />
       {/* <Item
        title="NewKanbanBoard"
        to="/NewKanbanBoard"

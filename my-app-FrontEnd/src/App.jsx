@@ -45,6 +45,7 @@ import { Toaster } from "react-hot-toast";
 
 import SignIn from './components/SignIn';
 import SignUp from './components/signUp/signUp';
+import NewNewKanbanBoard from './components/newNewKanbanBoard/NewKanbanBoard';
 
 function App() {
   const dispatch = useDispatch();
@@ -107,6 +108,7 @@ function App() {
             <Route path="/new" element={<New />} />
             <Route path="/KanbanBoard" element={<KanbanBoard />} />
             <Route path="/NewKanbanBoard" element={<NewKanbanBoard />} />
+            <Route path="/NewNewKanbanBoard" element={<NewNewKanbanBoard />} />
             <Route
               path="/NewKanbanBoard/:ContactDetail"
               element={<ContactDetailForNewKanbanBoard />}
