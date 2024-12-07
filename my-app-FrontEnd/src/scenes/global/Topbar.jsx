@@ -61,11 +61,14 @@ const Topbar = () => {
 
 
   return (
-    <Box display="flex" justifyContent="space-between" p={2}>
+    <Box display="flex" justifyContent="space-between" p={1} sx={{ background: 'black', width: '100%', zIndex: 1000 }}>
+      <Box sx={{mt:2, ml:3}}>
+
       <Header title={title}  />
+      </Box>
       {/* Search Bar */}
-      <Box>
-        <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
+      <Box >
+        <InputBase sx={{ mt: 2, flex: 1 }} placeholder="Search" />
         <IconButton type="button" sx={{ p: 1 }}>
           <SearchIcon />
         </IconButton>

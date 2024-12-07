@@ -1,12 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardContent, Typography, Chip, Button, Box } from '@mui/material';
+import { Card, CardContent, Typography, Chip, Button, Box, useTheme } from '@mui/material';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import TagIcon from '@mui/icons-material/Label';
+import { tokens } from '../../theme';
 
-const LeadCard = ({ lead }) => (
-    <Card sx={{ padding: 2, marginBottom: 2, borderRadius: 2, boxShadow: 2 }}>
+const LeadCard = ({ lead }) => {
+    const theme = useTheme();  // Access the theme using useTheme hook
+    const colors = tokens(theme.palette.mode); // Get colors based on the current theme
+    //rgb(29 41 54) original
+    //rgb(28 39 47) i make  #1c272f
+    return(
+        <Card sx={{ padding: 2, marginBottom: 2, borderRadius: 2, boxShadow: 10, background: colors.columns[100] }}>
         <CardContent>
             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>{lead.title}</Typography>
             <Typography variant="subtitle2" color="text.secondary">
@@ -43,7 +49,7 @@ const LeadCard = ({ lead }) => (
 
         </CardContent>
     </Card>
-);
+)};
 
 LeadCard.propTypes = {
     lead: PropTypes.shape({
