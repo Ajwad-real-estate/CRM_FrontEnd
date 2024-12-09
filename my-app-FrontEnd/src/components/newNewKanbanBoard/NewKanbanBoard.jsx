@@ -239,13 +239,28 @@ const NewNewKanbanBoard = () => {
             <Button
               variant="contained"
               onClick={() => setIsListView(!isListView)}
-              sx={{ ml: 2, padding: "10px 0px", width: "25%", display: "flex" }}
+              sx={{
+              ml: 2,
+              padding: "10px 0px",
+              width: "25%",
+              display: "flex",
+              background: colors.columns[900],
+              border: '0.01px solid ', borderColor: colors.columns[100],
+              color: colors.grey[100],
+                pl: 0.5,
+              pr:0.5,
+              boxShadow: 3,
+              '&:hover': {
+                background: colors.columns[900],
+                boxShadow: 9, // Add shadow on hover
+              },
+              }}
             >
               {isListView ? "Switch to Kanban View" : "Switch to List View"}
             </Button>
-          </Box>
+            </Box>
 
-          {isListView ? (
+            {isListView ? (
             // Render List View
             <Box>
               {filteredLeads.map((lead) => (
@@ -253,7 +268,7 @@ const NewNewKanbanBoard = () => {
                   <LeadCard
                     lead={lead}
                     onDoubleClick={() => handleDoubleClick(lead)}
-                    sx={{ backgroundColor: colors.primary[500] }} // Use theme colors
+                    // sx={{ backgroundColor: colors.primary[500] }} // Use theme colors252
                   />
                 </Box>
               ))}
@@ -296,7 +311,7 @@ const NewNewKanbanBoard = () => {
                                     style={{
                                       ...provided.draggableProps.style,
                                       marginBottom: "8px",
-                                      backgroundColor: colors.primary[500], // Use theme colors
+                                      // backgroundColor: colors.primary[500], // Use theme colors
                                       borderRadius: "4px",
                                     }}
                                     onDoubleClick={() =>

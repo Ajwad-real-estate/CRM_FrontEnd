@@ -205,7 +205,10 @@ const NewKanbanBoard = () => {
             <Button
               variant="contained"
               onClick={() => setIsListView(!isListView)}
-              sx={{ ml: 2, padding: '10px 0px', width: '25%', display: 'flex' }}
+              sx={{
+                ml: 2, padding: '10px 0px', width: '25%', display: 'flex'
+                // , background: "white"
+              }}
             >
               {isListView ? 'Switch to Kanban View' : 'Switch to List View'}
             </Button>
