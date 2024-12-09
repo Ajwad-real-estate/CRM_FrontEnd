@@ -1,42 +1,53 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';  // For navigation after login
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
+// Backend API URL
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
-const apiUrl = import.meta.env.VITE_API_URL;
-const websiteUrl = import.meta.env.VITE_APP_WEBSITE_URL;
-export default function SignIn() {
-  console.log(apiUrl); // https://api.example.com
-  
-  console.log(websiteUrl); // https://www.example.com
-  const [email, setEmail] = useState('');
+const SignIn = () => {
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const navigate = useNavigate();  // Hook to navigate after successful login
+  const navigate = useNavigate();
 
   // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Make sure both fields are filled
-    if (!email || !password) {
+    if (!identifier || !password) {
       setError('Please fill in both fields.');
       return;
     }
 
     try {
       // Make the POST request to the backend
-      const response = await axios.post('/api/auth/login', { email, password });
+      const response = await axios.post(`${apiUrl}/api/auth/login`, {
+        identifier,
+        password,
+      });
+console.log(response)
+      const { accessToken, refreshToken, role_id, name } = response.data;
+      console.log(response.data)
+      // Save tokens in cookies
+      Cookies.set('accessToken', accessToken, { secure: true, sameSite: 'Strict' });
+      Cookies.set('refreshToken', refreshToken, { secure: true, sameSite: 'Strict' });
+      Cookies.set('role_id', role_id, { secure: false });
+      Cookies.set('name', name, { secure: false });
 
-      // If successful, you can store the token and redirect the user
-      if (response.data.token) {
-        localStorage.setItem('authToken', response.data.token);  // Store token in local storage (for example)
-        navigate('/dashboard');  // Redirect user to the dashboard (or another page)
-      }
+      // Decode the name if needed
+      const decodedName = decodeURIComponent(Cookies.get('name'));
+
+      // You can now use the decoded name
+      console.log(decodedName); // "ahmed name"
+
+      // Navigate to the dashboard
+      navigate('/');
     } catch (err) {
-      // Handle errors (e.g., invalid credentials)
-      setError('Invalid email or password');
+      console.error(err);
+      setError('Invalid identifier or password');
     }
   };
 
@@ -54,20 +65,26 @@ export default function SignIn() {
           <form className="mx-auto max-w-[400px]" onSubmit={handleSubmit}>
             <div className="space-y-5">
               <div>
-                <label className="mb-1 block text-sm font-medium text-[#4cceac]/65" htmlFor="email">
-                  Email
+                <label
+                  className="mb-1 block text-sm font-medium text-[#4cceac]/65"
+                  htmlFor="identifier"
+                >
+                  Identifier
                 </label>
                 <input
-                  id="email"
-                  type="email"
+                  id="identifier"
+                  type="text"
                   className="form-input w-full p-2 rounded"
-                  placeholder="Your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Your username or email"
+                  value={identifier}
+                  onChange={(e) => setIdentifier(e.target.value)}
                 />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium text-[#4cceac]/65" htmlFor="password">
+                <label
+                  className="mb-1 block text-sm font-medium text-[#4cceac]/65"
+                  htmlFor="password"
+                >
                   Password
                 </label>
                 <input
@@ -87,23 +104,19 @@ export default function SignIn() {
               <button className="btn p-2 rounded w-full bg-gradient-to-t from-[#4cceac] to-[#4cceac] bg-[length:100%_100%] bg-[bottom] text-white shadow-[inset_0px_1px_0px_0px_theme(colors.white/.16)] hover:bg-[length:100%_150%]">
                 Sign in
               </button>
-              <div className="flex items-center gap-3 text-center text-sm italic text-gray-600 before:h-px before:flex-1 before:bg-gradient-to-r before:from-transparent before:via-gray-400/25 after:h-px after:flex-1 after:bg-gradient-to-r after:from-transparent after:via-gray-400/25">
-                or
-              </div>
-              <button className="btn p-2 rounded relative w-full bg-gradient-to-b from-gray-800 to-gray-800/60 bg-[length:100%_100%] bg-[bottom] text-gray-300 before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:border before:border-transparent before:[background:linear-gradient(to_right,theme(colors.gray.800),theme(colors.gray.700),theme(colors.gray.800))_border-box] before:[mask-composite:exclude_!important] before:[mask:linear-gradient(white_0_0)_padding-box,_linear-gradient(white_0_0)] hover:bg-[length:100%_150%]">
-                Sign In with Google
-              </button>
             </div>
           </form>
-          {/* Bottom link */}
+          {/* Bottom link
           <div className="mt-6 text-center text-sm text-[#4cceac]/65">
-            Don't you have an account?{" "}
+            Don't you have an account?{' '}
             <Link className="font-medium text-[#4cceac]" to="/signup">
               Sign Up
             </Link>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>
   );
-}
+};
+
+export default SignIn;

@@ -13,8 +13,6 @@ import { themeSettings, tokens } from '../../theme';
 import { useLocation } from "react-router-dom";
 import Header from "../../components/Header";
 
-
-
 const Topbar = () => {
   const colorMode = useSelector((state) => state.theme.mode);
   const dispatch = useDispatch();
@@ -23,24 +21,6 @@ const Topbar = () => {
     dispatch(toggleMode());
   };
   const colors = tokens(theme.palette.mode);
-  // title of page
-  // const location = useLocation();
-
-  // const getPageTitle = (pathname) => {
-  //   switch (pathname) {
-  //     case "/home":
-  //       return "Home";
-  //     case "/about":
-  //       return "About Us";
-  //     case "/contact":
-  //       return "Contact Us";
-  //     case "/NewKanbanBoard":
-  //       return "NewKanbanBoard Us";
-  //     default:
-  //       return "Page Not Found";
-  //   }
-  // };
-  // title and subtitle
 
   // Object to map page paths to titles and subtitles
   const pageInfo = {
@@ -51,6 +31,7 @@ const Topbar = () => {
       title: "Contacts Board", subtitle: "Manage your tasks effectively"
     },
   };
+
   // Function to get page info
   const getPageInfo = (pathname) => {
     return pageInfo[pathname] || { title: "Page Not Found", subtitle: "Subtitle Not Found" };
@@ -58,23 +39,39 @@ const Topbar = () => {
 
   const { title, subtitle } = getPageInfo(location.pathname);
 
-
-
   return (
-    <Box display="flex" justifyContent="space-between" p={1} sx={{ background: 'black', width: '100%', zIndex: 1000 }}>
-      <Box sx={{mt:2, ml:3}}>
-
-      <Header title={title}  />
+    <Box
+      display="flex"
+      justifyContent="space-between"
+      p={1}
+      sx={{
+        background: colors.primary[400],
+        width: '80%',
+        zIndex: 1000,
+        // position: 'fixed',  // Fixed positioning to stay on top
+        top: 0,            // Stay at the top
+        left: 0,           // Ensure it spans across the full width
+        right: 0,          // Ensure it spans across the full width
+        boxShadow: 3,      // Add shadow for a subtle 3D effect
+        paddingLeft: 3,    // Align left padding
+        paddingRight: 3,   // Align right padding
+        paddingTop: 2,     // Ensure the icons inside the topbar have proper spacing
+      }}
+    >
+      <Box sx={{ mt: 2 }}>
+        <Header title={title} />
       </Box>
+
       {/* Search Bar */}
-      <Box >
-        <InputBase sx={{ mt: 2, flex: 1 }} placeholder="Search" />
+      <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+        <InputBase sx={{ flex: 1 }} placeholder="Search" />
         <IconButton type="button" sx={{ p: 1 }}>
           <SearchIcon />
         </IconButton>
       </Box>
-      {/* icons */}
-      <Box display="flex">
+
+      {/* Icons */}
+      <Box display="flex" alignItems="center">
         <IconButton onClick={handleToggle}>
           {theme.palette.mode === "dark" ? (
             <DarkModeOutlinedIcon />
@@ -92,11 +89,8 @@ const Topbar = () => {
           <PersonOutlinedIcon />
         </IconButton>
       </Box>
-
-
     </Box>
+  );
+};
 
-  )
-}
-
-export default Topbar
+export default Topbar;

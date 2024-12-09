@@ -47,6 +47,9 @@ import SignIn from './components/SignIn';
 import SignUp from './components/signUp/signUp';
 import NewNewKanbanBoard from './components/newNewKanbanBoard/NewKanbanBoard';
 
+import Parent from './scenes/NewGlobal/Parent'
+
+
 function App() {
   const dispatch = useDispatch();
   const mode = useSelector((state) => state.theme.mode);
@@ -87,7 +90,7 @@ function App() {
         >
           {/* Only render Topbar if not on the auth pages */}
           {!isAuthPage && <Topbar setIsSidebar={setIsSidebar} />}
-
+<Parent/>
           <Routes>
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
