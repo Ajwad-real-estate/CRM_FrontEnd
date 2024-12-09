@@ -1,8 +1,8 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
-import { useEffect } from 'react';
-import { setMode } from './themeSlice';
-import './index.css';
+import { useEffect } from "react";
+import { setMode } from "./themeSlice";
+import "./index.css";
 import {
   createTheme,
   ThemeProvider,
@@ -43,9 +43,9 @@ import AddToDo from "./components/todolist/AddToDo";
 import ItemsList from "./components/todolist/ItemsList";
 import { Toaster } from "react-hot-toast";
 
-import SignIn from './components/SignIn';
-import SignUp from './components/signUp/signUp';
-import NewNewKanbanBoard from './components/newNewKanbanBoard/NewKanbanBoard';
+import SignIn from "./components/SignIn";
+import SignUp from "./components/signUp/signUp";
+import NewNewKanbanBoard from "./components/newNewKanbanBoard/NewKanbanBoard";
 
 function App() {
   const dispatch = useDispatch();
@@ -53,7 +53,7 @@ function App() {
 
   useEffect(() => {
     // Load mode from local storage on app initialization
-    const savedMode = localStorage.getItem('mode');
+    const savedMode = localStorage.getItem("mode");
     if (savedMode) {
       dispatch(setMode(savedMode));
     }
@@ -69,7 +69,8 @@ function App() {
   const location = useLocation();
 
   // Check if the current route is "/signup" or "/signin"
-  const isAuthPage = location.pathname === "/signin" || location.pathname === "/signup";
+  const isAuthPage =
+    location.pathname === "/signin" || location.pathname === "/signup";
 
   return (
     <ThemeProvider theme={theme}>
@@ -152,6 +153,5 @@ function App() {
     </ThemeProvider>
   );
 }
-
 
 export default App;
