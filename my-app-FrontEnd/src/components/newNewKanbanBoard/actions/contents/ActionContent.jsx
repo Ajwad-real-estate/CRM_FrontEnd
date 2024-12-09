@@ -4,18 +4,17 @@ import PhoneEnabledIcon from "@mui/icons-material/PhoneEnabled";
 import HomeIcon from "@mui/icons-material/Home";
 import TagIcon from "@mui/icons-material/Tag";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
-import { Height } from "@mui/icons-material";
 import ActionBody from "./pageStructure/ActionBody";
 const centering = {
   display: "flex",
   alignItems: "center",
-  justifyContent: "center",
+  justifyContent: "space-between",
 
   Height: "48%",
-  width: "31%",
+  width: "200px",
   backgroundColor: "#333",
 };
-function ActionContent() {
+function ActionContent({ lead }) {
   return (
     <>
       <Box

@@ -1,7 +1,10 @@
 import {
   Box,
   Button,
+  Checkbox,
+  InputAdornment,
   MenuItem,
+  Popper,
   TextField,
   Typography,
   useTheme,
@@ -10,13 +13,21 @@ import FollowUpStat from "./FollowUpStat";
 import { useState } from "react";
 import { tokens } from "../../../../../theme";
 import CallGroup from "./CallGroup";
-
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import VerifiedIcon from "@mui/icons-material/Verified";
 const actionOptions = [
   "Folloe Up",
   "Meeting",
   "Follow Up after Meeting",
   "Cancel",
   "Cencel after Meeting",
+];
+const cancelOptions = [
+  "Location",
+  "Budget",
+  "Life Drops",
+  "Not a deal",
+  "Other Reason",
 ];
 function ActionBody() {
   //
@@ -25,17 +36,24 @@ function ActionBody() {
   const [dateTime, setDateTime] = useState("");
 
   // Next Action
+  // const [searchValue, setSearchValue] = useState("");
+  //const [selectedAction, setSelectedAction] = useState("");
   const [searchValue, setSearchValue] = useState("");
-  const [selectedAction, setSelectedAction] = useState("");
+  const [selectedValue, setSelectedValue] = useState("Follow Up");
+  const [selectedCancel, setSelectedCancel] = useState("");
   const handleSearchChange = (event) => {
     setSearchValue(event.target.value);
   };
 
-  const handleSelectAction = (action) => {
-    setSelectedAction(action);
-    setSearchValue(action);
+  const handleSelectAction = (option) => {
+    setSelectedValue(option);
+    setSearchValue(option); // Optionally update search value to selected value
+  };
+  const handleSelectCancel = (option) => {
+    setSelectedCancel(option);
   };
   //
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const handleDateChange = (event) => {
@@ -77,56 +95,115 @@ function ActionBody() {
           >
             Next Action
           </Typography>
-          <TextField
-            id="outlined-select-currency-native"
-            select
-            defaultValue="Follow Up"
-            value={searchValue}
-            onChange={handleSearchChange}
-            slotProps={{
-              select: {
-                native: true,
-              },
-            }}
-            sx={{ width: "100%" }}
-          >
-            {actionOptions.map((option, index) => (
-              <MenuItem
-                key={index}
-                value={option}
-                onClick={() => handleSelectAction(option)}
+
+          <Box sx={{ width: "100%", display: "flex" }}>
+            <TextField
+              id="outlined-select-currency-native"
+              select
+              defaultValue="Follow Up"
+              value={searchValue}
+              onChange={handleSearchChange}
+              slotProps={{
+                select: {
+                  native: true,
+                },
+              }}
+              sx={{ flex: 1 }}
+            >
+              {actionOptions.map((option, index) => (
+                <MenuItem
+                  key={index}
+                  value={option}
+                  onClick={() => handleSelectAction(option)}
+                  sx={{
+                    padding: "10px 20px", // Custom padding
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      backgroundColor: "#e5e5e5a6",
+                    },
+                  }}
+                >
+                  {option}
+                </MenuItem>
+              ))}
+            </TextField>
+            {selectedValue === "Meeting" && (
+              <Checkbox
+                icon={<CheckCircleOutlineIcon />}
+                checkedIcon={<VerifiedIcon />}
                 sx={{
-                  padding: "10px 20px", // Custom padding
-                  transition: "all 0.3s ease",
-                  "&:hover": {
-                    backgroundColor: "#e5e5e5a6",
+                  color: colors.greenAccent[700], // Unchecked state color
+                  "&.Mui-checked": {
+                    color: colors.greenAccent[600], // Checked state color
                   },
                 }}
-              >
-                {option}
-              </MenuItem>
-            ))}
-          </TextField>
+              />
+            )}
+          </Box>
         </Box>
         <Box>
-          <Typography
-            variant="body1"
-            component="label"
-            htmlFor="custom-textfield"
-          >
-            Stage Date
-          </Typography>
-          <TextField
-            type="datetime-local"
-            value={dateTime}
-            onChange={handleDateChange}
-            fullWidth
-            InputLabelProps={{
-              shrink: true, // Ensures the label shrinks when using datetime-local
-            }}
-          />
+          {selectedValue === "Cencel after Meeting" ||
+          selectedValue === "Cancel" ? (
+            <>
+              <Typography
+                variant="body1"
+                component="label"
+                htmlFor="custom-textfield"
+              >
+                Cancel Reason
+              </Typography>
+              <TextField
+                id="outlined-select-currency-native"
+                select
+                defaultValue="Follow Up"
+                slotProps={{
+                  select: {
+                    native: true,
+                  },
+                }}
+                sx={{ width: "100%" }}
+              >
+                {cancelOptions.map((option, index) => (
+                  <MenuItem
+                    key={index}
+                    value={option}
+                    onClick={() => handleSelectCancel(option)}
+                    sx={{
+                      padding: "10px 20px", // Custom padding
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        backgroundColor: "#e5e5e5a6",
+                      },
+                    }}
+                  >
+                    {option}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </>
+          ) : (
+            <>
+              <Typography
+                variant="body1"
+                component="label"
+                htmlFor="custom-textfield"
+              >
+                Stage Date
+              </Typography>
+              <TextField
+                type="datetime-local"
+                value={dateTime}
+                onChange={handleDateChange}
+                fullWidth
+                InputLabelProps={{
+                  shrink: true, // Ensures the label shrinks when using datetime-local
+                }}
+              />
+            </>
+          )}
         </Box>
       </Box>
+
       <Box
         sx={{
           gridArea: "options",
@@ -139,8 +216,8 @@ function ActionBody() {
         }}
       >
         <CallGroup />
-
-        <FollowUpStat />
+        {selectedValue !== "Cancel" &&
+          selectedValue !== "Cencel after Meeting" && <FollowUpStat />}
       </Box>
       <Box
         sx={{

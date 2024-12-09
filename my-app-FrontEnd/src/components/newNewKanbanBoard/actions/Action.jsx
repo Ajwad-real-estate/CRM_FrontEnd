@@ -8,7 +8,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Button, Typography, useMediaQuery, useTheme } from "@mui/material";
 import ActionContent from "./contents/ActionContent";
 import { tokens } from "../../../theme";
-const Action = ({ open, onClose, onOpen }) => {
+const Action = ({ open, onClose, onOpen, lead }) => {
   const { TabValue } = useLeadOpt();
   // Drawer content
   const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -66,7 +66,7 @@ const Action = ({ open, onClose, onOpen }) => {
           gap: "10px",
         }}
       >
-        {TabValue === 3 && <ActionContent />}
+        {TabValue === 3 && <ActionContent lead={lead} />}
       </Box>
       {/* Content ----------------------------------------------------------------------------- */}
     </Box>
