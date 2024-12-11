@@ -96,44 +96,44 @@ const GetContacts = () => {
               </Typography>
               <Box>
 
-              <Box
-                component="input"
-                type="file"
-                accept=".xlsx, .xls"
-                onChange={handleFileUpload}
-                disabled={file !== null} // Disable the input if file is already selected
-                sx={{
-                  display: "block",
-                  margin: "16px auto",
-                  padding: "8px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                }}
-              />
-              {file && (
-                <Box sx={{ textAlign: "center", mt: 2 }}>
-                  <Typography variant="body1">File: {file.name}</Typography>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={handleResetFile}
-                    sx={{ mt: 2 }}
+                <Box
+                  component="input"
+                  type="file"
+                  accept=".xlsx, .xls"
+                  onChange={handleFileUpload}
+                  disabled={file !== null} // Disable the input if file is already selected
+                  sx={{
+                    display: "block",
+                    margin: "16px auto",
+                    padding: "8px",
+                    border: "1px solid #ccc",
+                    borderRadius: "4px",
+                  }}
+                />
+                {file && (
+                  <Box sx={{ textAlign: "center", mt: 2 }}>
+                    <Typography variant="body1">File: {file.name}</Typography>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={handleResetFile}
+                      sx={{ mt: 2 }}
                     >
-                    Remove File
-                  </Button>
-                </Box>
-              )}
-              {loading && (
-                <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-                  <CircularProgress />
-                  <Typography sx={{ ml: 2 }}>Processing file...</Typography>
-                </Box>
-              )}
-              {!loading && data.length === 0 && (
-                <Alert severity="info" sx={{ mt: 2 }}>
-                  No data to display. Please upload a valid Excel file.
-                </Alert>
-              )}
+                      Remove File
+                    </Button>
+                  </Box>
+                )}
+                {loading && (
+                  <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+                    <CircularProgress />
+                    <Typography sx={{ ml: 2 }}>Processing file...</Typography>
+                  </Box>
+                )}
+                {!loading && data.length === 0 && (
+                  <Alert severity="info" sx={{ mt: 2 }}>
+                    No data to display. Please upload a valid Excel file.
+                  </Alert>
+                )}
               </Box>
               {data.length > 0 && (
                 <TableContainer component={Paper} sx={{ mt: 3 }}>
