@@ -30,6 +30,9 @@ const Topbar = () => {
     "/NewKanbanBoard": {
       title: "Contacts Board", subtitle: "Manage your tasks effectively"
     },
+    "/NewNewKanbanBoard": {
+      title: "Contacts Board", subtitle: "Manage your tasks effectively"
+    },
   };
 
   // Function to get page info
@@ -58,34 +61,34 @@ const Topbar = () => {
         paddingTop: 2,     // Ensure the icons inside the topbar have proper spacing
       }}
     >
-      <Box sx={{ mt: 2 }}>
+      <Box sx={{ mt: 2}}>
         <Header title={title} />
       </Box>
 
       {/* Search Bar */}
-      <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
-        <InputBase sx={{ flex: 1 }} placeholder="Search" />
-        <IconButton type="button" sx={{ p: 1 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', mt: 2}}>
+        <InputBase sx={{ flex: 1, color: '#FCFCFC' }} placeholder="Search" />
+        <IconButton type="button" sx={{ p: 1, color: '#FCFCFC' }}>
           <SearchIcon />
         </IconButton>
       </Box>
 
       {/* Icons */}
-      <Box display="flex" alignItems="center">
-        <IconButton onClick={handleToggle}>
+      <Box display="flex" alignItems="center" sx={{ color: '#FCFCFC' }}>
+        <IconButton onClick={handleToggle} sx={{ color: '#FCFCFC' }}>
           {theme.palette.mode === "dark" ? (
             <DarkModeOutlinedIcon />
           ) : (
             <LightModeOutlinedIcon />
           )}
         </IconButton>
-        <IconButton>
+        <IconButton sx={{ color: '#FCFCFC' }}>
           <NotificationsOutlinedIcon />
         </IconButton>
-        <IconButton>
+        <IconButton sx={{ color: '#FCFCFC' }}>
           <SettingsOutlinedIcon />
         </IconButton>
-        <IconButton>
+        <IconButton sx={{ color: '#FCFCFC' }}>
           <PersonOutlinedIcon />
         </IconButton>
       </Box>

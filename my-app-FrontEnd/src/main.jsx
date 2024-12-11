@@ -8,14 +8,16 @@ import { BrowserRouter } from "react-router-dom";
 
 import { store } from './store';
 import { Provider } from 'react-redux';
+// import DashboardLayoutNavigationNested from './scenes/global/DashboardLayoutNavigationNested.jsx'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-
-        <App />
+        {/* <DashboardLayoutNavigationNested> */}
+          <App />
+        {/* </DashboardLayoutNavigationNested> */}
       </BrowserRouter>
     </Provider>
   </React.StrictMode>,

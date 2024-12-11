@@ -46,6 +46,10 @@ import { Toaster } from "react-hot-toast";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/signUp/signUp";
 import NewNewKanbanBoard from "./components/newNewKanbanBoard/NewKanbanBoard";
+import GetContacts from "./components/getContacts/GetContacts";
+import { Box } from "@mui/material";
+// import DashboardLayoutNavigationNested from "./scenes/global/DashboardLayout";
+// import DashboardLayoutBasic from "./scenes/global/DashboardLayoutBasic";
 
 
 function App() {
@@ -80,54 +84,60 @@ function App() {
         className="app"
         style={{ fontSize: isSmallScreen ? "10px" : "inherit" }}
       >
-        {/* Only render Sidebar if not on the auth pages */}
-        {!isAuthPage && <Sidebar isSidebar={isSidebar} />}
 
         <main
           className="content"
           style={{ maxWidth: "100%", overflowX: "hidden" }}
         >
+
           {/* Only render Topbar if not on the auth pages */}
           {!isAuthPage && <Topbar setIsSidebar={setIsSidebar} />}
-          <Routes>
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
-          </Routes>
+          <Box sx={{ display: 'flex',minHeight:'91%' }}>
 
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/team" element={<Team />} />
-            <Route path="/form" element={<Form />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/bar" element={<Bar />} />
-            <Route path="/pie" element={<Pie />} />
-            <Route path="/line" element={<Line />} />
-            <Route path="/geography" element={<Geography />} />
-            <Route path="/contacts" element={<Contacts />} />
-            <Route path="/invoices" element={<Invoices />} />
-            <Route path="/new" element={<New />} />
-            <Route path="/KanbanBoard" element={<KanbanBoard />} />
-            <Route path="/NewKanbanBoard" element={<NewKanbanBoard />} />
-            <Route path="/NewNewKanbanBoard" element={<NewNewKanbanBoard />} />
-            <Route
-              path="/NewKanbanBoard/:ContactDetail"
-              element={<ContactDetailForNewKanbanBoard />}
-            />
-            <Route path="/projects" element={<InventoryPage />} />
-            <Route path="/projects/:projectName" element={<ProjectDetails />} />
-            <Route path="/commission" element={<CommissionPage />} />
-            <Route path="/todolist" element={<ToDoListPage />}>
-              <Route path="addtask" element={<AddToDo />} />
-              <Route index element={<ItemsList />} />
-            </Route>
-            <Route
-              path="/RequestCommissionPage"
-              element={<RequestCommissionPage />}
-            />
-            <Route path="/Contact" element={<ContactPage />} />
-            <Route path="/SalesProcess" element={<SalesProcessPage />} />
-          </Routes>
+            {/* Only render Sidebar if not on the auth pages */}
+            {!isAuthPage && <Sidebar isSidebar={isSidebar} />}
+            <Box sx={{width:'100%'}}>
+            <Routes>
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
+            </Routes>
+
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/team" element={<Team />} />
+              <Route path="/form" element={<Form />} />
+              <Route path="/calendar" element={<Calendar />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/bar" element={<Bar />} />
+              <Route path="/pie" element={<Pie />} />
+              <Route path="/line" element={<Line />} />
+              <Route path="/geography" element={<Geography />} />
+              <Route path="/contacts" element={<Contacts />} />
+              <Route path="/invoices" element={<Invoices />} />
+              <Route path="/new" element={<New />} />
+              <Route path="/KanbanBoard" element={<KanbanBoard />} />
+              <Route path="/NewKanbanBoard" element={<NewKanbanBoard />} />
+              <Route path="/NewNewKanbanBoard" element={<NewNewKanbanBoard />} />
+              <Route
+                path="/NewKanbanBoard/:ContactDetail"
+                element={<ContactDetailForNewKanbanBoard />}
+              />
+              <Route path="/projects" element={<InventoryPage />} />
+              <Route path="/projects/:projectName" element={<ProjectDetails />} />
+              <Route path="/commission" element={<CommissionPage />} />
+              <Route path="/todolist" element={<ToDoListPage />}>
+                <Route path="addtask" element={<AddToDo />} />
+                <Route index element={<ItemsList />} />
+              </Route>
+              <Route
+                path="/RequestCommissionPage"
+                element={<RequestCommissionPage />}
+              />
+              <Route path="/Contact" element={<ContactPage />} />
+              <Route path="/SalesProcess" element={<SalesProcessPage />} />
+              <Route path="/GetContacts" element={<GetContacts />} />
+            </Routes>
+            </Box></Box>
         </main>
       </div>
       <Toaster

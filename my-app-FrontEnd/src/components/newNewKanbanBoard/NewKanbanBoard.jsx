@@ -201,7 +201,7 @@ const NewNewKanbanBoard = () => {
   return (
     <>
       <Box m="20px">
-        <Header title="Contacts" subtitle="Manage your tasks effectively" />
+        {/* <Header title="Contacts" subtitle="Manage your tasks effectively" /> */}
         <Box
           m="40px 0 0 0"
           height="100%"
