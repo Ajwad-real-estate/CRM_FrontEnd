@@ -18,7 +18,7 @@ import VerifiedIcon from "@mui/icons-material/Verified";
 import Dialogue from "./Dialogue";
 import Reservation from "./Reservation";
 const actionOptions = [
-  "Folloe Up",
+  "Follow Up",
   "Meeting",
   "Follow Up after Meeting",
   "Cancel",
