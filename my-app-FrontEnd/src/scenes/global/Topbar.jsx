@@ -45,8 +45,8 @@ const Topbar = () => {
       justifyContent="space-between"
       p={1}
       sx={{
-        background: colors.primary[400],
-        width: '80%',
+        background: colors.NewNav[900],
+        width: '100%',
         zIndex: 1000,
         // position: 'fixed',  // Fixed positioning to stay on top
         top: 0,            // Stay at the top

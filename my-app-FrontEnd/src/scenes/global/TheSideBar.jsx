@@ -24,119 +24,130 @@ import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import KanbanBoard from "../../components/KanbanBoard";
 import NewKanbanBoard from "../../components/newKanbanBoard/NewKanbanBoard";
 
+
 const Item = ({ title, to, icon, selected, setSelected }) => {
- const theme = useTheme();
- const colors = tokens(theme.palette.mode);
- return (
-  <Link to={to} className="no-underline">
-   <MenuItem
-    active={selected === title}
-    style={{
-     color: colors.grey[100],
-    }}
-    onClick={() => setSelected(title)}
-    icon={icon}
-   >
-    <Typography>{title}</Typography>
-   </MenuItem>
-  </Link>
- )
+       const theme = useTheme();
+       const colors = tokens(theme.palette.mode);
+       return (
+              <Link to={to} className="no-underline">
+                     <MenuItem
+                            active={selected === title}
+                            style={{
+                                   color: colors.grey[100],
+                            }}
+                            onClick={() => setSelected(title)}
+                            icon={icon}
+                     >
+                            <Typography>{title}</Typography>
+                     </MenuItem>
+              </Link>
+       )
 }
 
 const TheSideBar = () => {
- const theme = useTheme();
- const colors = tokens(theme.palette.mode);
- const [isCollapsed, setIsCollapsed] = useState(false);
- const [selected, setSelected] = useState("Dashboard");
+       const theme = useTheme();
+       const colors = tokens(theme.palette.mode);
+       const [isCollapsed, setIsCollapsed] = useState(false);
+       const [selected, setSelected] = useState("Dashboard");
 
- return (
-  <Box
-   sx={{
-    background: `${colors.primary[400]} !important`,
-    "& .ps-sidebar-root": {
-     border: `0px !important`,
-     height: `100% !important`,
-     // width: `270px`,
-    },
-    "& .MuiBox-root": {
-     background: `${colors.primary[400]} !important`,
-     margin: `${colors.primary[400]} !important`,
-    },
-    "& .ps-sidebar-container": {
-     background: `${colors.primary[400]} !important`,
-     overflow: `hidden auto !important`,
-     position: `relative !important`,
-    },
-    "& .ps-icon-wrapper": {
-     backgroundColor: "transparent !important",
-    },
-    "& .ps-menu-button": {
-     padding: "5px 30px 5px 15px !important",
-     "&:hover": {
-      // color: colors.grey[100] + " !important",
-      backgroundColor: colors.primary[400] + " !important",
-     },
-    },
-    "& .ps-menu-button:hover": {
-     color: "#868dfb !important",
-     background: `${colors.primary[400]} !important`,
 
-    },
-    "& .ps-menu-button.active": {
-     color: "#6870fa !important",
+       return (
+              <Box
+                     sx={{
+                            background: `${colors.primary[400]} !important`,
+                            "& .ps-sidebar-root": {
+                                   border: `0px !important`,
+                                   height: `100% !important`,
+                                   // width: `270px`,
+                            },
+                            "& .MuiBox-root": {
+                                   background: `${colors.primary[400]} !important`,
+                                   margin: `${colors.primary[400]} !important`,
+                            },
+                            "& .ps-sidebar-container": {
+                                   background: `${colors.primary[400]} !important`,
+                                   overflow: `hidden auto !important`,
+                                   position: `relative !important`,
+                            },
+                            "& .ps-icon-wrapper": {
+                                   backgroundColor: "transparent !important",
+                            },
+                            "& .ps-menu-button": {
+                                   padding: "5px 30px 5px 15px !important",
+                                   "&:hover": {
+                                          // color: colors.grey[100] + " !important",
+                                          backgroundColor: colors.primary[400] + " !important",
+                                   },
+                            },
+                            "& .ps-menu-button:hover": {
+                                   color: "#868dfb !important",
+                                   background: `${colors.primary[400]} !important`,
 
-    },
-   }}
-  >
-   <Sidebar collapsed={isCollapsed}>
-    <Menu iconShape="square">
-     {/* logo and menu icon */}
-     <MenuItem
-      onClick={() => setIsCollapsed(!isCollapsed)}
-      icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
-      style={{
-       margin: "10px 0 20px 0",
-       color: colors.grey[100],
-      }}
-     >
-      {!isCollapsed && (
-       <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        ml="15px"
-       >
-        <Typography variant="h3" color={colors.grey[100]}>
-         ADMINIS
-        </Typography>
-        <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
-         <MenuOutlinedIcon />
-        </IconButton>
-       </Box>
-      )}
-     </MenuItem>
+                            },
+                            "& .ps-menu-button.active": {
+                                   color: "#6870fa !important",
 
-     {!isCollapsed && (
-      <Box mb="25px">
+                            },
+                     }}
+              >
 
-       <Box textAlign="center">
-        <Typography
-         variant="h2"
-         color={colors.grey[100]}
-         fontWeight="bold"
-         sx={{ m: "10px 0 0 0" }}
-        >
-         Ahmed Elsisy
-        </Typography>
-        <Typography variant="h5" color={colors.greenAccent[500]}>
-         Role : Sales Manager
-        </Typography>
-       </Box>
-      </Box>
-     )}
-     <Box paddingLeft={isCollapsed ? undefined : "10%"}>
 
-      {/* <Typography
+
+
+
+
+
+
+
+                     <Sidebar collapsed={isCollapsed}>
+                            <Menu iconShape="square">
+                                   {/* logo and menu icon */}
+                                   <MenuItem
+                                          onClick={() => setIsCollapsed(!isCollapsed)}
+                                          icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
+                                          style={{
+                                                 margin: "10px 0 20px 0",
+                                                 color: colors.grey[100],
+                                          }}
+                                   >
+                                          {!isCollapsed && (
+                                                 <Box
+                                                        display="flex"
+                                                        justifyContent="space-between"
+                                                        alignItems="center"
+                                                        ml="15px"
+                                                 >
+                                                        <Typography variant="h3" color={colors.grey[100]}>
+                                                               ADMINIS
+                                                        </Typography>
+                                                        <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
+                                                               <MenuOutlinedIcon />
+                                                        </IconButton>
+                                                 </Box>
+                                          )}
+                                   </MenuItem>
+
+                                   {!isCollapsed && (
+                                          <Box mb="25px">
+
+                                                 <Box textAlign="center">
+                                                        <Typography
+                                                               variant="h2"
+                                                               color={colors.grey[100]}
+                                                               fontWeight="bold"
+                                                               sx={{ m: "10px 0 0 0" }}
+                                                        >
+                                                               Ahmed Elsisy
+                                                        </Typography>
+                                                        <Typography variant="h5" color={colors.greenAccent[500]}>
+                                                               Role : Sales Manager
+                                                        </Typography>
+                                                 </Box>
+                                          </Box>
+                                   )}
+                                   <Box paddingLeft={isCollapsed ? undefined : "10%"}>
+
+                                          {/* <Typography
        variant="h6"
        color={colors.grey[300]}
        sx={{ m: "15px 0 5px 20px" }}
@@ -150,63 +161,63 @@ const TheSideBar = () => {
        selected={selected}
        setSelected={setSelected}
       /> */}
-      <Typography
-       variant="h6"
-       color={colors.grey[300]}
-       sx={{ m: "15px 0 5px 20px" }}
-      >
-       Pages To Sales Manager
-      </Typography>
-      <Item
-       title="NewKanbanBoard"
-       to="/NewNewKanbanBoard"
-       icon={<ContactsOutlinedIcon />}
-       selected={selected}
-       setSelected={setSelected}
-      />
-      <Item
-       title="Inventory"
-       to="/projects"
-       icon={<MapOutlinedIcon />}
-       selected={selected}
-       setSelected={setSelected}
-      />
-      {/* <Item
+                                          <Typography
+                                                 variant="h6"
+                                                 color={colors.grey[300]}
+                                                 sx={{ m: "15px 0 5px 20px" }}
+                                          >
+                                                 Pages To Sales Manager
+                                          </Typography>
+                                          <Item
+                                                 title="NewKanbanBoard"
+                                                 to="/NewNewKanbanBoard"
+                                                 icon={<ContactsOutlinedIcon />}
+                                                 selected={selected}
+                                                 setSelected={setSelected}
+                                          />
+                                          <Item
+                                                 title="Inventory"
+                                                 to="/projects"
+                                                 icon={<MapOutlinedIcon />}
+                                                 selected={selected}
+                                                 setSelected={setSelected}
+                                          />
+                                          {/* <Item
        title="RequestCommissionPage"
        to="/RequestCommissionPage"
        icon={<ReceiptOutlinedIcon />}
        selected={selected}
        setSelected={setSelected}
       /> */}
-      <Item
-       title="To-Do List
+                                          <Item
+                                                 title="To-Do List
 "
-       to="/todolist"
-       icon={<ReceiptOutlinedIcon />}
-       selected={selected}
-       setSelected={setSelected}
-      />
-      <Item
-       title="Calendar"
-       to="/calendar"
-       icon={<CalendarTodayOutlinedIcon />}
-       selected={selected}
-       setSelected={setSelected}
-      />
-      <Item
-       title="Contact"
-       to="/contact"
-       icon={<ContactsOutlinedIcon />}
-       selected={selected}
-       setSelected={setSelected}
-      />
-      <Item
-       title="FAQ Page"
-       to="/faq"
-       icon={<HelpOutlineOutlinedIcon />}
-       selected={selected}
-       setSelected={setSelected}
-      />
+                                                 to="/todolist"
+                                                 icon={<ReceiptOutlinedIcon />}
+                                                 selected={selected}
+                                                 setSelected={setSelected}
+                                          />
+                                          <Item
+                                                 title="Calendar"
+                                                 to="/calendar"
+                                                 icon={<CalendarTodayOutlinedIcon />}
+                                                 selected={selected}
+                                                 setSelected={setSelected}
+                                          />
+                                          <Item
+                                                 title="Contact"
+                                                 to="/contact"
+                                                 icon={<ContactsOutlinedIcon />}
+                                                 selected={selected}
+                                                 setSelected={setSelected}
+                                          />
+                                          <Item
+                                                 title="FAQ Page"
+                                                 to="/faq"
+                                                 icon={<HelpOutlineOutlinedIcon />}
+                                                 selected={selected}
+                                                 setSelected={setSelected}
+                                          />
 
 
 
@@ -220,77 +231,77 @@ const TheSideBar = () => {
 
 
 
-      <Typography
-       variant="h6"
-       color={colors.grey[300]}
-       sx={{ m: "15px 0 5px 20px" }}
-      >
-       Pages To sales Manager
-      </Typography>
-      <Item
-       title="Dashboard"
-       to="/"
-       icon={<HomeOutlinedIcon />}
-       selected={selected}
-       setSelected={setSelected}
-      ></Item>
-      <Item
-       title="Contact"
-       to="/contact"
-       icon={<ContactsOutlinedIcon />}
-       selected={selected}
-       setSelected={setSelected}
-      />
-      {/* <Item
+                                          <Typography
+                                                 variant="h6"
+                                                 color={colors.grey[300]}
+                                                 sx={{ m: "15px 0 5px 20px" }}
+                                          >
+                                                 Pages To sales Manager
+                                          </Typography>
+                                          <Item
+                                                 title="Dashboard"
+                                                 to="/"
+                                                 icon={<HomeOutlinedIcon />}
+                                                 selected={selected}
+                                                 setSelected={setSelected}
+                                          ></Item>
+                                          <Item
+                                                 title="Contact"
+                                                 to="/contact"
+                                                 icon={<ContactsOutlinedIcon />}
+                                                 selected={selected}
+                                                 setSelected={setSelected}
+                                          />
+                                          {/* <Item
        title="NewKanbanBoard"
        to="/NewKanbanBoard"
        icon={<ContactsOutlinedIcon />}
        selected={selected}
        setSelected={setSelected}
       /> */}
-      <Item
-       title="Inventory"
-       to="/projects"
-       icon={<MapOutlinedIcon />}
-       selected={selected}
-       setSelected={setSelected}
-      />
-      {/* <Item
+                                          <Item
+                                                 title="Inventory"
+                                                 to="/projects"
+                                                 icon={<MapOutlinedIcon />}
+                                                 selected={selected}
+                                                 setSelected={setSelected}
+                                          />
+                                          {/* <Item
        title="commission"
        to="/commission"
        icon={<ReceiptOutlinedIcon />}
        selected={selected}
        setSelected={setSelected}
       /> */}
-      <Item
-       title="To-Do List
+                                          <Item
+                                                 title="To-Do List
 "
-       to="/todolist"
-       icon={<ReceiptOutlinedIcon />}
-       selected={selected}
-       setSelected={setSelected}
-      />
-      <Item
-       title="Calendar"
-       to="/calendar"
-       icon={<CalendarTodayOutlinedIcon />}
-       selected={selected}
-       setSelected={setSelected}
-      />
-      <Item
-       title="Manage Team"
-       to="/team"
-       icon={<PeopleOutlinedIcon />}
-       selected={selected}
-       setSelected={setSelected}
-      />
-      <Item
-       title="FAQ Page"
-       to="/faq"
-       icon={<HelpOutlineOutlinedIcon />}
-       selected={selected}
-       setSelected={setSelected}
-      />
+                                                 to="/todolist"
+                                                 icon={<ReceiptOutlinedIcon />}
+                                                 selected={selected}
+                                                 setSelected={setSelected}
+                                          />
+                                          <Item
+                                                 title="Calendar"
+                                                 to="/calendar"
+                                                 icon={<CalendarTodayOutlinedIcon />}
+                                                 selected={selected}
+                                                 setSelected={setSelected}
+                                          />
+                                          <Item
+                                                 title="Manage Team"
+                                                 to="/team"
+                                                 icon={<PeopleOutlinedIcon />}
+                                                 selected={selected}
+                                                 setSelected={setSelected}
+                                          />
+                                          <Item
+                                                 title="FAQ Page"
+                                                 to="/faq"
+                                                 icon={<HelpOutlineOutlinedIcon />}
+                                                 selected={selected}
+                                                 setSelected={setSelected}
+                                          />
 
 
 
@@ -314,7 +325,7 @@ const TheSideBar = () => {
 
 
 
-      {/* <Typography
+                                          {/* <Typography
        variant="h6"
        color={colors.grey[300]}
        sx={{ m: "15px 0 5px 20px" }}
@@ -408,14 +419,18 @@ const TheSideBar = () => {
 
 
 
-     </Box>
+                                   </Box>
 
 
 
-    </Menu>
-   </Sidebar>
-  </Box >
- );
+                            </Menu>
+                     </Sidebar>
+
+
+
+
+              </Box >
+       );
 };
 
 export default TheSideBar;

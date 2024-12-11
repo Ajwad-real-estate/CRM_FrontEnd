@@ -48,3 +48,21 @@ Cards (the black boxes in your design): Use #2C3E50 with white text (#E8E8E8) fo
 Buttons or Labels: Make them stand out using #4A90E2, with hover effects in #357ABD.
 Secondary Information (e.g., email or phone): Use #B0BEC5 for subtle emphasis.
 
+//lastedit of dark Nav
+
+#222222: A deep, almost black gray that provides good contrast with light text.
+#181818: A slightly lighter shade of gray that still maintains a dark and sleek look.
+#282828: A darker gray that creates a more dramatic effect.
+Light Mode Friendly:
+
+#F0F0F0: A light gray that provides a neutral and clean background.
+#E8E8E8: A slightly warmer shade of gray that can be more visually appealing.
+#F5F5F5: A very light gray that offers a bright and airy feel.
+Accent Colors:
+
+If you want to add a pop of color, you could use a subtle accent color in the top bar, such as:
+
+#4CAF50: A light green for a calming and natural feel.
+#2196F3: A light blue for a refreshing and modern look.
+#FFC107: A light yellow for a cheerful and energetic vibe.
+#2a354a
