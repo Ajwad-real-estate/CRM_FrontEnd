@@ -38,7 +38,8 @@ function CallGroup() {
           borderRadius: "8px",
           padding: "8px",
           cursor: "pointer",
-          background: selectedValue === "a" ? colors.grey[500] : "transparent",
+          background:
+            selectedValue === "a" ? colors.blueAccent[800] : "transparent",
           border:
             selectedValue === "a" ? "none" : `1px solid ${colors.grey[400]}`,
         }}
@@ -58,7 +59,14 @@ function CallGroup() {
                 : colors.grey[700],
           }}
         />
-        <Typography variant="p" sx={{ fontSize: "1.1rem", fontWeight: "500" }}>
+        <Typography
+          variant="p"
+          sx={{
+            fontSize: "1.1rem",
+            fontWeight: "500",
+            color: colors.primary[200],
+          }}
+        >
           Answer
         </Typography>
       </Box>
@@ -75,7 +83,8 @@ function CallGroup() {
           borderRadius: "8px",
           padding: "8px",
           cursor: "pointer",
-          background: selectedValue === "b" ? colors.grey[500] : "transparent",
+          background:
+            selectedValue === "b" ? colors.blueAccent[800] : "transparent",
           border:
             selectedValue === "b" ? "none" : `1px solid ${colors.grey[400]}`,
         }}
@@ -93,8 +102,15 @@ function CallGroup() {
               selectedValue === "b" ? colors.redAccent[500] : colors.grey[700],
           }}
         />
-        <Typography variant="p" sx={{ fontSize: "1.1rem", fontWeight: "500" }}>
-          End Call
+        <Typography
+          variant="p"
+          sx={{
+            fontSize: "1.1rem",
+            fontWeight: "500",
+            color: colors.primary[200],
+          }}
+        >
+          no answer
         </Typography>
       </Box>
     </Box>

@@ -34,8 +34,8 @@ const transformData = (pipelineData) => {
     pipeline.leads.forEach((lead) => {
       leads[lead.id] = {
         id: lead.id.toString(),
-        title: lead.title,
-        amount: lead.value,
+        title: lead.title || "untitled Lead",
+        amount: lead.value || "No Value",
         company: lead.company || "",
         phoneNumber: lead.phoneNumber || "",
         email: lead.email || "",
@@ -58,27 +58,22 @@ const NewNewKanbanBoard = () => {
   const [isListView, setIsListView] = useState(false); // State for view mode
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   // Toggle Drawer
-  const toggleDrawer = (open) => () => {
-    setIsDrawerOpen(open);
-  };
+
   //
   //const navigate = useNavigate();
 
   const handleDoubleClick = (lead) => {
     // navigate(`/NewNewKanbanBoard/${lead.id}`); // Navigate to contact detail page
+    setSelectedLead(lead);
     setIsDrawerOpen(true);
   };
   //Close Drawer
   const handleDrawerClose = () => {
     setIsDrawerOpen(false);
-    //setSelectedLead(null); // Clear the selected lead
+    setSelectedLead(null);
   };
 
   //
-  const handleEditClick = (lead) => {
-    setSelectedLead(lead);
-    setIsModalOpen(true);
-  };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);

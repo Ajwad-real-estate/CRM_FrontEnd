@@ -15,19 +15,26 @@ import { tokens } from "../../../../../theme";
 import CallGroup from "./CallGroup";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import VerifiedIcon from "@mui/icons-material/Verified";
+import Dialogue from "./Dialogue";
+import Reservation from "./Reservation";
 const actionOptions = [
   "Folloe Up",
   "Meeting",
   "Follow Up after Meeting",
   "Cancel",
-  "Cencel after Meeting",
+  "Cancel after Meeting",
+  "Done Deal",
+  "Archieve",
+  "Reservation",
 ];
 const cancelOptions = [
   "Location",
   "Budget",
   "Life Drops",
   "Not a deal",
+  "another Area",
   "Other Reason",
+  "المدام قالت لأ",
 ];
 function ActionBody() {
   //
@@ -41,6 +48,16 @@ function ActionBody() {
   const [searchValue, setSearchValue] = useState("");
   const [selectedValue, setSelectedValue] = useState("Follow Up");
   const [selectedCancel, setSelectedCancel] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+  //Modal Options
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+  const handleCheckboxChange = (event) => {
+    setOpenModal(event.target.checked);
+  };
+  //
   const handleSearchChange = (event) => {
     setSearchValue(event.target.value);
   };
@@ -64,15 +81,15 @@ function ActionBody() {
       sx={{
         width: "100%",
         display: "grid",
-        height: "70%",
+        height: "100%",
         gridTemplateAreas: `
           "input options"
           "comment comment"
-          "buttons buttons"
-          "commentInfo commentInfo"
+          "buttons buttons" 
+          
         `,
         gridTemplateColumns: "1fr 1.15fr",
-        gridTemplateRows: "150px 150px 100px 140px",
+        gridTemplateRows: "150px auto auto ",
         gap: "11px",
       }}
     >
@@ -118,8 +135,10 @@ function ActionBody() {
                   sx={{
                     padding: "10px 20px", // Custom padding
                     transition: "all 0.3s ease",
+                    background: colors.primary[800],
+
                     "&:hover": {
-                      backgroundColor: "#e5e5e5a6",
+                      backgroundColor: colors.primary[700],
                     },
                   }}
                 >
@@ -131,6 +150,8 @@ function ActionBody() {
               <Checkbox
                 icon={<CheckCircleOutlineIcon />}
                 checkedIcon={<VerifiedIcon />}
+                checked={openModal} // Bind checkbox state
+                onChange={handleCheckboxChange}
                 sx={{
                   color: colors.greenAccent[700], // Unchecked state color
                   "&.Mui-checked": {
@@ -142,7 +163,7 @@ function ActionBody() {
           </Box>
         </Box>
         <Box>
-          {selectedValue === "Cencel after Meeting" ||
+          {selectedValue === "Cancel after Meeting" ||
           selectedValue === "Cancel" ? (
             <>
               <Typography
@@ -155,7 +176,6 @@ function ActionBody() {
               <TextField
                 id="outlined-select-currency-native"
                 select
-                defaultValue="Follow Up"
                 slotProps={{
                   select: {
                     native: true,
@@ -171,6 +191,7 @@ function ActionBody() {
                     sx={{
                       padding: "10px 20px", // Custom padding
                       transition: "all 0.3s ease",
+                      background: colors.primary[800],
                       "&:hover": {
                         backgroundColor: "#e5e5e5a6",
                       },
@@ -194,6 +215,11 @@ function ActionBody() {
                 type="datetime-local"
                 value={dateTime}
                 onChange={handleDateChange}
+                slotProps={{
+                  select: {
+                    native: true,
+                  },
+                }}
                 fullWidth
                 InputLabelProps={{
                   shrink: true, // Ensures the label shrinks when using datetime-local
@@ -203,7 +229,6 @@ function ActionBody() {
           )}
         </Box>
       </Box>
-
       <Box
         sx={{
           gridArea: "options",
@@ -217,38 +242,44 @@ function ActionBody() {
       >
         <CallGroup />
         {selectedValue !== "Cancel" &&
-          selectedValue !== "Cencel after Meeting" && <FollowUpStat />}
+          selectedValue !== "Cancel after Meeting" && <FollowUpStat />}
       </Box>
-      <Box
-        sx={{
-          gridArea: "comment",
-          width: "100%",
-        }}
-      >
-        <Typography
-          variant="body1"
-          component="label"
-          htmlFor="custom-textfield"
-        >
-          Comment
-        </Typography>
+      {selectedValue === "Reservation" ? (
+        <Reservation />
+      ) : (
+        <>
+          <Box
+            sx={{
+              gridArea: "comment",
+              width: "100%",
+            }}
+          >
+            <Typography
+              variant="body1"
+              component="label"
+              htmlFor="custom-textfield"
+            >
+              Comment
+            </Typography>
 
-        <TextField
-          id="outlined-multiline-static"
-          multiline
-          rows={5}
-          variant="outlined"
-          sx={{
-            width: "100%",
-            height: "80%",
-            bgcolor: colors.grey[600],
-            borderRadius: "5px",
-            "& .MuiOutlinedInput-notchedOutline": {
-              border: "none", // Removes the border
-            },
-          }}
-        />
-      </Box>
+            <TextField
+              id="outlined-multiline-static"
+              multiline
+              rows={5}
+              variant="outlined"
+              sx={{
+                width: "100%",
+                height: "80%",
+                bgcolor: colors.primary[800],
+                borderRadius: "5px",
+                "& .MuiOutlinedInput-notchedOutline": {
+                  border: "none", // Removes the border
+                },
+              }}
+            />
+          </Box>
+        </>
+      )}
       <Box
         sx={{
           gridArea: "buttons",
@@ -300,8 +331,9 @@ function ActionBody() {
             Cancel
           </Button>
         </Box>
-      </Box>
-      <Box sx={{ gridArea: "commentInfo", backgroundColor: "orange" }}>opt</Box>
+      </Box>{" "}
+      {/* <Box sx={{ gridArea: "commentInfo", backgroundColor: "orange" }}>opt</Box> */}
+      <Dialogue open={openModal} onClose={handleCloseModal} />
     </Box>
   );
 }

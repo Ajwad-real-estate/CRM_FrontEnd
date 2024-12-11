@@ -1,20 +1,31 @@
-import { Box, getAppBarUtilityClass } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import PhoneEnabledIcon from "@mui/icons-material/PhoneEnabled";
 import HomeIcon from "@mui/icons-material/Home";
 import TagIcon from "@mui/icons-material/Tag";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import ActionBody from "./pageStructure/ActionBody";
-const centering = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
+import BusinessIcon from "@mui/icons-material/Business";
+import TextSnippetIcon from "@mui/icons-material/TextSnippet";
+import { tokens } from "../../../../theme";
 
-  Height: "48%",
-  width: "200px",
-  backgroundColor: "#333",
-};
 function ActionContent({ lead }) {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
+  const centering = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    gap: "8px",
+    color: colors.greenAccent[300],
+    padding: "10px",
+    border: `0.5px solid ${colors.greenAccent[200]}`,
+    borderRadius: "8px",
+    flex: "1 1 calc(33.33% - 20px)", // Adjust for 3 items per row with spacing
+    boxSizing: "border-box", // Ensure padding is included in width
+  };
+
   return (
     <>
       <Box
@@ -22,27 +33,41 @@ function ActionContent({ lead }) {
           padding: "22px 26px",
           width: "94%",
           marginInline: "auto",
-          border: "0.5px solid #c0c0c0",
+          border: `0.5px solid ${colors.primary[300]}`,
+          borderRadius: "5px",
           display: "flex",
-          flexWrap: "wrap",
-          gap: "20px",
-          height: "30%",
+          flexWrap: "wrap", // Enable wrapping
+          justifyContent: "space-between", // Adjust alignment between rows
+          gap: "20px", // Space between items
         }}
       >
         <Box sx={centering}>
-          <PersonIcon />
+          <TextSnippetIcon />
+          <Typography variant="p">{lead.title}</Typography>
         </Box>
         <Box sx={centering}>
-          <HomeIcon />
+          <PersonIcon />
+          <Typography variant="p">{lead.email}</Typography>
+        </Box>
+        <Box sx={centering}>
+          <BusinessIcon />
+          <Typography variant="p">{lead.company}</Typography>
         </Box>
         <Box sx={centering}>
           <PhoneEnabledIcon />
+          <Typography variant="p">{lead.phoneNumber}</Typography>
         </Box>
         <Box sx={centering}>
           <ReceiptLongIcon />
+          <Typography variant="p">{lead.amount}</Typography>
         </Box>
         <Box sx={centering}>
           <TagIcon />
+          {lead.tags.map((cur, i) => (
+            <Typography key={i} variant="p" sx={{ display: "inline" }}>
+              {cur}
+            </Typography>
+          ))}
         </Box>
       </Box>
       <ActionBody />

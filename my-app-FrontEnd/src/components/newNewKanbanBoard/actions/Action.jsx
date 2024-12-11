@@ -8,6 +8,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Button, Typography, useMediaQuery, useTheme } from "@mui/material";
 import ActionContent from "./contents/ActionContent";
 import { tokens } from "../../../theme";
+import EditPage from "./contents/EditPage";
 const Action = ({ open, onClose, onOpen, lead }) => {
   const { TabValue } = useLeadOpt();
   // Drawer content
@@ -23,7 +24,8 @@ const Action = ({ open, onClose, onOpen, lead }) => {
         flexDirection: "column",
         alignItems: "center",
         gap: "20px",
-        height: "100%",
+        height: "100vw",
+        background: colors.primary[400],
       }}
       role="presentation"
     >
@@ -40,7 +42,7 @@ const Action = ({ open, onClose, onOpen, lead }) => {
           onClick={onClose}
           sx={{ position: "absolute", top: "5px", right: "5px" }}
         >
-          <CloseIcon sx={{ color: "#fff" }} />
+          <CloseIcon sx={{ color: colors.primary[200] }} />
         </Button>
         <Box sx={{ width: "230px" }}>
           {/*Title-------------------------------------------------------------*/}
@@ -62,11 +64,12 @@ const Action = ({ open, onClose, onOpen, lead }) => {
           width: "97%",
           display: "flex",
           flexDirection: "column",
-          height: "75%",
+          height: "100%",
           gap: "10px",
         }}
       >
-        {TabValue === 3 && <ActionContent lead={lead} />}
+        {TabValue === 1 && lead && <EditPage />}
+        {TabValue === 3 && lead && <ActionContent lead={lead} />}
       </Box>
       {/* Content ----------------------------------------------------------------------------- */}
     </Box>
@@ -78,6 +81,7 @@ const Action = ({ open, onClose, onOpen, lead }) => {
       open={open}
       onClose={onClose}
       onOpen={onOpen}
+      lead={lead}
     >
       {drawerContent}
     </SwipeableDrawer>

@@ -13,15 +13,19 @@ const Label = styled.label`
   font-weight: 500;
   width: 150px;
   text-align: left;
+  font-size: ${(props) => (props.editSize ? "1.3rem" : "inherit")};
 `;
+
 const InputContainer = styled.div`
   flex: 1;
 `;
 
-function FormRow({ label, children }) {
+function FormRow({ label, children, editSize }) {
   return (
     <StyledFormRow>
-      <Label htmlFor={children?.props?.id || "default-id"}>{label}</Label>
+      <Label htmlFor={children?.props?.id || "default-id"} editSize={editSize}>
+        {label}
+      </Label>
       <InputContainer>{children}</InputContainer>
     </StyledFormRow>
   );
