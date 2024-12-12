@@ -15,7 +15,7 @@ import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/TheSideBar";
 import Dashboard from "./scenes/dashboard/index";
 import Team from "./scenes/team";
-import Form from "./scenes/form";
+import CreateAccForm from "./scenes/form";
 import Calendar from "./scenes/calendar";
 import KanbanBoard from "./components/KanbanBoard";
 import NewKanbanBoard from "./components/newKanbanBoard/NewKanbanBoard";
@@ -105,7 +105,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/team" element={<Team />} />
-              <Route path="/form" element={<Form />} />
+                <Route path="/CreateAccForm" element={<CreateAccForm />} />
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/faq" element={<FAQ />} />
               <Route path="/bar" element={<Bar />} />

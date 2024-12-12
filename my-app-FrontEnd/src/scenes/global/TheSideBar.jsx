@@ -256,7 +256,7 @@ const TheSideBar = () => {
             >
               <Item
                 title="New Sales Account"
-                to="/form"
+                to="/CreateAccForm"
                 icon={<PersonOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
