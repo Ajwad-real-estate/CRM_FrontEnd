@@ -262,13 +262,13 @@ const TheSideBar = () => {
                 setSelected={setSelected}
               />
             </SubMenu>
-            <Item
+            {/* <Item
               title="Manage Team"
               to="/team"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
 
 
 
