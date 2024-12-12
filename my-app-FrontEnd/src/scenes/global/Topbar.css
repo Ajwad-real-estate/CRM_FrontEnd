@@ -1,18 +1,16 @@
 /* Box styles */
 
-
 .ps-sidebar-root {
-    height: 100% !important;
-    text-align: left !important;
-    transition: width, left, right, 0.3s !important;
-    position: relative !important;
-    z-index: 1009 !important;
-    -webkit-transition: width, left, right, 0.3s !important;
-    -moz-transition: width, left, right, 0.3s !important;
-    -ms-transition: width, left, right, 0.3s !important;
-    -o-transition: width, left, right, 0.3s !important;
-    text-decoration:  none !important; 
-
+  height: 100% !important;
+  text-align: left !important;
+  transition: width, left, right, 0.3s !important;
+  position: relative !important;
+  z-index: 1009 !important;
+  -webkit-transition: width, left, right, 0.3s !important;
+  -moz-transition: width, left, right, 0.3s !important;
+  -ms-transition: width, left, right, 0.3s !important;
+  -o-transition: width, left, right, 0.3s !important;
+  text-decoration: none !important;
 }
 
 /* Remove underline from sidebar button */
@@ -75,4 +73,15 @@
   -webkit-text-decoration: none !important;
 }
 
-
+.ps-submenu-content {
+  margin-left: 15px;
+  background-color: rgb(0 0 0 / 10%) !important ;
+  color: #a4a9fc !important;
+}
+.ps-submenu-content .ps-menu-button {
+  /* color: #625df5 !important; */
+}
+.ps-submenu-content:hover .ps-menu-button:hover {
+  color: #625df5 !important;
+  background-color: rgb(0 0 0 / 5%) !important ;
+}

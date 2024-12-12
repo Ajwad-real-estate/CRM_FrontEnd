@@ -157,6 +157,21 @@ const TheSideBar = () => {
             </Box>
           )}
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
+
+            {/* <Typography
+       variant="h6"
+       color={colors.grey[300]}
+       sx={{ m: "15px 0 5px 20px" }}
+      >
+       Pages To finace Deparment
+      </Typography>
+      <Item
+       title="commission"
+       to="/commission"
+       icon={<ReceiptOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      /> */}
             <Typography
               variant="h6"
               color={colors.grey[300]}
@@ -180,11 +195,11 @@ const TheSideBar = () => {
             />
             {/* SubMenu 1 */}
             <SubMenu
-              label="Kanban Board"
+              label="Other"
               icon={<PeopleOutlinedIcon />}
               // style={{ color: "#fff" }}
-              open={activeSubMenu === "NewNewKanbanBoard"} // Open conditionally
-              onClick={() => handleSubMenuClick("NewNewKanbanBoard", "/NewNewKanbanBoard")} // Toggle active and navigate
+              open={activeSubMenu === "other"} // Open conditionally
+              onClick={() => handleSubMenuClick("other", "/other")} // Toggle active and navigate
             >
               <MenuItem
                 title="Done Deal"
@@ -208,6 +223,89 @@ const TheSideBar = () => {
                 Lost
               </MenuItem>
             </SubMenu>
+
+            {/* SubMenu 2 (Example for another submenu) */}
+            <SubMenu
+              label="Another Menu"
+              icon={<PeopleOutlinedIcon />}
+              // style={{ color: "#fff" }}
+              open={activeSubMenu === "another"} // Open conditionally
+              onClick={() => handleSubMenuClick("another", "/another")} // Toggle active and navigate
+            >
+              <MenuItem
+                title="Option 1"
+                icon={<ContactsOutlinedIcon />}
+                onClick={() => navigate("/option1")}
+              >
+                Option 1
+              </MenuItem>
+              <MenuItem
+                title="Option 2"
+                icon={<ContactsOutlinedIcon />}
+                onClick={() => navigate("/option2")}
+              >
+                Option 2
+              </MenuItem>
+            </SubMenu>
+            <SubMenu
+              label="Kanban Board"
+              icon={<PeopleOutlinedIcon />}
+              // style={{ color: "#fff" }}
+              onClick={() => handleSubMenuClick("/NewNewKanbanBoard")} // Navigate when SubMenu is clicked
+            >
+              <MenuItem
+                title="Done Deal"
+                to="/done_deal"
+                icon={<ContactsOutlinedIcon />}
+                onClick={() => navigate("/done_deal")} // Navigate to specific page
+              >
+                Done Deal
+              </MenuItem>
+              <MenuItem
+                title="Archived"
+                to="/archived"
+                icon={<ContactsOutlinedIcon />}
+                onClick={() => navigate("/archived")} // Navigate to specific page
+              >
+                Archived
+              </MenuItem>
+              <MenuItem
+                title="Lost"
+                to="/lost"
+                icon={<ContactsOutlinedIcon />}
+                onClick={() => navigate("/lost")} // Navigate to specific page
+              >
+                Lost
+              </MenuItem>
+            </SubMenu>
+            <SubMenu
+              label="Other"
+        
+              icon={<PeopleOutlinedIcon />}
+              style={{ color: colors.grey[100] }}
+          >
+              <Item
+                title="Done Deal"
+                to="/done_deal"
+                icon={<ContactsOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Archived"
+                to="/Archived"
+                icon={<ContactsOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="lost"
+                to="/lost"
+                icon={<ContactsOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </SubMenu>
             <Item
               title="Inventory"
               to="/projects"
@@ -215,6 +313,7 @@ const TheSideBar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+          
             <Item
               title="To-Do List
 "
@@ -225,7 +324,7 @@ const TheSideBar = () => {
             />
 
             {/* Nested SubMenu for Sales Agent Pages */}
-
+         
             <Item
               title="Calendar"
               to="/calendar"
@@ -241,27 +340,82 @@ const TheSideBar = () => {
               setSelected={setSelected}
             />
             <Item
-              title="Contacts Information"
-              to="/contacts"
+              title="FAQ Page"
+              to="/faq"
+              icon={<HelpOutlineOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <Typography
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 5px 20px" }}
+            >
+              Pages To sales Manager
+            </Typography>
+            <Item
+              title="Dashboard"
+              to="/"
+              icon={<HomeOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            ></Item>
+            <Item
+              title="Contact"
+              to="/contact"
               icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
-            <SubMenu
-              label="Manage Team"
-              icon={<PeopleOutlinedIcon />}
-              // style={{ color: "#fff" }}
-              open={activeSubMenu === "team"} // Open conditionally
-              onClick={() => handleSubMenuClick("team", "/team")} // Toggle active and navigate
-            >
-              <Item
-                title="New Sales Account"
-                to="/form"
-                icon={<PersonOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
-            </SubMenu>
+            {/* <Item
+       title="NewKanbanBoard"
+       to="/NewKanbanBoard"
+       icon={<ContactsOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      /> */}
+            <Item
+              title="Inventory"
+              to="/projects"
+              icon={<MapOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            {/* <Item
+       title="commission"
+       to="/commission"
+       icon={<ReceiptOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      /> */}
+            <Item
+              title="To-Do List
+"
+              to="/todolist"
+              icon={<ReceiptOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Calendar"
+              to="/calendar"
+              icon={<CalendarTodayOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
             <Item
               title="Manage Team"
               to="/team"
@@ -269,14 +423,6 @@ const TheSideBar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-
-
-
-
-
-
-
-
             <Item
               title="FAQ Page"
               to="/faq"
@@ -284,30 +430,52 @@ const TheSideBar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             {/* <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              finance
-            </Typography>
+       variant="h6"
+       color={colors.grey[300]}
+       sx={{ m: "15px 0 5px 20px" }}
+      >
+       Data
+      </Typography>
+     
+      <Item
+       title="Contacts Information"
+       to="/contacts"
+       icon={<ContactsOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      />
+      <Item
+       title="Invoices Balances"
+       to="/invoices"
+       icon={<ReceiptOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      />
 
-            <Item
-              title="Invoices Balances"
-              to="/invoices"
-              icon={<ReceiptOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Request Commission"
-              to="/requestCommission"
-              icon={<ReceiptOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            /> */}
-
-            {/*
       <Typography
        variant="h6"
        color={colors.grey[300]}
@@ -315,6 +483,28 @@ const TheSideBar = () => {
       >
        Pages
       </Typography>
+      <Item
+       title="Profile Form"
+       to="/form"
+       icon={<PersonOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      />
+      <Item
+       title="Calendar"
+       to="/calendar"
+       icon={<CalendarTodayOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      />
+      <Item
+       title="FAQ Page"
+       to="/faq"
+       icon={<HelpOutlineOutlinedIcon />}
+       selected={selected}
+       setSelected={setSelected}
+      />
+
       <Typography
        variant="h6"
        color={colors.grey[300]}
