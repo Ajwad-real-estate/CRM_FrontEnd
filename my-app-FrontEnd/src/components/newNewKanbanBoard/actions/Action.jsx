@@ -9,7 +9,7 @@ import { Button, Typography, useMediaQuery, useTheme } from "@mui/material";
 import ActionContent from "./contents/ActionContent";
 import { tokens } from "../../../theme";
 import EditPage from "./contents/EditPage";
-const Action = ({ open, onClose, onOpen, lead }) => {
+const Action = ({ open, onClose, onOpen, lead, onUpdate }) => {
   const { TabValue } = useLeadOpt();
   // Drawer content
   const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -68,7 +68,7 @@ const Action = ({ open, onClose, onOpen, lead }) => {
           gap: "10px",
         }}
       >
-        {TabValue === 1 && lead && <EditPage />}
+        {TabValue === 1 && lead && <EditPage lead={lead} onUpdate={onUpdate} />}
         {TabValue === 3 && lead && <ActionContent lead={lead} />}
       </Box>
       {/* Content ----------------------------------------------------------------------------- */}

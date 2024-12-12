@@ -82,7 +82,7 @@ const GetContacts = () => {
   // Handle file reset
   const handleResetFile = () => {
     setFile(null); // Reset the file state
-    setData([]);   // Optionally, reset the data if you want
+    setData([]); // Optionally, reset the data if you want
   };
 
   return (
@@ -95,7 +95,6 @@ const GetContacts = () => {
                 Upload Excel File
               </Typography>
               <Box>
-
                 <Box
                   component="input"
                   type="file"
@@ -124,7 +123,9 @@ const GetContacts = () => {
                   </Box>
                 )}
                 {loading && (
-                  <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "center", mt: 3 }}
+                  >
                     <CircularProgress />
                     <Typography sx={{ ml: 2 }}>Processing file...</Typography>
                   </Box>
@@ -140,10 +141,18 @@ const GetContacts = () => {
                   <Table>
                     <TableHead>
                       <TableRow>
-                        <TableCell><b>Name</b></TableCell>
-                        <TableCell><b>Phone</b></TableCell>
-                        <TableCell><b>Email</b></TableCell>
-                        <TableCell><b>Action</b></TableCell>
+                        <TableCell>
+                          <b>Name</b>
+                        </TableCell>
+                        <TableCell>
+                          <b>Phone</b>
+                        </TableCell>
+                        <TableCell>
+                          <b>Email</b>
+                        </TableCell>
+                        <TableCell>
+                          <b>Action</b>
+                        </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -156,10 +165,9 @@ const GetContacts = () => {
                           <TableRow
                             key={index}
                             sx={{
-                              backgroundColor:
-                                !(isNameValid && isPhoneValid)
-                                  ? "rgba(255, 0, 0, 0.1)" // Red background for invalid row
-                                  : "white",
+                              backgroundColor: !(isNameValid && isPhoneValid)
+                                ? "rgba(255, 0, 0, 0.1)" // Red background for invalid row
+                                : "white",
                             }}
                           >
                             <TableCell>{row.Name || "N/A"}</TableCell>
@@ -181,7 +189,13 @@ const GetContacts = () => {
                 </TableContainer>
               )}
               {data.length > 0 && (
-                <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    mt: 3,
+                  }}
+                >
                   <Button
                     variant="contained"
                     color="primary"

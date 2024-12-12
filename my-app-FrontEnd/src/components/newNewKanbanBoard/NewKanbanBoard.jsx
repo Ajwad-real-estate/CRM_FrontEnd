@@ -74,7 +74,7 @@ const NewNewKanbanBoard = () => {
   };
 
   //
-
+  //
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedLead(null);
@@ -136,7 +136,7 @@ const NewNewKanbanBoard = () => {
       });
     }
   };
-
+  //amount
   const addNewLead = (columnId) => {
     const title = prompt("Enter lead title:");
     const value = prompt("Enter lead value:");
@@ -197,7 +197,34 @@ const NewNewKanbanBoard = () => {
         tag.toLowerCase().includes(searchQuery.toLowerCase())
       )
   );
+  const updateLead = (updatedLead) => {
+    setData((prevData) => {
+      const { id } = updatedLead;
 
+      // Check if the lead exists
+      if (!prevData.leads[id]) {
+        console.error(`Lead with id ${id} not found.`);
+        return prevData;
+      }
+
+      // Update the specific lead
+      const updatedLeads = {
+        ...prevData.leads,
+        [id]: {
+          ...prevData.leads[id],
+          ...updatedLead, // Merge the updated lead data
+        },
+      };
+
+      // Return the updated state
+      return {
+        ...prevData,
+        leads: updatedLeads,
+      };
+    });
+  };
+
+  console.log(selectedLead);
   return (
     <>
       <Box m="20px">
@@ -235,27 +262,28 @@ const NewNewKanbanBoard = () => {
               variant="contained"
               onClick={() => setIsListView(!isListView)}
               sx={{
-              ml: 2,
-              padding: "10px 0px",
-              width: "25%",
-              display: "flex",
-              background: colors.columns[900],
-              border: '0.01px solid ', borderColor: colors.columns[100],
-              color: colors.grey[100],
-                pl: 0.5,
-              pr:0.5,
-              boxShadow: 3,
-              '&:hover': {
+                ml: 2,
+                padding: "10px 0px",
+                width: "25%",
+                display: "flex",
                 background: colors.columns[900],
-                boxShadow: 9, // Add shadow on hover
-              },
+                border: "0.01px solid ",
+                borderColor: colors.columns[100],
+                color: colors.grey[100],
+                pl: 0.5,
+                pr: 0.5,
+                boxShadow: 3,
+                "&:hover": {
+                  background: colors.columns[900],
+                  boxShadow: 9, // Add shadow on hover
+                },
               }}
             >
               {isListView ? "Switch to Kanban View" : "Switch to List View"}
             </Button>
-            </Box>
+          </Box>
 
-            {isListView ? (
+          {isListView ? (
             // Render List View
             <Box>
               {filteredLeads.map((lead) => (
@@ -339,7 +367,8 @@ const NewNewKanbanBoard = () => {
           <Action
             open={isDrawerOpen}
             onClose={handleDrawerClose}
-            lead={selectedLead} // Pass selected lead if needed
+            lead={selectedLead}
+            onUpdate={updateLead}
           />
         </LeadOptionsProvider>
       </Box>
