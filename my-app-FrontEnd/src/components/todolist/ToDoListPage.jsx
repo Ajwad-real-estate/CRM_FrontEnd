@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 
 const ToDoListPage = () => {
   return (
-    <PageDesign title="To-Do List" subtitle="Manage Your tasks effectively">
+    <PageDesign>
       <Outlet />
     </PageDesign>
   );

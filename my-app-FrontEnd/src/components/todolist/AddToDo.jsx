@@ -169,8 +169,8 @@ const AddToDo = () => {
                       priority === 1
                         ? "grey"
                         : priority === 2
-                        ? "#1976d2"
-                        : "red",
+                          ? "#1976d2"
+                          : "red",
                   },
                   "& .MuiSlider-rail": {
                     backgroundColor: "#e0e0e0",
@@ -180,8 +180,8 @@ const AddToDo = () => {
                       priority === 1
                         ? "grey"
                         : priority === 2
-                        ? "#1976d2"
-                        : "red",
+                          ? "#1976d2"
+                          : "red",
                   },
                 }}
               />
@@ -190,8 +190,8 @@ const AddToDo = () => {
                   priority === 1
                     ? "Follow Up"
                     : priority === 2
-                    ? "Routine"
-                    : "Urgent"
+                      ? "Routine"
+                      : "Urgent"
                 }`}
                 arrow
                 placement="top"
@@ -220,8 +220,8 @@ const AddToDo = () => {
                       priority === 1
                         ? "grey"
                         : priority === 2
-                        ? "#1976d2"
-                        : "red"
+                          ? "#1976d2"
+                          : "red"
                     }`,
                     cursor: "pointer",
                     height: "14px",

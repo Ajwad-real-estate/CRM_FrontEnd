@@ -4,24 +4,28 @@ import { DataGrid } from "@mui/x-data-grid";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
-import Header from "../../components/Header";
 import { getSalesAgent } from "./apiStuff";
 import { tokens } from "../../theme";
+import ProgressCircle from "../../components/ProgressCircle";
 
 const Team = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
-  const [agents, setAgents] = useState([]); // Initialize as an empty array
+  const [agents, setAgents] = useState([]);
+  const [status, setStatus] = useState("idle");
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   // Fetch data in useEffect
   useEffect(() => {
+    setStatus("loading");
     async function fetchAgents() {
       try {
-        const data = await getSalesAgent(); // Wait for data
-        setAgents(data.agents || []); // Safely access `agents` array
+        const data = await getSalesAgent();
+        setAgents(data.agents || []);
+        setStatus("success");
       } catch (error) {
         console.error("Error fetching agents:", error);
+        setStatus("error");
       }
     }
 
@@ -91,42 +95,74 @@ const Team = () => {
 
   return (
     <Box m="20px">
-      <Header title="TEAM" subtitle="Managing the Team Members" />
-      <Box
-        m="40px 0 0 0"
-        height="75vh"
-        sx={{
-          "& .MuiDataGrid-root": {
-            border: "none",
-            fontSize: isNonMobile ? "14px" : "8px",
-          },
-          "& .MuiDataGrid-cell": {
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: colors.blueAccent[700],
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: colors.primary[400],
-          },
-          "& .MuiDataGrid-footerContainer": {
-            borderTop: "none",
-            backgroundColor: colors.blueAccent[700],
-          },
-          "& .MuiCheckbox-root": {
-            color: `${colors.greenAccent[200]} !important`,
-          },
-        }}
-      >
-        <DataGrid
-          checkboxSelection
-          rows={agents}
-          columns={columns}
-          pageSize={isNonMobile ? 10 : 5}
-          getRowId={(row) => row.id} // Use `id` internally for unique row identification
-        />
-      </Box>
+      {status === "loading" && (
+        <Box
+          sx={{
+            height: "75vh",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <ProgressCircle size="80" />
+        </Box>
+      )}
+
+      {status === "success" && agents && (
+        <Box
+          m="40px 0 0 0"
+          height="75vh"
+          sx={{
+            "& .MuiDataGrid-root": {
+              border: "none",
+              fontSize: isNonMobile ? "14px" : "8px",
+            },
+            "& .MuiDataGrid-cell": {
+              borderBottom: "none",
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: colors.blueAccent[700],
+              borderBottom: "none",
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: colors.primary[400],
+            },
+            "& .MuiDataGrid-footerContainer": {
+              borderTop: "none",
+              backgroundColor: colors.blueAccent[700],
+            },
+            "& .MuiCheckbox-root": {
+              color: `${colors.greenAccent[200]} !important`,
+            },
+          }}
+        >
+          <DataGrid
+            checkboxSelection
+            rows={agents}
+            columns={columns}
+            pageSize={isNonMobile ? 10 : 5}
+            getRowId={(row) => row.id} // Use `id` internally for unique row identification
+          />
+        </Box>
+      )}
+      {status === "error" && (
+        <Box
+          sx={{
+            width: "100%",
+            height: "100%",
+            display: "grid",
+            placeContent: "center",
+          }}
+        >
+          <Typography
+            variant="h2"
+            sx={{ fontWeight: 600, color: colors.blueAccent[500] }}
+          >
+            Internet Connection is Required
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 };

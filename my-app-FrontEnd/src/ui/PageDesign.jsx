@@ -7,9 +7,8 @@ import {
   TextField,
 } from "@mui/material";
 import { tokens } from "../theme";
-import Header from "../components/Header";
 
-function PageDesign({ title, subtitle, children }) {
+function PageDesign({ children }) {
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
   const theme = useTheme();
@@ -17,7 +16,6 @@ function PageDesign({ title, subtitle, children }) {
 
   return (
     <Box m="20px">
-      <Header title={title} subtitle={subtitle} />
       <Box
         m="40px 0 0 0"
         sx={{

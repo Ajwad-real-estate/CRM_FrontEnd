@@ -45,10 +45,16 @@ const Topbar = () => {
     "/todolist": { title: "Todolist", subtitle: "View and Handle Tasks" },
     "/contact": { title: "Contact Us", subtitle: "Get in touch with us" },
     "/projects": { title: "Projects", subtitle: "Real estate Projects" },
-    "/calendar": { title: "Calendar", subtitle: "See Tasks Schedule" },
-    "/faq": { title: "FAQs", subtitle: "Know about us" },
-    "/team": { title: "Team", subtitle: "Organize Your Team" },
-    "/contacts": { title: "Contacts", subtitle: "Interested to Contact" },
+    "/calendar": {
+      title: "Calendar",
+      subtitle: "Full Calender Interactive page",
+    },
+    "/faq": { title: "FAQs", subtitle: "Frequently Asked Questions Page" },
+    "/team": { title: "Team", subtitle: "Managing the Team Members" },
+    "/contacts": {
+      title: "Contacts",
+      subtitle: "List of Contacts for future reference",
+    },
     "/done_deal": { title: "Done deal", subtitle: "Clients done the Deal" },
     "/CreateAccForm": { title: "Create account", subtitle: "add New user" },
 
