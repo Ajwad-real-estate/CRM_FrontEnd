@@ -4,6 +4,11 @@ import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
 import { MenuItem, Select, InputLabel, FormControl } from "@mui/material";
+import toast, { Toaster } from "react-hot-toast";
+import add from "../../assets/add.mp3";
+import delet from "../../assets/delet.mp3";
+import { useEffect, useState } from "react";
+
 
 const phoneRegExp =
   /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
@@ -26,6 +31,25 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 const CreateAccForm = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
+  
+  const [addSound, setAddSound] = useState(false);
+  const [dltSound, setDltSound] = useState(false);
+
+  useEffect(() => {
+    const playSound = () => {
+      if (addSound) {
+        const sound = new Audio(add);
+        sound.play();
+      } else if (dltSound) {
+        const sound = new Audio(delet);
+        sound.play();
+      }
+      setAddSound(false);
+      setDltSound(false);
+    };
+
+    playSound();
+  }, [addSound, dltSound]);
 
   const handleFormSubmit = async (values) => {
     const userData = {
@@ -48,16 +72,48 @@ const CreateAccForm = () => {
 
       if (response.ok) {
         console.log("Account created:", result);
+
+        toast.success("Account created successfully!");
+        setAddSound(true); // Play success sound
       } else {
         console.log("Error:", result.message);
+        toast.dismiss("error-toast");
+
+        toast.error(`Error: ${result.message}`);
+        setDltSound(true); // Play error sound
       }
     } catch (error) {
+      console.error("Error submitting form:", error);
+      setDltSound(true); // Play error sound
       console.error("Error submitting form:", error);
     }
   };
 
   return (
     <Box m="20px">
+      {/* <Toaster
+        position="top-center"
+        gutter={12}
+        containerStyle={{
+          marginTop: "100px", // Moves the toaster 50px down
+          margin: "8px"
+        }}
+        toastOptions={{
+          success: {
+            duration: 3350,
+          },
+          error: {
+            duration: 5870,
+          },
+          style: {
+            fontSize: "17px",
+            maxWidth: "500px",
+            padding: "16px 24px",
+            backgroundColor: "var(--color-grey-0)",
+            color: "var(--color-grey-700)",
+          },
+        }}
+      /> */}
       <Header title="CREATE USER" subtitle="Create a New User Profile" />
       <Formik
         onSubmit={handleFormSubmit}

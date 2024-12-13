@@ -8,9 +8,10 @@ import {
   ThemeProvider,
   CssBaseline,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { Routes, Route, useLocation } from "react-router-dom";
-import { themeSettings } from "./theme";
+import { themeSettings, tokens } from "./theme";
 import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/TheSideBar";
 import Dashboard from "./scenes/dashboard/index";
@@ -55,6 +56,8 @@ import { Box } from "@mui/material";
 function App() {
   const dispatch = useDispatch();
   const mode = useSelector((state) => state.theme.mode);
+  const theme = createTheme(themeSettings(mode));
+  const colors = tokens(theme.palette.mode);
 
   useEffect(() => {
     // Load mode from local storage on app initialization
@@ -64,7 +67,6 @@ function App() {
     }
   }, [dispatch]);
 
-  const theme = createTheme(themeSettings(mode));
   const [isSidebar, setIsSidebar] = useState(true);
 
   // Use useMediaQuery to check if the screen width is less than 600px
@@ -92,58 +94,60 @@ function App() {
 
           {/* Only render Topbar if not on the auth pages */}
           {!isAuthPage && <Topbar setIsSidebar={setIsSidebar} />}
-          <Box sx={{ display: 'flex',minHeight:'91%' }}>
+          <Box sx={{ display: 'flex', minHeight: '91%' }}>
 
             {/* Only render Sidebar if not on the auth pages */}
             {!isAuthPage && <Sidebar isSidebar={isSidebar} />}
-            <Box sx={{width:'100%'}}>
-            <Routes>
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/signup" element={<SignUp />} />
-            </Routes>
+            <Box sx={{ width: '100%' }}>
+              <Routes>
+                <Route path="/signin" element={<SignIn />} />
+                <Route path="/signup" element={<SignUp />} />
+              </Routes>
 
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/team" element={<Team />} />
+              <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/team" element={<Team />} />
                 <Route path="/CreateAccForm" element={<CreateAccForm />} />
-              <Route path="/calendar" element={<Calendar />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/bar" element={<Bar />} />
-              <Route path="/pie" element={<Pie />} />
-              <Route path="/line" element={<Line />} />
-              <Route path="/geography" element={<Geography />} />
-              <Route path="/contacts" element={<Contacts />} />
-              <Route path="/invoices" element={<Invoices />} />
-              <Route path="/new" element={<New />} />
-              <Route path="/KanbanBoard" element={<KanbanBoard />} />
-              <Route path="/NewKanbanBoard" element={<NewKanbanBoard />} />
-              <Route path="/NewNewKanbanBoard" element={<NewNewKanbanBoard />} />
-              <Route
-                path="/NewKanbanBoard/:ContactDetail"
-                element={<ContactDetailForNewKanbanBoard />}
-              />
-              <Route path="/projects" element={<InventoryPage />} />
-              <Route path="/projects/:projectName" element={<ProjectDetails />} />
-              <Route path="/commission" element={<CommissionPage />} />
-              <Route path="/todolist" element={<ToDoListPage />}>
-                <Route path="addtask" element={<AddToDo />} />
-                <Route index element={<ItemsList />} />
-              </Route>
-              <Route
-                path="/RequestCommissionPage"
-                element={<RequestCommissionPage />}
-              />
-              <Route path="/Contact" element={<ContactPage />} />
-              <Route path="/SalesProcess" element={<SalesProcessPage />} />
-              <Route path="/GetContacts" element={<GetContacts />} />
-            </Routes>
+                <Route path="/calendar" element={<Calendar />} />
+                <Route path="/faq" element={<FAQ />} />
+                <Route path="/bar" element={<Bar />} />
+                <Route path="/pie" element={<Pie />} />
+                <Route path="/line" element={<Line />} />
+                <Route path="/geography" element={<Geography />} />
+                <Route path="/contacts" element={<Contacts />} />
+                <Route path="/invoices" element={<Invoices />} />
+                <Route path="/new" element={<New />} />
+                <Route path="/KanbanBoard" element={<KanbanBoard />} />
+                <Route path="/NewKanbanBoard" element={<NewKanbanBoard />} />
+                <Route path="/NewNewKanbanBoard" element={<NewNewKanbanBoard />} />
+                <Route
+                  path="/NewKanbanBoard/:ContactDetail"
+                  element={<ContactDetailForNewKanbanBoard />}
+                />
+                <Route path="/projects" element={<InventoryPage />} />
+                <Route path="/projects/:projectName" element={<ProjectDetails />} />
+                <Route path="/commission" element={<CommissionPage />} />
+                <Route path="/todolist" element={<ToDoListPage />}>
+                  <Route path="addtask" element={<AddToDo />} />
+                  <Route index element={<ItemsList />} />
+                </Route>
+                <Route
+                  path="/RequestCommissionPage"
+                  element={<RequestCommissionPage />}
+                />
+                <Route path="/Contact" element={<ContactPage />} />
+                <Route path="/SalesProcess" element={<SalesProcessPage />} />
+                <Route path="/GetContacts" element={<GetContacts />} />
+              </Routes>
             </Box></Box>
         </main>
       </div>
       <Toaster
         position="top-center"
         gutter={12}
-        containerStyle={{ margin: "8px" }}
+        containerStyle={{
+          margin: "8px"
+        }}
         toastOptions={{
           success: {
             duration: 3350,
@@ -152,12 +156,24 @@ function App() {
             duration: 5870,
           },
           style: {
+            background: colors.primary[400],
             fontSize: "17px",
             maxWidth: "500px",
             padding: "16px 24px",
-            backgroundColor: "var(--color-grey-0)",
+            // top: '100px',
+            margin: "0px 100px",
+            // backgroundColor: "var(--color-grey-0)",
             color: "var(--color-grey-700)",
           },
+          // style: {
+          //   fontSize: "17px",
+          //   maxWidth: "500px",
+          //   padding: "16px 24px",
+          //   top:'100px',
+          //   margin:"0px 100px",
+          //   backgroundColor: "var(--color-grey-0)",
+          //   color: "var(--color-grey-700)",
+          // },
         }}
       />
     </ThemeProvider>

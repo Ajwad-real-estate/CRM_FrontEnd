@@ -6,7 +6,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addTask } from "../../GlobalState/todolistSlice";
-import add from "./add.mp3";
+import add from "./../../assets/add.mp3";
 
 const AddToDo = () => {
   const [title, setTitle] = useState("");

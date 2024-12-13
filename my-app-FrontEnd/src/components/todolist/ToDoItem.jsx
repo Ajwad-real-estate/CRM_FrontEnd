@@ -22,7 +22,7 @@ import { useTheme } from "@emotion/react";
 import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch } from "react-redux";
 import { deleteTask, handleEditTask } from "../../GlobalState/todolistSlice";
-import delet from "./delet.mp3";
+import delet from "../../assets/delet.mp3";
 import FormRow from "../../ui/FormRow";
 
 import styled from "styled-components";
@@ -204,7 +204,7 @@ const ToDoItem = ({ todo }) => {
           padding="auto"
           marginInline="auto"
           borderRadius="4px"
-          // width="50%"
+        // width="50%"
         >
           <Typography
             variant="body1"
@@ -231,13 +231,12 @@ const ToDoItem = ({ todo }) => {
             {todo.deadLineDate}
           </Typography>
           <Tooltip
-            title={`${
-              todo.priority === 1
+            title={`${todo.priority === 1
                 ? "Follow Up"
                 : priority === 2
-                ? "Routine"
-                : "Urgent"
-            }`}
+                  ? "Routine"
+                  : "Urgent"
+              }`}
             arrow
             placement="top"
             PopperProps={{
@@ -261,13 +260,12 @@ const ToDoItem = ({ todo }) => {
           >
             <Box
               sx={{
-                background: `${
-                  todo.priority === 1
+                background: `${todo.priority === 1
                     ? "grey"
                     : priority === 2
-                    ? "#1976d2"
-                    : "red"
-                }`,
+                      ? "#1976d2"
+                      : "red"
+                  }`,
                 cursor: "pointer",
                 height: "14px",
                 width: "14px",
@@ -388,8 +386,8 @@ const ToDoItem = ({ todo }) => {
                           priority === 1
                             ? "grey"
                             : priority === 2
-                            ? "#1976d2"
-                            : "red",
+                              ? "#1976d2"
+                              : "red",
                       },
                       "& .MuiSlider-rail": {
                         backgroundColor: "#e0e0e0",
@@ -399,19 +397,18 @@ const ToDoItem = ({ todo }) => {
                           priority === 1
                             ? "grey"
                             : priority === 2
-                            ? "#1976d2"
-                            : "red",
+                              ? "#1976d2"
+                              : "red",
                       },
                     }}
                   />
                   <Tooltip
-                    title={`${
-                      priority === 1
+                    title={`${priority === 1
                         ? "Follow Up"
                         : priority === 2
-                        ? "Routine"
-                        : "Urgent"
-                    }`}
+                          ? "Routine"
+                          : "Urgent"
+                      }`}
                     arrow
                     placement="top"
                     PopperProps={{
@@ -435,13 +432,12 @@ const ToDoItem = ({ todo }) => {
                   >
                     <Box
                       sx={{
-                        background: `${
-                          priority === 1
+                        background: `${priority === 1
                             ? "grey"
                             : priority === 2
-                            ? "#1976d2"
-                            : "red"
-                        }`,
+                              ? "#1976d2"
+                              : "red"
+                          }`,
                         cursor: "pointer",
                         height: "14px",
                         width: "14px",

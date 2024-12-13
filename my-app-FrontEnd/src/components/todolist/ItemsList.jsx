@@ -3,7 +3,7 @@ import ToDoItem from "./ToDoItem";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import delet from "./delet.mp3";
+import delet from "../../assets/delet.mp3";
 
 function ItemsList() {
   const [searchQuery, setSearchQuery] = useState();

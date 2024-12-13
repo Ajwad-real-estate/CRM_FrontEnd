@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import add from "./add.mp3";
-import delet from "./delet.mp3";
+import add from "../../../assets/add.mp3";
+import delet from "../../../assets/delet.mp3";
 import { checkTaskDateValidation } from "../../../helpers/dates";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
