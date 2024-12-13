@@ -310,6 +310,10 @@ const NewNewKanbanBoard = () => {
                           margin: "0 8px",
                           minWidth: 250,
                           borderRadius: "8px",
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "space-around",
+                          alignItems: "flex-start",
                         }} // Use theme colors
                       >
                         <PipelineColumn

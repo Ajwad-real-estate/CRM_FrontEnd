@@ -6,17 +6,23 @@ import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettin
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "../../components/Header";
+import { getSalesAgent } from "./apiStuff";
 
 const Team = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-
+  getSalesAgent();
   // Define columns conditionally based on screen size
   const columns = [
     { field: "id", headerName: "ID", flex: isNonMobile ? 0.5 : 1 },
-    { field: "name", headerName: "Name", flex: 1, cellClassName: "name-column-cell" },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+      cellClassName: "name-column-cell",
+    },
     {
       field: "age",
       headerName: "Age",
@@ -56,7 +62,9 @@ const Team = () => {
             }
             borderRadius="4px"
           >
-            {access === "admin" && <AdminPanelSettingsOutlinedIcon fontSize="small" />}
+            {access === "admin" && (
+              <AdminPanelSettingsOutlinedIcon fontSize="small" />
+            )}
             {access === "manager" && <SecurityOutlinedIcon fontSize="small" />}
             {access === "user" && <LockOpenOutlinedIcon fontSize="small" />}
             {isNonMobile ? (
@@ -86,7 +94,7 @@ const Team = () => {
         sx={{
           "& .MuiDataGrid-root": {
             border: "none",
-            fontSize: isNonMobile ? '14px' : '8px',
+            fontSize: isNonMobile ? "14px" : "8px",
           },
           "& .MuiBox-root": {
             mt: "10px",
