@@ -1,22 +1,35 @@
+import React, { useEffect, useState } from "react";
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { tokens } from "../../theme";
-import { mockDataTeam } from "../../data/mockData";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "../../components/Header";
 import { getSalesAgent } from "./apiStuff";
+import { tokens } from "../../theme";
 
 const Team = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
-
+  const [agents, setAgents] = useState([]); // Initialize as an empty array
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  getSalesAgent();
-  // Define columns conditionally based on screen size
+
+  // Fetch data in useEffect
+  useEffect(() => {
+    async function fetchAgents() {
+      try {
+        const data = await getSalesAgent(); // Wait for data
+        setAgents(data.agents || []); // Safely access `agents` array
+      } catch (error) {
+        console.error("Error fetching agents:", error);
+      }
+    }
+
+    fetchAgents();
+  }, []);
+
+  // Define columns for DataGrid (excluding `id`)
   const columns = [
-    { field: "id", headerName: "ID", flex: isNonMobile ? 0.5 : 1 },
     {
       field: "name",
       headerName: "Name",
@@ -24,25 +37,23 @@ const Team = () => {
       cellClassName: "name-column-cell",
     },
     {
-      field: "age",
-      headerName: "Age",
-      type: "number",
-      headerAlign: "left",
-      align: "left",
-      flex: isNonMobile ? 0.5 : 1,
-      hide: !isNonMobile,
+      field: "title",
+      headerName: "Title",
+      flex: 1,
     },
     {
-      field: "phone",
-      headerName: "Phone Number",
+      field: "status",
+      headerName: "Status",
       flex: 1,
-      hide: !isNonMobile,
-    },
-    {
-      field: "email",
-      headerName: "Email",
-      flex: 1,
-      hide: !isNonMobile,
+      renderCell: ({ value }) => (
+        <Typography
+          color={
+            value === "online" ? colors.greenAccent[400] : colors.grey[500]
+          }
+        >
+          {value || "N/A"}
+        </Typography>
+      ),
     },
     {
       headerName: "Access Level",
@@ -67,18 +78,11 @@ const Team = () => {
             )}
             {access === "manager" && <SecurityOutlinedIcon fontSize="small" />}
             {access === "user" && <LockOpenOutlinedIcon fontSize="small" />}
-            {isNonMobile ? (
-              <>
-                <Typography
-                  color={colors.grey[100]}
-                  sx={{
-                    ml: "5px",
-                  }}
-                >
-                  {access}
-                </Typography>
-              </>
-            ) : null}
+            {isNonMobile && (
+              <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
+                {access}
+              </Typography>
+            )}
           </Box>
         );
       },
@@ -96,14 +100,8 @@ const Team = () => {
             border: "none",
             fontSize: isNonMobile ? "14px" : "8px",
           },
-          "& .MuiBox-root": {
-            mt: "10px",
-          },
           "& .MuiDataGrid-cell": {
             borderBottom: "none",
-          },
-          "& .name-column--cell": {
-            color: colors.greenAccent[300],
           },
           "& .MuiDataGrid-columnHeaders": {
             backgroundColor: colors.blueAccent[700],
@@ -119,17 +117,14 @@ const Team = () => {
           "& .MuiCheckbox-root": {
             color: `${colors.greenAccent[200]} !important`,
           },
-          ".MuiDataGrid-container--top [role=row]": {
-            backgroundColor: colors.blueAccent[700] + "!important",
-            borderBottom: "none",
-          },
         }}
       >
         <DataGrid
           checkboxSelection
-          rows={mockDataTeam}
+          rows={agents}
           columns={columns}
-          pageSize={isNonMobile ? 10 : 5} // Adjust page size for better mobile experience
+          pageSize={isNonMobile ? 10 : 5}
+          getRowId={(row) => row.id} // Use `id` internally for unique row identification
         />
       </Box>
     </Box>

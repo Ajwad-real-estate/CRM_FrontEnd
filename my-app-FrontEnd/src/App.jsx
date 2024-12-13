@@ -52,7 +52,6 @@ import { Box } from "@mui/material";
 // import DashboardLayoutNavigationNested from "./scenes/global/DashboardLayout";
 // import DashboardLayoutBasic from "./scenes/global/DashboardLayoutBasic";
 
-
 function App() {
   const dispatch = useDispatch();
   const mode = useSelector((state) => state.theme.mode);
@@ -86,19 +85,16 @@ function App() {
         className="app"
         style={{ fontSize: isSmallScreen ? "10px" : "inherit" }}
       >
-
         <main
           className="content"
           style={{ maxWidth: "100%", overflowX: "hidden" }}
         >
-
           {/* Only render Topbar if not on the auth pages */}
           {!isAuthPage && <Topbar setIsSidebar={setIsSidebar} />}
-          <Box sx={{ display: 'flex', minHeight: '91%' }}>
-
+          <Box sx={{ display: "flex", minHeight: "91%" }}>
             {/* Only render Sidebar if not on the auth pages */}
             {!isAuthPage && <Sidebar isSidebar={isSidebar} />}
-            <Box sx={{ width: '100%' }}>
+            <Box sx={{ width: "100%" }}>
               <Routes>
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
@@ -119,13 +115,19 @@ function App() {
                 <Route path="/new" element={<New />} />
                 <Route path="/KanbanBoard" element={<KanbanBoard />} />
                 <Route path="/NewKanbanBoard" element={<NewKanbanBoard />} />
-                <Route path="/NewNewKanbanBoard" element={<NewNewKanbanBoard />} />
+                <Route
+                  path="/NewNewKanbanBoard"
+                  element={<NewNewKanbanBoard />}
+                />
                 <Route
                   path="/NewKanbanBoard/:ContactDetail"
                   element={<ContactDetailForNewKanbanBoard />}
                 />
                 <Route path="/projects" element={<InventoryPage />} />
-                <Route path="/projects/:projectName" element={<ProjectDetails />} />
+                <Route
+                  path="/projects/:projectName"
+                  element={<ProjectDetails />}
+                />
                 <Route path="/commission" element={<CommissionPage />} />
                 <Route path="/todolist" element={<ToDoListPage />}>
                   <Route path="addtask" element={<AddToDo />} />
@@ -139,14 +141,15 @@ function App() {
                 <Route path="/SalesProcess" element={<SalesProcessPage />} />
                 <Route path="/GetContacts" element={<GetContacts />} />
               </Routes>
-            </Box></Box>
+            </Box>
+          </Box>
         </main>
       </div>
       <Toaster
         position="top-center"
         gutter={12}
         containerStyle={{
-          margin: "8px"
+          margin: "8px",
         }}
         toastOptions={{
           success: {
