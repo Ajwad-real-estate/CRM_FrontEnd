@@ -10,7 +10,7 @@ import {
   useTheme,
 } from "@mui/material";
 import FollowUpStat from "./FollowUpStat";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { tokens } from "../../../../../theme";
 import CallGroup from "./CallGroup";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
@@ -48,14 +48,24 @@ function ActionBody() {
   const [searchValue, setSearchValue] = useState("");
   const [selectedValue, setSelectedValue] = useState("Follow Up");
   const [selectedCancel, setSelectedCancel] = useState("");
+  const [checked, setChecked] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [pendingCheck, setPendingCheck] = useState(false);
   //Modal Options
 
   const handleCloseModal = () => {
     setOpenModal(false);
   };
+
   const handleCheckboxChange = (event) => {
-    setOpenModal(event.target.checked);
+    // Prevent immediate change and open the modal
+    setPendingCheck(event.target.checked);
+    setOpenModal(true);
+  };
+
+  const handleModalResponse = (accept) => {
+    setChecked(accept); // Update checkbox state based on modal response
+    setOpenModal(false); // Close the modal
   };
   //
   const handleSearchChange = (event) => {
@@ -150,12 +160,12 @@ function ActionBody() {
               <Checkbox
                 icon={<CheckCircleOutlineIcon />}
                 checkedIcon={<VerifiedIcon />}
-                checked={openModal} // Bind checkbox state
+                checked={checked} // Bind checkbox state
                 onChange={handleCheckboxChange}
                 sx={{
-                  color: colors.greenAccent[700], // Unchecked state color
+                  color: colors.greenAccent[700],
                   "&.Mui-checked": {
-                    color: colors.greenAccent[600], // Checked state color
+                    color: colors.greenAccent[600],
                   },
                 }}
               />
@@ -333,7 +343,11 @@ function ActionBody() {
         </Box>
       </Box>{" "}
       {/* <Box sx={{ gridArea: "commentInfo", backgroundColor: "orange" }}>opt</Box> */}
-      <Dialogue open={openModal} onClose={handleCloseModal} />
+      <Dialogue
+        open={openModal}
+        onClose={handleCloseModal}
+        setAcceptance={handleModalResponse}
+      />
     </Box>
   );
 }

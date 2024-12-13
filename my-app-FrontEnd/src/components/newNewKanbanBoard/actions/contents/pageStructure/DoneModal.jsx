@@ -9,17 +9,9 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { Typography, useTheme } from "@mui/material";
 import { tokens } from "../../../../../theme";
 
-export default function Dialogue({ open, onClose, setAcceptance }) {
+export default function DoneModal({ open, onClose }) {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const onClickYes = () => {
-    onClose();
-    setAcceptance(true);
-  };
-  const onClickNo = () => {
-    onClose();
-    setAcceptance(false);
-  };
   return (
     <Dialog
       open={open}
@@ -83,7 +75,7 @@ export default function Dialogue({ open, onClose, setAcceptance }) {
               transform: "scale(0.94)", // Apply scale on active
             },
           }}
-          onClick={onClickYes}
+          onClick={onClose}
         >
           Yes
         </Button>
@@ -102,7 +94,7 @@ export default function Dialogue({ open, onClose, setAcceptance }) {
               transform: "scale(0.94)", // Apply scale on active
             },
           }}
-          onClick={onClickNo}
+          onClick={onClose}
           autoFocus
         >
           No

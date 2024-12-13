@@ -103,7 +103,7 @@ const Topbar = () => {
       </Box>
 
       {/* Search Bar */}
-      <FormControl variant="outlined">
+      <FormControl variant="outlined" sx={{ width: "30%" }}>
         <OutlinedInput
           sx={{ height: "50px", borderRadius: "25px", fontSize: "1.25rem" }}
           placeholder="Search"
@@ -126,7 +126,25 @@ const Topbar = () => {
             <LightModeOutlinedIcon />
           )}
         </IconButton>
+
         <IconButton sx={{ color: "#FCFCFC" }}>
+          <Box
+            sx={{
+              backgroundColor: "red",
+              height: "17px",
+              width: "17px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: "50%",
+              position: "absolute",
+              top: "2px",
+              right: "2px",
+              fontSize: "0.8rem",
+            }}
+          >
+            1
+          </Box>
           <NotificationsOutlinedIcon />
         </IconButton>
         <IconButton sx={{ color: "#FCFCFC" }}>
