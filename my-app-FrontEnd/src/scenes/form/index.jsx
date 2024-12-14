@@ -8,6 +8,7 @@ import toast, { Toaster } from "react-hot-toast";
 import add from "../../assets/add.mp3";
 import delet from "../../assets/delet.mp3";
 import { useEffect, useState } from "react";
+import Cookies from 'js-cookie';
 
 
 const phoneRegExp =
@@ -31,7 +32,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 const CreateAccForm = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
-  
+
   const [addSound, setAddSound] = useState(false);
   const [dltSound, setDltSound] = useState(false);
 
@@ -58,36 +59,62 @@ const CreateAccForm = () => {
       contact: values.contact,
       roleId: values.roleId, // Send roleId
     };
+    const accessToken = Cookies.get("accessToken");
 
     try {
       const response = await fetch(apiUrl + "/api/create-sales-account", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`, // Add the token to the Authorization header
         },
         body: JSON.stringify(userData),
       });
 
+      // Check if the response is Unauthorized (401)
+      if (response.status === 401) {
+        // Show toast notification for Unauthorized
+        toast.error("Unauthorized. Please logout and login again.", {
+          toastId: "unauthorized-toast", // Prevent duplicate toasts
+          position: "top-center", // Position the toast notification
+          autoClose: 5000, // Automatically close after 5 seconds
+        });
+        setDltSound(true); // Play error sound
+        return; // Stop further execution
+      }
+
+      // Parse the response JSON
       const result = await response.json();
 
       if (response.ok) {
-        console.log("Account created:", result);
-
-        toast.success("Account created successfully!");
+        // Show success notification
+        toast.success("Account created successfully!", {
+          toastId: "success-toast",
+          position: "top-center",
+          autoClose: 5000,
+        });
         setAddSound(true); // Play success sound
       } else {
-        console.log("Error:", result.message);
-        toast.dismiss("error-toast");
-
-        toast.error(`Error: ${result.message}`);
+        // Show toast for other API errors
+        toast.error(`Error: ${result.message}`, {
+          toastId: "api-error-toast",
+          position: "top-center",
+          autoClose: 5000,
+        });
         setDltSound(true); // Play error sound
       }
     } catch (error) {
+      // Handle unexpected errors (e.g., network issues)
       console.error("Error submitting form:", error);
+      toast.error("An unexpected error occurred. Please try again.", {
+        toastId: "unexpected-error-toast",
+        position: "top-center",
+        autoClose: 5000,
+      });
       setDltSound(true); // Play error sound
-      console.error("Error submitting form:", error);
     }
   };
+
 
   return (
     <Box m="20px">
