@@ -7,6 +7,7 @@ import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import { getSalesAgent } from "./apiStuff";
 import { tokens } from "../../theme";
 import ProgressCircle from "../../components/ProgressCircle";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 const Team = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -105,7 +106,7 @@ const Team = () => {
             alignItems: "center",
           }}
         >
-          <ProgressCircle size="80" />
+          <ProgressCircle size="80" rotate />
         </Box>
       )}
 
@@ -150,17 +151,26 @@ const Team = () => {
         <Box
           sx={{
             width: "100%",
-            height: "100%",
-            display: "grid",
-            placeContent: "center",
+            height: "80vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <Typography
             variant="h2"
-            sx={{ fontWeight: 600, color: colors.blueAccent[500] }}
+            sx={{ fontWeight: 600, color: colors.redAccent[500] }}
           >
             Internet Connection is Required
           </Typography>
+          <WarningAmberIcon
+            sx={{
+              marginLeft: "23px",
+              fontSize: "3rem",
+              fontWeight: 700,
+              color: colors.redAccent[500],
+            }}
+          />
         </Box>
       )}
     </Box>
