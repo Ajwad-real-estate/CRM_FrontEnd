@@ -10,8 +10,8 @@ const BarChart = ({ target, doneDeals, isDashboard = false }) => {
     const data = [
         {
             country: "Performance",
-            "My Work": doneDeals,
             "Target": target,
+            "My Work": doneDeals,
         },
     ];
 
@@ -46,7 +46,7 @@ const BarChart = ({ target, doneDeals, isDashboard = false }) => {
                     },
                 },
             }}
-            keys={["My Work","Target"]}
+            keys={["Target", "My Work"]}
             indexBy="country"
             margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
             padding={0.3}

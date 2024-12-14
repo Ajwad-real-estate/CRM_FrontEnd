@@ -1,24 +1,17 @@
 import { useTheme } from "@mui/material";
 import { ResponsiveBar } from "@nivo/bar";
 import { tokens } from "../theme";
+import { mockBarData as data } from "../data/mockData";
 
-const BarChart = ({ target, doneDeals, isDashboard = false }) => {
+const BarChart = ({ isDashboard = false }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-
-    // Prepare the data for the chart
-    const data = [
-        {
-            country: "Performance",
-            "My Work": doneDeals,
-            "Target": target,
-        },
-    ];
 
     return (
         <ResponsiveBar
             data={data}
             theme={{
+                // added
                 axis: {
                     domain: {
                         line: {
@@ -46,7 +39,7 @@ const BarChart = ({ target, doneDeals, isDashboard = false }) => {
                     },
                 },
             }}
-            keys={["My Work","Target"]}
+            keys={["hot dog", "burger", "sandwich", "kebab", "fries", "donut"]}
             indexBy="country"
             margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
             padding={0.3}
@@ -83,7 +76,7 @@ const BarChart = ({ target, doneDeals, isDashboard = false }) => {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: isDashboard ? undefined : "Performance",
+                legend: isDashboard ? undefined : "country", // changed
                 legendPosition: "middle",
                 legendOffset: 32,
             }}
@@ -91,7 +84,7 @@ const BarChart = ({ target, doneDeals, isDashboard = false }) => {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: isDashboard ? undefined : "Amount",
+                legend: isDashboard ? undefined : "food", // changed
                 legendPosition: "middle",
                 legendOffset: -40,
             }}
@@ -127,7 +120,9 @@ const BarChart = ({ target, doneDeals, isDashboard = false }) => {
                 },
             ]}
             role="application"
-            barAriaLabel={(e) => `${e.id}: ${e.formattedValue} in country: ${e.indexValue}`}
+            barAriaLabel={function (e) {
+                return e.id + ": " + e.formattedValue + " in country: " + e.indexValue;
+            }}
         />
     );
 };

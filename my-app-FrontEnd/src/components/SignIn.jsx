@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
-// Backend API URL
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 const SignIn = () => {
@@ -13,7 +11,6 @@ const SignIn = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -28,22 +25,22 @@ const SignIn = () => {
         identifier,
         password,
       });
-console.log(response)
-      const { accessToken, refreshToken, role_id, name } = response.data;
-      console.log(response.data)
-      // Save tokens in cookies
+
+      const { accessToken, refreshToken, user } = response.data;
+
+      // Save tokens and user data into cookies
       Cookies.set('accessToken', accessToken, { secure: true, sameSite: 'Strict' });
       Cookies.set('refreshToken', refreshToken, { secure: true, sameSite: 'Strict' });
-      Cookies.set('role_id', role_id, { secure: false });
-      Cookies.set('name', name, { secure: false });
 
-      // Decode the name if needed
-      const decodedName = decodeURIComponent(Cookies.get('name'));
+      // Save the user object details into cookies
+      Cookies.set('username', user.username, { secure: false });
+      Cookies.set('agentId', user.agentId, { secure: false });
+      Cookies.set('role', user.role, { secure: false });
+      Cookies.set('roleId', user.roleId, { secure: false });
 
-      // You can now use the decoded name
-      console.log(decodedName); // "ahmed name"
+      console.log('User payload saved in cookies:', { ...user });
 
-      // Navigate to the dashboard
+      // Navigate to the dashboard or home page
       navigate('/');
     } catch (err) {
       console.error(err);
@@ -61,7 +58,7 @@ console.log(response)
               Welcome back
             </h1>
           </div>
-          {/* Contact form */}
+          {/* Login Form */}
           <form className="mx-auto max-w-[400px]" onSubmit={handleSubmit}>
             <div className="space-y-5">
               <div>
@@ -106,13 +103,6 @@ console.log(response)
               </button>
             </div>
           </form>
-          {/* Bottom link
-          <div className="mt-6 text-center text-sm text-[#4cceac]/65">
-            Don't you have an account?{' '}
-            <Link className="font-medium text-[#4cceac]" to="/signup">
-              Sign Up
-            </Link>
-          </div> */}
         </div>
       </div>
     </section>
