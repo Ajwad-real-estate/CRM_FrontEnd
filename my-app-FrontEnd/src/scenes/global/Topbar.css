@@ -76,12 +76,12 @@
 .ps-submenu-content {
   margin-left: 15px;
   background-color: rgb(0 0 0 / 10%) !important ;
-  color: #a4a9fc !important;
+  /* color: #a4a9fc !important; */
 }
 .ps-submenu-content .ps-menu-button {
   /* color: #625df5 !important; */
 }
 .ps-submenu-content:hover .ps-menu-button:hover {
-  color: #625df5 !important;
-  background-color: rgb(0 0 0 / 5%) !important ;
+  /* color: #625df5 !important; */
+  background-color: rgb(0 0 0 / 10%) !important ;
 }

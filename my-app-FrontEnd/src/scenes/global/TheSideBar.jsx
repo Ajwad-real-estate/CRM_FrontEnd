@@ -23,11 +23,13 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import KanbanBoard from "../../components/KanbanBoard";
 import NewKanbanBoard from "../../components/newKanbanBoard/NewKanbanBoard";
+import Cookies from 'js-cookie';
 
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
   return (
     <Link to={to} className="no-underline">
       <MenuItem
@@ -61,6 +63,8 @@ const TheSideBar = () => {
     }
     navigate(to); // Navigate to the page
   };
+  const accName = Cookies.get("username");
+  const accRole = Cookies.get("role");
 
   return (
     <Box
@@ -129,7 +133,7 @@ const TheSideBar = () => {
                 ml="15px"
               >
                 <Typography variant="h3" color={colors.grey[100]}>
-                  ADMINIS
+                  CRM
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
@@ -148,10 +152,10 @@ const TheSideBar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  Ahmed Elsisy
+                  {accName}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  Role : Sales Manager
+                  Role : {accRole}
                 </Typography>
               </Box>
             </Box>
@@ -171,13 +175,13 @@ const TheSideBar = () => {
               selected={selected}
               setSelected={setSelected}
             ></Item>
-            <Item
+            {/* <Item
               title="NewKanbanBoard"
               to="/NewNewKanbanBoard"
               icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
             {/* SubMenu 1 */}
             <SubMenu
               label="Kanban Board"

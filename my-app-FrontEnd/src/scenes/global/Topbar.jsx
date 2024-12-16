@@ -21,6 +21,9 @@ import { toggleMode } from "../../themeSlice";
 import { themeSettings, tokens } from "../../theme";
 import { useLocation } from "react-router-dom";
 import Header from "../../components/Header";
+import AjwadWhite from "../../assets/logoWihte.png"
+import AjwadBlack from "../../assets/logoBlack.png"
+
 
 const Topbar = () => {
   const colorMode = useSelector((state) => state.theme.mode);
@@ -103,7 +106,11 @@ const Topbar = () => {
         paddingTop: 2, // Ensure the icons inside the topbar have proper spacing
       }}
     >
-      <img src="/CRM.png" alt="Logo" style={{ width: "140px" }} />
+      <img src={AjwadBlack} alt="Ajwad Black Logo" 
+      style={{ width: "280px" }} 
+      />
+      {/* <img src="/CRM.png" alt="Logo" style={{ width: "140px" }} /> */}
+
       <Box sx={{ mt: 2 }}>
         <Header title={title} subtitle={subtitle} />
       </Box>

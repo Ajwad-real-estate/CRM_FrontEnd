@@ -8,7 +8,6 @@ import {
   ThemeProvider,
   CssBaseline,
   useMediaQuery,
-  useTheme,
 } from "@mui/material";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { themeSettings, tokens } from "./theme";
@@ -49,8 +48,7 @@ import SignUp from "./components/signUp/signUp";
 import NewNewKanbanBoard from "./components/newNewKanbanBoard/NewKanbanBoard";
 import GetContacts from "./components/getContacts/GetContacts";
 import { Box } from "@mui/material";
-// import DashboardLayoutNavigationNested from "./scenes/global/DashboardLayout";
-// import DashboardLayoutBasic from "./scenes/global/DashboardLayoutBasic";
+import NetworkStatus from "./NetworkStatus";
 
 function App() {
   const dispatch = useDispatch();
@@ -145,6 +143,7 @@ function App() {
           </Box>
         </main>
       </div>
+      <NetworkStatus />
       <Toaster
         position="top-center"
         gutter={12}

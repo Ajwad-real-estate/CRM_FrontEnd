@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { Container, Box, TextField, Button, Typography, Alert } from '@mui/material';
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
@@ -106,108 +105,6 @@ const SignIn = () => {
           </form>
         </div>
       </div>
-      <Container
-        maxWidth="sm"
-        sx={{
-          minHeight: '100vh',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Box
-          sx={{
-            backgroundColor: '#1c1c1c',
-            padding: 4,
-            borderRadius: 2,
-            boxShadow: 3,
-            width: '100%',
-          }}
-        >
-          <Typography
-            variant="h4"
-            align="center"
-            gutterBottom
-            sx={{ color: '#4cceac', fontWeight: 'bold' }}
-          >
-            Sign In
-          </Typography>
-
-          <form onSubmit={handleSubmit}>
-            {/* Email Input */}
-            <Box mb={3}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                label="Email"
-                InputLabelProps={{
-                  style: { color: '#4cceac' },
-                }}
-                InputProps={{
-                  style: { color: 'white' },
-                }}
-                // value={email}
-                // onChange={(e) => setEmail(e.target.value)}
-                // error={Boolean(errors.email)}
-                // helperText={errors.email}
-                sx={{
-                  '& fieldset': { borderColor: '#4cceac' },
-                  '&:hover fieldset': { borderColor: '#4cceac' },
-                }}
-              />
-            </Box>
-
-            {/* Password Input */}
-            <Box mb={3}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                type="password"
-                label="Password"
-                InputLabelProps={{
-                  style: { color: '#4cceac' },
-                }}
-                InputProps={{
-                  style: { color: 'white' },
-                }}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                // error={Boolean(errors.password)}
-                // helperText={errors.password}
-                sx={{
-                  '& fieldset': { borderColor: '#4cceac' },
-                  '&:hover fieldset': { borderColor: '#4cceac' },
-                }}
-              />
-            </Box>
-
-            {/* Display Errors */}
-            {/* {Object.keys(errors).map(
-              (key) =>
-                errors[key] && (
-                  <Alert key={key} severity="error" sx={{ marginBottom: 2 }}>
-                    {errors[key]}
-                  </Alert>
-                )
-            )} */}
-
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{
-                backgroundColor: '#4cceac',
-                '&:hover': { backgroundColor: '#3aae94' },
-                color: '#fff',
-                fontWeight: 'bold',
-              }}
-            >
-              Sign In
-            </Button>
-          </form>
-        </Box>
-      </Container>
     </section>
   );
 };

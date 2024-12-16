@@ -23,13 +23,14 @@ const Dashboard = () => {
 
   // Define state for the dashboard data
   const [dashboardData, setDashboardData] = useState(null);
+  const [errorTimeout, setErrorTimeout] = useState(false);
 
   // Fetch dashboard data when component mounts
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         // Fetch the data from the API
-        const response = await axios.get("http://localhost:3000/api/dashboard", {
+        const response = await axios.get(apiUrl+"/api/dashboard", {
           headers: {
             Authorization: `Bearer ${Cookies.get('accessToken')}`, // Assuming token is stored in cookies
           },
@@ -41,23 +42,59 @@ const Dashboard = () => {
       }
     };
 
+
+    // Timeout logic
+    const timeout = setTimeout(() => {
+      setErrorTimeout(true);
+    }, 10000); // 10 seconds timeout
+
     fetchDashboardData();
+
+    // Cleanup timeout to avoid memory leaks
+    return () => clearTimeout(timeout);
   }, []);
 
-  if (!dashboardData) {
-    return <Typography>Loading...</Typography>; // Show loading state
+  // if (!dashboardData) {
+  //   return <Typography>Loading...</Typography>; // Show loading state
+  // }
+  if (dashboardData === null) {
+    // Show a friendly message while loading or in case of an error
+    return (
+      <Box textAlign="center" mt="50px">
+        <Typography variant="h4" color={colors.primary[100]}>
+          Loading dashboard data...
+        </Typography>
+        <Typography variant="subtitle1" color={colors.grey[400]}>
+          Please check your network connection or IT Department and try again later.
+        </Typography>
+      </Box>
+    );
+  }
+
+  if (Object.keys(dashboardData).length === 0) {
+    // Show a fallback message if no data is available
+    return (
+      <Box textAlign="center" mt="50px">
+        <Typography variant="h4" color={colors.grey[300]}>
+          No data available
+        </Typography>
+        <Typography variant="subtitle1" color={colors.grey[400]}>
+          Please ensure data is being sent from the server.
+        </Typography>
+      </Box>
+    );
   }
 
   // StatBox data to display
   const statBoxes = [
-    { title: "Done Clients", value: dashboardData.doneClientsCount, icon: <EmailIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
-    { title: "Follow Ups", value: dashboardData.followUpCount, icon: <PointOfSaleIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
-    { title: "Meetings", value: dashboardData.meetingCount, icon: <PersonAddIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
-    { title: "Calls", value: dashboardData.callCount, icon: <TrafficIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
-    { title: "Emails", value: dashboardData.emailCount, icon: <EmailIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
-    { title: "New Clients", value: dashboardData.newClientsCount, icon: <PointOfSaleIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
-    { title: "Qualified Clients", value: dashboardData.qualifiedClientsCount, icon: <PersonAddIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
-    { title: "Reserved Clients", value: dashboardData.reservedClientsCount, icon: <TrafficIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
+    { title: "Done Clients", value: dashboardData.doneClientsCount|| 0, icon: <EmailIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
+    { title: "Follow Ups", value: dashboardData.followUpCount || 0, icon: <PointOfSaleIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
+    { title: "Meetings", value: dashboardData.meetingCount || 0, icon: <PersonAddIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
+    { title: "Calls", value: dashboardData.callCount || 0, icon: <TrafficIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
+    { title: "Emails", value: dashboardData.emailCount || 0, icon: <EmailIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
+    { title: "New Clients", value: dashboardData.newClientsCount || 0, icon: <PointOfSaleIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
+    { title: "Qualified Clients", value: dashboardData.qualifiedClientsCount || 0, icon: <PersonAddIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
+    { title: "Reserved Clients", value: dashboardData.reservedClientsCount || 0, icon: <TrafficIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
   ];
 
   // Set target and doneDeals data for the BarChart component

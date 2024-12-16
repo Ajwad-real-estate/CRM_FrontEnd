@@ -17,6 +17,7 @@ const BarChart = ({ target, doneDeals, isDashboard = false }) => {
 
     return (
         <ResponsiveBar
+            backgroundColor={colors.primary[400]}
             data={data}
             theme={{
                 axis: {
@@ -46,7 +47,7 @@ const BarChart = ({ target, doneDeals, isDashboard = false }) => {
                     },
                 },
             }}
-            keys={["My Work","Target"]}
+            keys={["My Work", "Target"]}
             indexBy="country"
             margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
             padding={0.3}
