@@ -22,7 +22,8 @@ const LeadCard = ({ lead }) => {
 
 
         <Typography variant="subtitle1" color="text.secondary">
-          Budget : not provided
+          Budget: {typeof lead.amount === 'number' ? `$${lead.amount.toFixed(2)}` : ' Not provided'}
+
         </Typography>
         {/* <Box sx={{ display: 'flex', alignItems: 'center', marginTop: 1 }}>
                     <PhoneIcon sx={{ marginRight: 0.5 }} />

@@ -4,7 +4,6 @@ import CloseIcon from '@mui/icons-material/Close';
 
 const LeadSidebar = ({ lead, onClose }) => {
     const sidebarRef = useRef(null);
-    const [timeoutId, setTimeoutId] = useState(null);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Track if sidebar is open
     // const [isTimerStarted, setIsTimerStarted] = useState(false);
 

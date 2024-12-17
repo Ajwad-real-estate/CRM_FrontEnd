@@ -104,6 +104,8 @@ const Topbar = () => {
         paddingLeft: 3, // Align left padding
         paddingRight: 3, // Align right padding
         paddingTop: 2, // Ensure the icons inside the topbar have proper spacing
+        borderBottom: "0.1px solid",
+        borderColor: colors.NewNav[1000],
       }}
     >
       <img src={AjwadBlack} alt="Ajwad Black Logo" 

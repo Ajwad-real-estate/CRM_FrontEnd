@@ -19,7 +19,6 @@ import Action from "./actions/Action";
 import { LeadOptionsProvider } from "./actions/LeadContext";
 import ClientData from "./ClientData";
 import Cookies from 'js-cookie';
-import ProgressCircle from "../ProgressCircle";
 
 
 // const transformData = (clients) => {
@@ -88,25 +87,12 @@ function transformData(clients) {
   // Push the lead id to the respective column's leadIds
   columns[client.status].leadIds.push(client.id);
  });
- // Sorting the columns based on your desired order
- const columnOrder = ['new', 'qualified', 'reserved', 'done_deal'];  // Define the desired order
- const orderedColumns = {};
 
- columnOrder.forEach(status => {
-  if (columns[status]) {
-   orderedColumns[status] = columns[status];
-  }
- });
- console.log("orderedColumns", orderedColumns);
+ console.log("columns", columns);
  console.log("leads", leads);
 
- return { columns: orderedColumns, leads };
+ return { columns, leads };
 }
-//  console.log("columns", columns);
-//  console.log("leads", leads);
-
-//  return { columns, leads };
-// }
 
 
 
@@ -114,7 +100,6 @@ function transformData(clients) {
 const NewNewKanbanBoard = () => {
  const [clients, setClients] = useState([]);
  const [error, setError] = useState(null);
- // const [errorTimeout, setErrorTimeout] = useState(false);
 
  useEffect(() => {
   const fetchClients = async () => {
@@ -140,72 +125,30 @@ const NewNewKanbanBoard = () => {
    }
   };
 
-
-
-
-
-
-
-  // // Timeout logic
-  // const timeout = setTimeout(() => {
-  //  setErrorTimeout(true);
-  // }, 60000); // 1 Minute timeout
-
   fetchClients();
-
-  // // Cleanup timeout to avoid memory leaks
-  // return () => clearTimeout(timeout);
  }, []);
-
-
-
  const initialData = transformData(clients);
  console.log("initialData")
  console.log(initialData.columns)
- const [data, setData] = useState({ columns: {}, leads: {} });
+ const [data, setData] = useState(initialData);
  // Using useEffect to log when the state is updated
- // Transform and update data once clients are loaded
  useEffect(() => {
-  if (clients.length > 0) {
-   const initialData = transformData(clients); // Transform data when clients are available
-   setData(initialData); // Set the transformed data into state
-  }
- }, [clients]); // Only runs when clients are updated
+  console.log("Updated data:", data);
+  console.log("Columns:", data.columns);
+ }, [data]); // Will run when data is updated
 
  const [dataLeads, setDataLeads] = useState(initialData.leads);
  const [dataColumns, setDataColumns] = useState(initialData.columns);
+
+
  const [isModalOpen, setIsModalOpen] = useState(false);
  const [selectedLead, setSelectedLead] = useState(null);
  const [searchQuery, setSearchQuery] = useState("");
  const [isListView, setIsListView] = useState(false); // State for view mode
  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
  // Toggle Drawer
- if (data === null) {
-  // Show a friendly message while loading or in case of an error
-  return (
-   <Box textAlign="center" mt="50px">
-    <Box
-     sx={{
-      height: "75vh",
-      width: "100%",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-     }}
-    >
-     <ProgressCircle size="80" rotate />
-    </Box>
-    <Typography variant="h4" color={colors.primary[100]}>
-     Loading data...
-    </Typography>
-    {/* <Typography variant="subtitle1" color={colors.grey[400]}>
-          Please check your network connection or IT Department and try again later.
-        </Typography> */}
-   </Box>
-  );
- }
 
-
+ //
  //const navigate = useNavigate();
 
  const handleDoubleClick = (lead) => {
@@ -368,6 +311,8 @@ const NewNewKanbanBoard = () => {
    };
   });
  };
+
+ console.log(selectedLead);
  return (
   <>
    <Box m="20px">

@@ -6,7 +6,7 @@ import './Topbar.css'
 // import 'react-pro-sidebar/dist/css/styles.css';
 // @import '~react-pro-sidebar/dist/scss/styles.scss';
 
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
@@ -24,6 +24,7 @@ import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import KanbanBoard from "../../components/KanbanBoard";
 import NewKanbanBoard from "../../components/newKanbanBoard/NewKanbanBoard";
 import Cookies from 'js-cookie';
+import useLogout from "../../components/Logout";
 
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
@@ -52,6 +53,7 @@ const TheSideBar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
   const [activeSubMenu, setActiveSubMenu] = useState(null); // Track active submenu
+  const logout = useLogout();
 
   const navigate = useNavigate();
 
@@ -288,6 +290,27 @@ const TheSideBar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+            <Box
+              sx={{ display: "flex" }}>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={logout}
+                sx={{
+                  fontWeight: 'bold',
+                  width: '80%',
+                  m: 'auto',
+                  ml: '3%',
+                  mt: '8%',
+                  color: '#ff4c4c',
+                  borderColor: '#ff4c4c',
+                  '&:hover': { backgroundColor: '#ff4c4c', color: '#fff' },
+                }}
+              >
+                Logout
+              </Button>
+            </Box>
+
             {/* <Typography
               variant="h6"
               color={colors.grey[300]}

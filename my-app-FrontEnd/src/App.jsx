@@ -49,12 +49,24 @@ import NewNewKanbanBoard from "./components/newNewKanbanBoard/NewKanbanBoard";
 import GetContacts from "./components/getContacts/GetContacts";
 import { Box } from "@mui/material";
 import NetworkStatus from "./NetworkStatus";
+import ClientData from "./components/newNewKanbanBoard/ClientData";
+import Cookies from "js-cookie"; // Import js-cookie
+import { useNavigate } from "react-router-dom"; // For navigation
 
 function App() {
   const dispatch = useDispatch();
   const mode = useSelector((state) => state.theme.mode);
   const theme = createTheme(themeSettings(mode));
   const colors = tokens(theme.palette.mode);
+  const navigate = useNavigate(); // Hook for programmatic navigation
+
+  // useEffect(() => {
+  //   // Load mode from local storage on app initialization
+  //   const savedMode = localStorage.getItem("mode");
+  //   if (savedMode) {
+  //     dispatch(setMode(savedMode));
+  //   }
+  // }, [dispatch]);
 
   useEffect(() => {
     // Load mode from local storage on app initialization
@@ -62,7 +74,14 @@ function App() {
     if (savedMode) {
       dispatch(setMode(savedMode));
     }
-  }, [dispatch]);
+
+    // Check for access token in cookies
+    const accessToken = Cookies.get("accessToken");
+    if (!accessToken) {
+      // Redirect to the sign-in page if no token is found
+      navigate("/signin");
+    }
+  }, [dispatch, navigate]);
 
   const [isSidebar, setIsSidebar] = useState(true);
 
@@ -99,6 +118,7 @@ function App() {
               </Routes>
 
               <Routes>
+                <Route path="getClientsData" element={< ClientData />} />
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/team" element={<Team />} />
                 <Route path="/CreateAccForm" element={<CreateAccForm />} />

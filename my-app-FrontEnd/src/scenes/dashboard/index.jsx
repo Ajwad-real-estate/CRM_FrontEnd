@@ -23,7 +23,6 @@ const Dashboard = () => {
 
   // Define state for the dashboard data
   const [dashboardData, setDashboardData] = useState(null);
-  const [errorTimeout, setErrorTimeout] = useState(false);
 
   // Fetch dashboard data when component mounts
   useEffect(() => {
@@ -43,27 +42,13 @@ const Dashboard = () => {
     };
 
 
-    // Timeout logic
-    const timeout = setTimeout(() => {
-      setErrorTimeout(true);
-    }, 60000); // 1 Minute timeout
+
 
     fetchDashboardData();
 
-    // Cleanup timeout to avoid memory leaks
-    return () => clearTimeout(timeout);
+
   }, []);
-  if (errorTimeout) {
-    return (
-      <Box textAlign="center" mt="50px">
-        <Typography variant="h4"
-        // color={colors.error.main}
-        >
-          Reload Page and Contact IT Department
-        </Typography>
-      </Box>
-    );
-  }
+
 
   // if (!dashboardData) {
   //   return <Typography>Loading...</Typography>; // Show loading state
