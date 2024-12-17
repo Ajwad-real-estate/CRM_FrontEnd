@@ -61,7 +61,7 @@ const Team = () => {
       ),
     },
     {
-      headerName: "Access Level",
+      headerName: "Health",
       flex: 1,
       renderCell: ({ row: { access } }) => {
         return (
