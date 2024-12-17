@@ -97,16 +97,22 @@ const Team = () => {
   return (
     <Box m="20px">
       {status === "loading" && (
-        <Box
-          sx={{
-            height: "75vh",
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <ProgressCircle size="80" rotate />
+        <Box textAlign="center" mt="50px">
+
+          <Box
+            sx={{
+              height: "75vh",
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <ProgressCircle size="80" rotate />
+          </Box>
+          <Typography variant="h4" color={colors.primary[100]}>
+            Loading data...
+          </Typography>
         </Box>
       )}
 
@@ -145,6 +151,7 @@ const Team = () => {
             pageSize={isNonMobile ? 10 : 5}
             getRowId={(row) => row.id} // Use `id` internally for unique row identification
           />
+
         </Box>
       )}
       {status === "error" && (
@@ -161,7 +168,7 @@ const Team = () => {
             variant="h2"
             sx={{ fontWeight: 600, color: colors.redAccent[500] }}
           >
-            Internet Connection is Required
+            Reload Page and Contact IT Department
           </Typography>
           <WarningAmberIcon
             sx={{

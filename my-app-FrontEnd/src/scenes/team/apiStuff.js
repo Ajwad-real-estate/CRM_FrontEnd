@@ -1,7 +1,16 @@
+import Cookies from "js-cookie";
+
+
 export async function getSalesAgent() {
+  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
   try {
     const response = await fetch(
-      "http://localhost:3000/api/get-sales-agents-details/agents"
+      apiUrl + "/api/get-sales-agents-details", {
+      headers: {
+        Authorization: `Bearer ${Cookies.get("accessToken")}`,
+      },
+    }
     );
 
     if (!response.ok) {
