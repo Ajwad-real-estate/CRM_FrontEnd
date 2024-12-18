@@ -4,34 +4,18 @@ import { DataGrid } from "@mui/x-data-grid";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
-import { getSalesAgent } from "./apiStuff";
 import { tokens } from "../../theme";
 import ProgressCircle from "../../components/ProgressCircle";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+import { useTeam } from "./useTeam";
 
 const Team = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
-  const [agents, setAgents] = useState([]);
-  const [status, setStatus] = useState("idle");
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { isPending, data, error, isError } = useTeam();
 
   // Fetch data in useEffect
-  useEffect(() => {
-    setStatus("loading");
-    async function fetchAgents() {
-      try {
-        const data = await getSalesAgent();
-        setAgents(data.agents || []);
-        setStatus("success");
-      } catch (error) {
-        console.error("Error fetching agents:", error);
-        setStatus("error");
-      }
-    }
-
-    fetchAgents();
-  }, []);
 
   // Define columns for DataGrid (excluding `id`)
   const columns = [
@@ -96,9 +80,8 @@ const Team = () => {
 
   return (
     <Box m="20px">
-      {status === "loading" && (
+      {isPending && (
         <Box textAlign="center" mt="50px">
-
           <Box
             sx={{
               height: "75vh",
@@ -116,7 +99,7 @@ const Team = () => {
         </Box>
       )}
 
-      {status === "success" && agents && (
+      {data && (
         <Box
           m="40px 0 0 0"
           height="75vh"
@@ -146,15 +129,14 @@ const Team = () => {
         >
           <DataGrid
             checkboxSelection
-            rows={agents}
+            rows={data.agents}
             columns={columns}
             pageSize={isNonMobile ? 10 : 5}
             getRowId={(row) => row.id} // Use `id` internally for unique row identification
           />
-
         </Box>
       )}
-      {status === "error" && (
+      {isError && (
         <Box
           sx={{
             width: "100%",
@@ -168,7 +150,7 @@ const Team = () => {
             variant="h2"
             sx={{ fontWeight: 600, color: colors.redAccent[500] }}
           >
-            Reload Page and Contact IT Department
+            {error}
           </Typography>
           <WarningAmberIcon
             sx={{

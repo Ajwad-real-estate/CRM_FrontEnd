@@ -1,10 +1,10 @@
 import Cookies from "js-cookie";
 
-export async function getSalesAgent() {
+export async function getTasks() {
   const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
   try {
-    const response = await fetch(apiUrl + "/api/get-sales-agents-details", {
+    const response = await fetch(apiUrl + "/api/tasks", {
       headers: {
         Authorization: `Bearer ${Cookies.get("accessToken")}`,
       },
@@ -15,7 +15,6 @@ export async function getSalesAgent() {
     }
 
     const data = await response.json();
-    console.log(data.agents);
 
     return data;
   } catch (error) {

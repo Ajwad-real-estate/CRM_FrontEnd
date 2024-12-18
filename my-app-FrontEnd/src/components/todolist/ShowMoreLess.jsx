@@ -1,13 +1,14 @@
-import { useTheme } from "@emotion/react";
-import { Button, Typography } from "@mui/material";
+import { Button } from "bootstrap";
 import { useState } from "react";
 import { tokens } from "../../theme";
+import { Typography, useTheme } from "@mui/material";
 
 export default function ShowMoreLess({ text }) {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isExpanded, setIsExpanded] = useState(false); // Control toggle state
-  const words = text.split(" "); // Split the text into words
+
+  const words = text ? text.split(" ") : []; // Split text into words or fallback to an empty array
   const MAX_WORDS = 10; // Maximum words to display when collapsed
 
   const toggleShowMore = () => {
