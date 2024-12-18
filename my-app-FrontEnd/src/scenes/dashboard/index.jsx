@@ -199,6 +199,8 @@ const Dashboard = () => {
         <Box
           gridColumn="span 4"
           gridRow="span 2"
+          backgroundColor={colors.primary[400]}
+
         // sx={{width:'2'}} width="75vh"
         >
           <BarChart target={target} doneDeals={doneDeals} isDashboard={true} />
