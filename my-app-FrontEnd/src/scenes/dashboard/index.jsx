@@ -14,12 +14,14 @@ import BarChart from "../../components/BarChart";
 import StatBox from "../../components/StatBox";
 import ProgressCircle from "../../components/ProgressCircle";
 import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const navigate = useNavigate();
 
   // Define state for the dashboard data
   const [dashboardData, setDashboardData] = useState(null);
@@ -94,14 +96,14 @@ const Dashboard = () => {
 
   // StatBox data to display
   const statBoxes = [
-    { title: "Done Clients", value: dashboardData.doneClientsCount || 0, icon: <EmailIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
-    { title: "Follow Ups", value: dashboardData.followUpCount || 0, icon: <PointOfSaleIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
-    { title: "Meetings", value: dashboardData.meetingCount || 0, icon: <PersonAddIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
-    { title: "Calls", value: dashboardData.callCount || 0, icon: <TrafficIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
-    { title: "Emails", value: dashboardData.emailCount || 0, icon: <EmailIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
-    { title: "New Clients", value: dashboardData.newClientsCount || 0, icon: <PointOfSaleIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
-    { title: "Qualified Clients", value: dashboardData.qualifiedClientsCount || 0, icon: <PersonAddIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
-    { title: "Reserved Clients", value: dashboardData.reservedClientsCount || 0, icon: <TrafficIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} /> },
+    { title: "Done Clients", value: dashboardData.doneClientsCount || 99999999999999, icon: <EmailIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
+    { title: "Follow Ups", value: dashboardData.followUpCount || 99999999999999, icon: <PointOfSaleIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
+    { title: "Meetings", value: dashboardData.meetingCount || 99999999999999, icon: <PersonAddIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
+    { title: "Calls", value: dashboardData.callCount || 99999999999999, icon: <TrafficIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
+    { title: "Emails", value: dashboardData.emailCount || 99999999999999, icon: <EmailIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
+    { title: "New Clients", value: dashboardData.newClientsCount || 99999999999999, icon: <PointOfSaleIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
+    { title: "Qualified Clients", value: dashboardData.qualifiedClientsCount || 99999999999999, icon: <PersonAddIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
+    { title: "Reserved Clients", value: dashboardData.reservedClientsCount || 99999999999999, icon: <TrafficIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
   ];
 
   // Set target and doneDeals data for the BarChart component
@@ -138,14 +140,41 @@ const Dashboard = () => {
       >
         {/* Render StatBox dynamically */}
         {statBoxes.map((box, index) => (
-          <StatBox
+          <Box
             key={index}
-            title={box.title}
-            subtitle={box.value}
-            progress="0.75" // Add logic to calculate progress if needed
-            increase="+14%"  // Add logic for increase percentage if needed
-            icon={box.icon}
-          />
+            onClick={() => navigate(box.link)}
+            sx={{
+              cursor: "pointer",
+              // "&:hover": {
+              //   backgroundColor: colors.primary[500],
+              // },
+            }}
+            // display="grid"
+            // // gridTemplateColumns="repeat(12, 1fr)"
+            // gridAutoRows="140px"
+            // gap="20px"
+            // gridColumn="span 2"
+            // gridRow="span 1"
+            // backgroundColor={colors.primary[400]}
+            gridColumn="span 3" // Adjust the width of each box to span 3 columns
+            gridRow="span 1" // Adjust the height of each box to span 1 row
+            backgroundColor={colors.primary[400]} // Box background color
+            display="grid" // Center content inside the box
+            // justifyContent="center"
+            // alignItems="center"
+            gridAutoRows="140px"
+
+          >
+            <StatBox
+              // key={index}
+              title={box.title}
+              subtitle={box.value}
+              progress="0.75" // Add logic to calculate progress if needed
+              increase="+14%"  // Add logic for increase percentage if needed
+              icon={box.icon}
+            // sx={{ padding: '10px' }}
+            />
+          </Box>
         ))}
 
         {/* Additional Rows */}
@@ -199,6 +228,8 @@ const Dashboard = () => {
         <Box
           gridColumn="span 4"
           gridRow="span 2"
+          backgroundColor={colors.primary[400]}
+
         // sx={{width:'2'}} width="75vh"
         >
           <BarChart target={target} doneDeals={doneDeals} isDashboard={true} />
