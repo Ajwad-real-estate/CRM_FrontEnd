@@ -27,6 +27,7 @@ import FormRow from "../../ui/FormRow";
 
 import styled from "styled-components";
 import ShowMoreLess from "./ShowMoreLess";
+import { useDeleteTask } from "./useDeleteTask";
 const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -51,6 +52,10 @@ const ToDoItem = ({ todo }) => {
   const colors = tokens(theme.palette.mode);
   const [dltSound, setDltSound] = useState(false);
 
+  //////////////////////////////////////
+  const { deleteTaskById, isDeleting } = useDeleteTask();
+
+  ////////////////////////////////////////
   //Edit Functions Stuff
   //Pop up stuff
 
@@ -66,7 +71,6 @@ const ToDoItem = ({ todo }) => {
   //
 
   //
-
   return (
     <Box
       p="10px"
@@ -93,6 +97,7 @@ const ToDoItem = ({ todo }) => {
         width="100%"
       >
         <Checkbox
+          onChange={() => deleteTaskById(todo.id)}
           sx={{
             color: colors.greenAccent[500],
             "&.Mui-checked": {
@@ -102,7 +107,7 @@ const ToDoItem = ({ todo }) => {
         />
         <Typography
           variant="body1"
-          width="190px"
+          width="120px"
           sx={{
             color: colors.grey[100],
             flexGrow: 1,
@@ -112,7 +117,7 @@ const ToDoItem = ({ todo }) => {
             justifyContent: "start",
           }}
         >
-          {todo.comment}
+          {todo.title}
         </Typography>
         <Box
           display="flex"
@@ -134,7 +139,7 @@ const ToDoItem = ({ todo }) => {
               fontSize: "1rem",
             }}
           >
-            {todo.created_at}
+            Created at: {todo.created_at}
           </Typography>
         </Box>
 
@@ -159,7 +164,7 @@ const ToDoItem = ({ todo }) => {
               fontSize: "1rem",
             }}
           >
-            {todo.time}
+            {todo.date}
           </Typography>
           <Typography
             variant="body1"
@@ -170,7 +175,7 @@ const ToDoItem = ({ todo }) => {
               fontSize: "1rem",
             }}
           >
-            {todo.date}
+            {todo.time}
           </Typography>
 
           <Box
@@ -191,7 +196,7 @@ const ToDoItem = ({ todo }) => {
         </Box>
       </Box>
       <Box sx={{ width: "90%" }}>
-        <ShowMoreLess text={todo.location} />
+        <ShowMoreLess text={todo.detail} />
       </Box>
     </Box>
   );

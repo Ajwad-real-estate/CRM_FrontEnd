@@ -16,7 +16,9 @@ const Team = () => {
   const { isPending, data, error, isError } = useTeam();
 
   // Fetch data in useEffect
-
+  console.log(isPending);
+  console.log(data);
+  console.log(isError);
   // Define columns for DataGrid (excluding `id`)
   const columns = [
     {
@@ -80,7 +82,7 @@ const Team = () => {
 
   return (
     <Box m="20px">
-      {isPending && (
+      {isPending && isError && (
         <Box textAlign="center" mt="50px">
           <Box
             sx={{
@@ -150,7 +152,7 @@ const Team = () => {
             variant="h2"
             sx={{ fontWeight: 600, color: colors.redAccent[500] }}
           >
-            {error}
+            Error Occurd Call IT Department
           </Typography>
           <WarningAmberIcon
             sx={{

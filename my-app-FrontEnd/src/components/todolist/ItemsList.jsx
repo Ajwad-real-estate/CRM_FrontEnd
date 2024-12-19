@@ -14,20 +14,28 @@ function ItemsList() {
   //const todos = useSelector((state) => state.todolist.todos);
   const { isPending, data, error, isError } = useTasks();
   let All_TASKS = [];
+  let TODAY = [];
+  console.log(data);
   if (!isPending) {
-    console.log(data.allTasks);
-    console.log(data.todayTasks);
-    console.log(data);
     All_TASKS = data.allTasks;
-    console.log(All_TASKS);
+    TODAY = data.todayTasks;
+
     All_TASKS = All_TASKS.map((task) => formatTaskDates(task));
+    TODAY = TODAY.map((task) => formatTaskDates(task));
+    console.log(All_TASKS);
+    console.log(TODAY);
   }
   //length
   function HandleNavigate() {
     navigate("addtask");
   }
   return (
-    <div>
+    <div
+      style={{
+        width: "90%",
+        height: "100%",
+      }}
+    >
       <Box
         sx={{
           display: "flex",
@@ -48,23 +56,70 @@ function ItemsList() {
           Add New Task
         </Button>
       </Box>
-      {data && !isPending && (
-        <Box mt="20px " sx={{ minHeight: "50vh" }}>
-          {All_TASKS.length > 0 ? (
-            All_TASKS.map((todo) => <ToDoItem key={todo.id} todo={todo} />)
-          ) : (
-            <Typography
-              variant="h2"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                marginTop: "60px",
-              }}
-            >
-              Task List is Empty
-            </Typography>
-          )}
+      {data && !isPending && !isError && (
+        <Box
+          sx={{
+            width: "100%",
+            height: "80%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "space-around",
+            gap: "30px",
+          }}
+        >
+          <Typography
+            variant="h3"
+            sx={{ marginBottom: "10px", marginTop: "18px" }}
+          >
+            Today&apos;s Tasks
+          </Typography>
+          <Box
+            mt="20px"
+            sx={{ height: "400px", width: "100%", overflowY: "scroll" }}
+          >
+            {TODAY.length > 0 ? (
+              TODAY.map((todo) => <ToDoItem key={todo.id} todo={todo} />)
+            ) : (
+              <Typography
+                variant="h2"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginTop: "60px",
+                }}
+              >
+                No Tasks Today
+              </Typography>
+            )}
+          </Box>
+          <Typography
+            variant="h3"
+            sx={{ marginBottom: "10px", marginTop: "18px" }}
+          >
+            All Tasks
+          </Typography>
+          <Box
+            mt="20px "
+            sx={{ height: "400px", width: "100%", overflowY: "scroll" }}
+          >
+            {All_TASKS.length > 0 ? (
+              All_TASKS.map((todo) => <ToDoItem key={todo.id} todo={todo} />)
+            ) : (
+              <Typography
+                variant="h2"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginTop: "60px",
+                }}
+              >
+                Task List is Empty
+              </Typography>
+            )}
+          </Box>
         </Box>
       )}
       {isError && (
@@ -90,7 +145,7 @@ function ItemsList() {
             justifyContent: "center",
           }}
         >
-          <ProgressCircle />
+          <ProgressCircle rotate />
         </Box>
       )}
     </div>

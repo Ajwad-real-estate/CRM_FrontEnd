@@ -1,83 +1,51 @@
 import { useEffect, useState } from "react";
-import {
-  Box,
-  TextField,
-  Button,
-  Slider,
-  Tooltip,
-  MenuItem,
-} from "@mui/material";
+import { Box, TextField, Button, Slider, Tooltip } from "@mui/material";
 import FormRow from "../../ui/FormRow";
 import Form from "../../ui/Form";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addTask } from "../../GlobalState/todolistSlice";
 import add from "./../../assets/add.mp3";
-import { useAddTasks } from "./useTasks";
 
-function convertDate(dateString) {
-  // Parse the date string
-  const date = new Date(dateString);
-
-  // Convert to ISO format (UTC)
-  return date.toISOString();
-}
-
-function convertTime(timeString) {
-  // Split the input time string into hours and minutes
-  const [hours, minutes] = timeString.split(":").map(Number);
-
-  // Create a new date object for today
-  const now = new Date();
-  now.setHours(hours, minutes, 0, 0); // Set time with hours and minutes
-
-  // Convert to desired format with seconds and microseconds
-  const seconds = now.getSeconds().toString().padStart(2, "0");
-  const milliseconds = now.getMilliseconds().toString().padStart(6, "0"); // Pad to 6 digits
-  return `${hours}:${minutes}:${seconds}.${milliseconds}`;
-}
 const AddToDo = () => {
   const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
-
+  const [deadLineDate, setDeadLineDate] = useState("");
+  const [deadLineTime, setDeadLineTime] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [startDate, setStartDate] = useState("");
   const [taskDetails, setTaskDetails] = useState("");
   const [addsound, setAddSound] = useState(false);
   const [priority, setPriority] = useState(2);
-  const options = [
-    { value: "pending", label: "pending" },
-    { value: "trying", label: "trying" },
-    { value: "done", label: "done" },
-  ];
-  const { addTaskTod, isCreating } = useAddTasks();
-  const [status, setStatus] = useState("pending");
-
-  const handleChangeStatus = (event) => {
-    setStatus(event.target.value);
-  };
 
   const handleChange = (event, newValue) => {
     setPriority(newValue);
   };
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleBack = () => {
     navigate(-1);
   };
   const handleAdd = () => {
     if (title.trim()) {
-      console.log("Date: " + date);
-      console.log("Time: " + time);
-      addTaskTod({
-        title,
-        detail: taskDetails,
-        priority_level: priority,
-        status,
-        date: convertDate(date),
-        time: convertTime(time),
-      });
+      dispatch(
+        addTask(
+          title,
+          deadLineDate,
+          deadLineTime,
+          startDate,
+          startTime,
+          taskDetails,
+          priority
+        )
+      );
       setAddSound(true);
       setTitle("");
-
+      setDeadLineDate("");
+      setDeadLineTime("");
+      setStartDate("");
+      setStartTime("");
       setTaskDetails("");
       setPriority(2);
     }
@@ -121,17 +89,8 @@ const AddToDo = () => {
               sx={{ width: "60%", marginRight: "10px" }}
             />
           </FormRow>
-          <FormRow label={"Task Date"}>
+          <FormRow label={"Start Time"}>
             <TextField
-              id="outlined-basic"
-              variant="outlined"
-              type="date"
-              placeholder={"YYYY-MM-DD"}
-              sx={{ width: "60%", marginRight: "10px" }}
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-            />
-            {/* <TextField
               id="outlined-basic"
               variant="outlined"
               type="date"
@@ -151,33 +110,29 @@ const AddToDo = () => {
               placeholder={"00:00 AM/PM"}
               size={"small"}
               width={"40%"}
-            /> */}
+            />
           </FormRow>
-          <FormRow label={"TaskTime"}>
+          <FormRow label={"Deadline"}>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              type="date"
+              placeholder={"YYYY-MM-DD"}
+              size={"small"}
+              width={"40%"}
+              value={deadLineDate}
+              onChange={(e) => setDeadLineDate(e.target.value)}
+            />
             <TextField
               id="outlined-basic"
               variant="outlined"
               type="time"
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
+              value={deadLineTime}
+              onChange={(e) => setDeadLineTime(e.target.value)}
               placeholder={"00:00 AM/PM"}
-              sx={{ width: "60%", marginRight: "10px" }}
+              size={"small"}
+              width={"40%"}
             />
-          </FormRow>
-          <FormRow label={"Status"}>
-            <TextField
-              select // Indicates this is a dropdown select
-              value={status}
-              onChange={handleChangeStatus}
-              fullWidth
-              variant="outlined"
-            >
-              {options.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
           </FormRow>
           <FormRow label={"Priority Level"}>
             <Box
