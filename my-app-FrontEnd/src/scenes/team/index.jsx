@@ -8,12 +8,14 @@ import { tokens } from "../../theme";
 import ProgressCircle from "../../components/ProgressCircle";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import { useTeam } from "./useTeam";
+import { useNavigate } from "react-router-dom";
 
 const Team = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const { isPending, data, error, isError } = useTeam();
+  const navigate = useNavigate(); // Use navigate at the top level
 
   // Fetch data in useEffect
   console.log(isPending);
@@ -79,6 +81,18 @@ const Team = () => {
       },
     },
   ];
+  const handleCellClick = (params) => {
+    const salesColumns = ["name", "title", "status"]; // Define the columns for Sales ID page
+
+    if (salesColumns.includes(params.field)) {
+      const salesId = params.row.id; // Assuming `id` is the sales identifier
+      navigate(`/sales/${salesId}`);
+      // } else if (params.field === "health") {
+    } else {
+      const agentId = params.row.id; // Assuming `id` is the agent identifier
+      navigate(`/agent-details/${agentId}`);
+    }
+  };
 
   return (
     <Box m="20px">
@@ -129,12 +143,14 @@ const Team = () => {
             },
           }}
         >
+
           <DataGrid
             checkboxSelection
             rows={data.agents}
             columns={columns}
             pageSize={isNonMobile ? 10 : 5}
             getRowId={(row) => row.id} // Use `id` internally for unique row identification
+            onCellClick={(params) => handleCellClick(params)}
           />
         </Box>
       )}
