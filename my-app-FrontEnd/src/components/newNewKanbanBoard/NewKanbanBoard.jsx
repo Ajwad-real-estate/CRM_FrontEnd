@@ -81,6 +81,7 @@ function transformData(clients) {
       company: client.city_id || "", // You can map this to a company or location (here, using city_id)
       phoneNumber: client.phone_numbers[0] || "", // Use the first phone number or empty string if none
       email: client.email || "", // Use the email or empty string if none
+
       tags: [client.channel || ""], // Use the channel as a tag (e.g., Facebook, Instagram)
     };
 
@@ -88,6 +89,7 @@ function transformData(clients) {
     columns[client.status].leadIds.push(client.id);
   });
   // Sorting the columns based on your desired order
+
   const columnOrder = ["new", "qualified", "reserved", "done_deal"]; // Define the desired order
   const orderedColumns = {};
 
@@ -96,8 +98,8 @@ function transformData(clients) {
       orderedColumns[status] = columns[status];
     }
   });
-  // console.log("orderedColumns", orderedColumns);
-  // console.log("leads", leads);
+  console.log("orderedColumns", orderedColumns);
+  console.log("leads", leads);
 
   return { columns: orderedColumns, leads };
 }
@@ -110,12 +112,7 @@ function transformData(clients) {
 const NewNewKanbanBoard = () => {
   const [clients, setClients] = useState([]);
   const [error, setError] = useState(null);
-  const { lead, isPending, isError, errorContent } = useGetKanban();
-  if (lead) {
-    console.log(lead.allActions);
-  }
-  const isNonMobile = useMediaQuery("(min-width:600px)");
-  const theme = useTheme();
+
   // const [errorTimeout, setErrorTimeout] = useState(false);
 
   useEffect(() => {
@@ -133,6 +130,7 @@ const NewNewKanbanBoard = () => {
         }
 
         const dataFromApi = await response.json();
+
         console.log("dataFromApi");
         console.log(dataFromApi);
         setClients(dataFromApi);
@@ -321,6 +319,8 @@ const NewNewKanbanBoard = () => {
   //  });
   // };
 
+  const isNonMobile = useMediaQuery("(min-width:600px)");
+  const theme = useTheme();
   const colors = tokens(theme.palette.mode); // Get colors based on the current theme
 
   // Function to filter leads based on the search query
@@ -428,7 +428,6 @@ const NewNewKanbanBoard = () => {
                   <LeadCard
                     lead={lead}
                     onDoubleClick={() => handleDoubleClick(lead)}
-                    // sx={{ backgroundColor: colors.primary[500] }} // Use theme colors252
                   />
                 </Box>
               ))}
@@ -457,6 +456,7 @@ const NewNewKanbanBoard = () => {
                       >
                         <PipelineColumn
                           title={column.title}
+
                           // onAdd={() => addNewLead(column.id)}
                         >
                           {filteredLeads
@@ -502,6 +502,7 @@ const NewNewKanbanBoard = () => {
             <LeadModal
               lead={selectedLead}
               onClose={handleCloseModal}
+
               // onSave={onSaveLead}
             />
           )}

@@ -56,6 +56,7 @@ import NetworkStatus from "./NetworkStatus";
 import ClientData from "./components/newNewKanbanBoard/ClientData";
 import Cookies from "js-cookie"; // Import js-cookie
 import { useNavigate } from "react-router-dom"; // For navigation
+import Sales from "./scenes/team/sales";
 
 function App() {
   const dispatch = useDispatch();
@@ -163,6 +164,8 @@ function App() {
                     path="/RequestCommissionPage"
                     element={<RequestCommissionPage />}
                   />
+                  <Route path="/sales/:id" element={<Sales />} />
+
                   <Route path="/Contact" element={<ContactPage />} />
                   <Route path="/SalesProcess" element={<SalesProcessPage />} />
                   <Route path="/GetContacts" element={<GetContacts />} />

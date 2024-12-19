@@ -10,7 +10,6 @@ import delet from "../../assets/delet.mp3";
 import { useEffect, useState } from "react";
 import Cookies from 'js-cookie';
 
-
 const phoneRegExp =
   /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
 
@@ -35,6 +34,42 @@ const CreateAccForm = () => {
 
   const [addSound, setAddSound] = useState(false);
   const [dltSound, setDltSound] = useState(false);
+  const [roles, setRoles] = useState([]); // State to hold the roles
+
+  useEffect(() => {
+    // Load roles dynamically (can be adjusted as per your requirement)
+    const fetchRoles = async () => {
+      const accessToken = Cookies.get("accessToken");
+
+      try {
+        const response = await fetch(apiUrl + "/api/roles", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`, // Add the token to the Authorization header
+          },
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          setRoles(result.roles); // Set roles if successful
+        } else {
+          toast.error("Failed to load roles.", {
+            position: "top-center",
+            autoClose: 5000,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching roles:", error);
+        toast.error("An error occurred while fetching roles.", {
+          position: "top-center",
+          autoClose: 5000,
+        });
+      }
+    };
+
+    fetchRoles();
+  }, []);
 
   useEffect(() => {
     const playSound = () => {
@@ -71,23 +106,19 @@ const CreateAccForm = () => {
         body: JSON.stringify(userData),
       });
 
-      // Check if the response is Unauthorized (401)
       if (response.status === 401) {
-        // Show toast notification for Unauthorized
         toast.error("Unauthorized. Please logout and login again.", {
-          toastId: "unauthorized-toast", // Prevent duplicate toasts
-          position: "top-center", // Position the toast notification
-          autoClose: 5000, // Automatically close after 5 seconds
+          toastId: "unauthorized-toast",
+          position: "top-center",
+          autoClose: 5000,
         });
         setDltSound(true); // Play error sound
-        return; // Stop further execution
+        return;
       }
 
-      // Parse the response JSON
       const result = await response.json();
 
       if (response.ok) {
-        // Show success notification
         toast.success("Account created successfully!", {
           toastId: "success-toast",
           position: "top-center",
@@ -95,7 +126,6 @@ const CreateAccForm = () => {
         });
         setAddSound(true); // Play success sound
       } else {
-        // Show toast for other API errors
         toast.error(`Error: ${result.message}`, {
           toastId: "api-error-toast",
           position: "top-center",
@@ -104,7 +134,6 @@ const CreateAccForm = () => {
         setDltSound(true); // Play error sound
       }
     } catch (error) {
-      // Handle unexpected errors (e.g., network issues)
       console.error("Error submitting form:", error);
       toast.error("An unexpected error occurred. Please try again.", {
         toastId: "unexpected-error-toast",
@@ -115,32 +144,8 @@ const CreateAccForm = () => {
     }
   };
 
-
   return (
     <Box m="20px">
-      {/* <Toaster
-        position="top-center"
-        gutter={12}
-        containerStyle={{
-          marginTop: "100px", // Moves the toaster 50px down
-          margin: "8px"
-        }}
-        toastOptions={{
-          success: {
-            duration: 3350,
-          },
-          error: {
-            duration: 5870,
-          },
-          style: {
-            fontSize: "17px",
-            maxWidth: "500px",
-            padding: "16px 24px",
-            backgroundColor: "var(--color-grey-0)",
-            color: "var(--color-grey-700)",
-          },
-        }}
-      /> */}
       <Header title="CREATE USER" subtitle="Create a New User Profile" />
       <Formik
         onSubmit={handleFormSubmit}
@@ -201,19 +206,6 @@ const CreateAccForm = () => {
                 helperText={touched.contact && errors.contact}
                 sx={{ gridColumn: "span 4" }}
               />
-              {/* <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="Role ID"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.roleId}
-                name="roleId"
-                error={!!touched.roleId && !!errors.roleId}
-                helperText={touched.roleId && errors.roleId}
-                sx={{ gridColumn: "span 4" }}
-              /> */}
               <FormControl fullWidth variant="filled">
                 <InputLabel id="role-select-label">Role</InputLabel>
                 <Select
@@ -224,10 +216,11 @@ const CreateAccForm = () => {
                   label="Role ID"
                   name="roleId"
                 >
-
-                  <MenuItem value="1">Admin</MenuItem>
-                  <MenuItem value="2">User</MenuItem>
-                  {/* Add other roles as necessary */}
+                  {roles.map((role) => (
+                    <MenuItem key={role.id} value={role.id}>
+                      {role.title}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Box>
@@ -242,6 +235,5 @@ const CreateAccForm = () => {
     </Box>
   );
 };
-
 
 export default CreateAccForm;
