@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, colors, TextField, Typography } from "@mui/material";
 import ToDoItem from "./ToDoItem";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +22,8 @@ function ItemsList() {
 
     All_TASKS = All_TASKS.map((task) => formatTaskDates(task));
     TODAY = TODAY.map((task) => formatTaskDates(task));
+    All_TASKS = All_TASKS.sort((a, b) => b.priority_level - a.priority_level);
+    TODAY = TODAY.sort((a, b) => b.priority_level - a.priority_level);
     console.log(All_TASKS);
     console.log(TODAY);
   }
@@ -76,7 +78,12 @@ function ItemsList() {
           </Typography>
           <Box
             mt="20px"
-            sx={{ height: "400px", width: "100%", overflowY: "scroll" }}
+            sx={{
+              height: "200px",
+              width: "100%",
+              overflowY: "scroll",
+              borderRadius: "10px",
+            }}
           >
             {TODAY.length > 0 ? (
               TODAY.map((todo) => <ToDoItem key={todo.id} todo={todo} />)
