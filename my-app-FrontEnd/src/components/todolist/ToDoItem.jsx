@@ -260,7 +260,7 @@ const ToDoItem = ({ todo }) => {
                   sx={{ width: "60%", marginRight: "10px" }}
                 />
               </FormRow>
-              <FormRow label={"Start Time"}>
+              <FormRow label={"Date"}>
                 <TextField
                   id="outlined-basic"
                   variant="outlined"

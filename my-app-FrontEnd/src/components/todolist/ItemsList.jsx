@@ -35,7 +35,8 @@ function ItemsList() {
     <div
       style={{
         width: "90%",
-        height: "100%",
+
+        height: `${isPending ? "80vh" : "100%"}`,
       }}
     >
       <Box

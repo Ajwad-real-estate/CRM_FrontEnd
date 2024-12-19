@@ -4,6 +4,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
+
 import { formatDate } from "@fullcalendar/core";
 import {
   Box,
@@ -18,10 +19,13 @@ import { useSelector } from "react-redux";
 import { useTasks } from "../../components/todolist/useTasks";
 import formatTaskDates from "../../components/todolist/date-visualization";
 import ProgressCircle from "../../components/ProgressCircle";
+import EditDialogue from "./EditDialogue";
+import { format, parseISO } from "date-fns";
 
 const Calendar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
   //const tasks = useSelector((state) => state.todolist.todos);
   //  Task Date
   const { isPending, data, error, isError } = useTasks();
@@ -42,16 +46,22 @@ const Calendar = () => {
 
   //const [currentEvents, setCurrentEvents] = useState([]);
   let formattedEvents = [];
-  if (data) {
-    formattedEvents = allTasks.map((task) => ({
-      id: task.is, // Fallback to a unique generated ID if `id` is missing
-      title: task?.title || "Untitled Task", // Fallback to a default title
+  if (data && !isPending) {
+    formattedEvents = allTasks.map((task, i) => ({
+      id: task?.id || i,
+      title: task?.title || "Untitled Task",
+      status: task?.status || "trying",
+      priority_level: task?.priority_level || 1,
+      date: task?.date?.split(" ")[0] || new Date().toISOString(),
+      time: task?.time || "",
+      detail: task?.detail || "No Description",
+
       start:
         task?.created_at?.split(" ")[0] ||
         task?.date ||
-        new Date().toISOString(), // Fallback to `date` or current date
-      end: task?.date || new Date().toISOString(), // Fallback to the current date in ISO format
-      allDay: task?.allDay || false, // Default to `false` if not specified
+        new Date().toISOString(),
+      end: task?.date || new Date().toISOString(),
+      allDay: task?.allDay || false,
     }));
   }
   return (
@@ -71,6 +81,7 @@ const Calendar = () => {
                 {formattedEvents.map((event) => (
                   <ListItem
                     key={event.id}
+                    taskId={event.id}
                     sx={{
                       backgroundColor: colors.greenAccent[500],
                       margin: "10px 0",
@@ -89,6 +100,7 @@ const Calendar = () => {
                         </Typography>
                       }
                     />
+                    <EditDialogue todo={event} />
                   </ListItem>
                 ))}
               </List>
