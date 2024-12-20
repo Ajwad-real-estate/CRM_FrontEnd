@@ -9,6 +9,7 @@ import { Button, Typography, useMediaQuery, useTheme } from "@mui/material";
 import ActionContent from "./contents/ActionContent";
 import { tokens } from "../../../theme";
 import EditPage from "./contents/EditPage";
+import LeadPreview from "./LeadPreview";
 const Action = ({ open, onClose, onOpen, lead, onUpdate }) => {
   const { TabValue } = useLeadOpt();
   // Drawer content
@@ -68,6 +69,7 @@ const Action = ({ open, onClose, onOpen, lead, onUpdate }) => {
           gap: "10px",
         }}
       >
+        {TabValue === 0 && lead && <LeadPreview lead={lead} open={open} />}
         {TabValue === 1 && lead && <EditPage lead={lead} onUpdate={onUpdate} />}
         {TabValue === 3 && lead && <ActionContent lead={lead} />}
       </Box>

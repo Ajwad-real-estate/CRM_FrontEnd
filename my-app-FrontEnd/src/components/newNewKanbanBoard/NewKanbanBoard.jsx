@@ -20,7 +20,7 @@ import { LeadOptionsProvider } from "./actions/LeadContext";
 import ClientData from "./ClientData";
 import Cookies from "js-cookie";
 import ProgressCircle from "../ProgressCircle";
-import { useGetKanban } from "./KanbanAPI/useGetKanban";
+//import { useGetKanban } from "./KanbanAPI/useGetKanban";
 
 // const transformData = (clients) => {
 //  const columns = {}; // To store the different status columns
@@ -153,7 +153,7 @@ const NewNewKanbanBoard = () => {
 
   const initialData = transformData(clients);
   console.log("initialData");
-  console.log(initialData.columns);
+  console.log(initialData);
   const [data, setData] = useState({ columns: {}, leads: {} });
   // Using useEffect to log when the state is updated
   // Transform and update data once clients are loaded
@@ -171,6 +171,7 @@ const NewNewKanbanBoard = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isListView, setIsListView] = useState(false); // State for view mode
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  console.log(selectedLead);
   // Toggle Drawer
   if (data === null) {
     // Show a friendly message while loading or in case of an error
