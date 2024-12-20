@@ -40,7 +40,7 @@ import ProjectDetails from "./components/inventory/ProjectDetails";
 import CommissionPage from "./components/TransactionForFinace/CommissionPage";
 // import RequestCommissionPage from './components/TransactionForSalesAgent/RequestCommissionPage';
 import ToDoListPage from "./components/todolist/ToDoListPage";
-import ContactPage from "./components/contact/Contact";
+// import ContactPage from "./components/contact/Contact";
 import ContactDetailForNewKanbanBoard from "./components/newKanbanBoard/contactDetailForNewKanbanBoard/ContactDetailForNewKanbanBoard";
 import SalesProcessPage from "./components/salesProcessPage/SalesProcessPage";
 import AddToDo from "./components/todolist/AddToDo";
@@ -57,6 +57,8 @@ import ClientData from "./components/newNewKanbanBoard/ClientData";
 import Cookies from "js-cookie"; // Import js-cookie
 import { useNavigate } from "react-router-dom"; // For navigation
 import Sales from "./scenes/team/sales";
+import Profile from "./components/myProfile/Profile";
+import ClientDetails from "./scenes/contacts/ClientDetails";
 
 function App() {
   const dispatch = useDispatch();
@@ -137,7 +139,7 @@ function App() {
                   <Route path="/pie" element={<Pie />} />
                   <Route path="/line" element={<Line />} />
                   <Route path="/geography" element={<Geography />} />
-                  <Route path="/contacts" element={<Contacts />} />
+                  <Route path="/clients" element={<Contacts />} />
                   <Route path="/invoices" element={<Invoices />} />
                   <Route path="/new" element={<New />} />
                   <Route path="/KanbanBoard" element={<KanbanBoard />} />
@@ -165,10 +167,13 @@ function App() {
                     element={<RequestCommissionPage />}
                   />
                   <Route path="/sales/:id" element={<Sales />} />
+                  <Route path="/profile" element={<Profile />} />
 
-                  <Route path="/Contact" element={<ContactPage />} />
+                  {/* <Route path="/Contact" element={<ContactPage />} /> */}
                   <Route path="/SalesProcess" element={<SalesProcessPage />} />
                   <Route path="/GetContacts" element={<GetContacts />} />
+                  <Route path="/clients/:id" element={<ClientDetails />} />
+
                 </Routes>
               </Box>
             </Box>

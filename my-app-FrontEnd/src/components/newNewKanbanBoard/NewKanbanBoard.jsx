@@ -458,7 +458,7 @@ const NewNewKanbanBoard = () => {
                         <PipelineColumn
                           title={column.title}
 
-                          // onAdd={() => addNewLead(column.id)}
+                        // onAdd={() => addNewLead(column.id)}
                         >
                           {filteredLeads
                             .filter((lead) =>
@@ -504,7 +504,7 @@ const NewNewKanbanBoard = () => {
               lead={selectedLead}
               onClose={handleCloseModal}
 
-              // onSave={onSaveLead}
+            // onSave={onSaveLead}
             />
           )}
         </Box>

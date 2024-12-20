@@ -216,7 +216,7 @@ const TheSideBar = () => {
             </SubMenu>
             <Item
               title="Inventory"
-              to="/projects"
+              // to="/projects"
               icon={<MapOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -239,16 +239,16 @@ const TheSideBar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
+            {/* <Item
               title="Contact"
               to="/contact"
               icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
             <Item
               title="Contacts Information"
-              to="/contacts"
+              to="/clients"
               icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

@@ -1,17 +1,46 @@
 import { Box, useTheme, useMediaQuery } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { mockDataContacts } from "../../data/mockData";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
-const Contacts = () => {
+const Clients = () => {
+  const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
   const isNonMobile = useMediaQuery("(min-width:600px)");
-
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/clients',
+                  {
+                    headers: {
+                      Authorization: `Bearer ${Cookies.get("accessToken")}`,
+                    },
+                  });
+        const data = await response.json();
+        setClients(data);
+      } catch (error) {
+        console.error("Error fetching clients:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchClients();
+  }, []);
+
+  const handleRowClick = (params) => {
+    navigate(`/clients/${params.id}`);
+  };
+
   const columns = [
-    { field: "id", headerName: "ID", flex: 0.5 },
-    { field: "registrarId", headerName: "Registrar ID" },
+    // { field: "id", headerName: "ID", flex: 0.5 },
     {
       field: "name",
       headerName: "Name",
@@ -26,9 +55,12 @@ const Contacts = () => {
       align: "left",
     },
     {
-      field: "phone",
-      headerName: "Phone Number",
+      field: "phone_numbers",
+      headerName: "Phone Numbers",
       flex: 1,
+      renderCell: (params) => {
+        return params.value ? params.value.join(", ") : "-";
+      }
     },
     {
       field: "email",
@@ -36,20 +68,34 @@ const Contacts = () => {
       flex: 1,
     },
     {
-      field: "address",
-      headerName: "Address",
+      field: "street",
+      headerName: "Street",
       flex: 1,
     },
     {
-      field: "city",
-      headerName: "City",
+      field: "budget",
+      headerName: "Budget",
+      flex: 1,
+      type: "number",
+      renderCell: (params) => {
+        return params.value ? `$${params.value.toLocaleString()}` : "-";
+      }
+    },
+    {
+      field: "status",
+      headerName: "Status",
       flex: 1,
     },
     {
-      field: "zipCode",
-      headerName: "Zip Code",
+      field: "type",
+      headerName: "Type",
       flex: 1,
     },
+    {
+      field: "channel",
+      headerName: "Channel",
+      flex: 1,
+    }
   ];
 
   return (
@@ -62,11 +108,9 @@ const Contacts = () => {
             border: "none",
             fontSize: isNonMobile ? "14px" : "8px",
           },
-          "& .MuiBox-root": {
-            mt: "10px",
-          },
           "& .MuiDataGrid-cell": {
             borderBottom: "none",
+            cursor: "pointer",
           },
           "& .name-column--cell": {
             color: colors.greenAccent[300],
@@ -85,20 +129,22 @@ const Contacts = () => {
           "& .MuiCheckbox-root": {
             color: `${colors.greenAccent[200]} !important`,
           },
-          ".MuiDataGrid-container--top [role=row]": {
-            backgroundColor: colors.blueAccent[700] + "!important",
-            borderBottom: "none",
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+            color: `${colors.grey[100]} !important`,
           },
         }}
       >
         <DataGrid
-          rows={mockDataContacts}
+          rows={clients}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
+          loading={loading}
+          autoHeight
+          onRowClick={handleRowClick}
         />
       </Box>
     </Box>
   );
 };
 
-export default Contacts;
+export default Clients;
