@@ -19,13 +19,14 @@ import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleMode } from "../../themeSlice";
 import { themeSettings, tokens } from "../../theme";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
 import AjwadWhite from "../../assets/logoWihte.png"
 import AjwadBlack from "../../assets/logoBlack.png"
 
 
 const Topbar = () => {
+  const location = useLocation();
   const colorMode = useSelector((state) => state.theme.mode);
   const dispatch = useDispatch();
   const theme = createTheme(themeSettings(colorMode));
@@ -86,6 +87,8 @@ const Topbar = () => {
 
   const { title, subtitle } = getPageInfo(editTitlePageInfo(location.pathname));
 
+  const navigate = useNavigate();
+
   return (
     <Box
       display="flex"
@@ -96,14 +99,13 @@ const Topbar = () => {
         background: colors.NewNav[900],
         width: "100%",
         zIndex: 1000,
-        // position: 'fixed',  // Fixed positioning to stay on top
-        height: "110px", // Stay at the top
-        left: 0, // Ensure it spans across the full width
-        right: 0, // Ensure it spans across the full width
-        boxShadow: 3, // Add shadow for a subtle 3D effect
-        paddingLeft: 3, // Align left padding
-        paddingRight: 3, // Align right padding
-        paddingTop: 2, // Ensure the icons inside the topbar have proper spacing
+        height: "110px",
+        left: 0,
+        right: 0,
+        boxShadow: 3,
+        paddingLeft: 3,
+        paddingRight: 3,
+        paddingTop: 2,
         borderBottom: "0.1px solid",
         borderColor: colors.NewNav[1000],
       }}
@@ -111,13 +113,11 @@ const Topbar = () => {
       <img src={AjwadBlack} alt="Ajwad Black Logo" 
       style={{ width: "280px" }} 
       />
-      {/* <img src="/CRM.png" alt="Logo" style={{ width: "140px" }} /> */}
 
       <Box sx={{ mt: 2 }}>
         <Header title={title} subtitle={subtitle} />
       </Box>
 
-      {/* Search Bar */}
       <FormControl variant="outlined" sx={{ width: "30%" }}>
         <OutlinedInput
           sx={{ height: "50px", borderRadius: "25px", fontSize: "1.25rem" }}
@@ -132,7 +132,6 @@ const Topbar = () => {
         />
       </FormControl>
 
-      {/* Icons */}
       <Box display="flex" alignItems="center" sx={{ color: "#FCFCFC" }}>
         <IconButton onClick={handleToggle} sx={{ color: "#FCFCFC" }}>
           {theme.palette.mode === "dark" ? (
@@ -166,7 +165,11 @@ const Topbar = () => {
           <SettingsOutlinedIcon />
         </IconButton>
         <IconButton sx={{ color: "#FCFCFC" }}>
-          <PersonOutlinedIcon />
+          <PersonOutlinedIcon
+            onClick={() => {
+              navigate("/profile");
+            }}
+          />
         </IconButton>
       </Box>
     </Box>
