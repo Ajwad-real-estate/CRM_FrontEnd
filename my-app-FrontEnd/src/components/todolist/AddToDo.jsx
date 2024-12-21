@@ -13,6 +13,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import add from "./../../assets/add.mp3";
 import { useAddTasks } from "./useTasks";
+import toast from "react-hot-toast";
 
 function convertDate(dateString) {
   // Parse the date string
@@ -39,15 +40,11 @@ const AddToDo = () => {
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
-
+  const [ErrorField, setErrorField] = useState(false);
   const [taskDetails, setTaskDetails] = useState("");
   const [addsound, setAddSound] = useState(false);
   const [priority, setPriority] = useState(2);
-  const options = [
-    { value: "pending", label: "pending" },
-    { value: "trying", label: "trying" },
-    { value: "done", label: "done" },
-  ];
+  const options = [{ value: "pending", label: "pending" }];
   const { addTaskTod, isCreating } = useAddTasks();
   const [status, setStatus] = useState("pending");
 
@@ -64,7 +61,8 @@ const AddToDo = () => {
     navigate(-1);
   };
   const handleAdd = () => {
-    if (title.trim()) {
+    if (title.trim() && date && time) {
+      setErrorField(false);
       console.log("Date: " + date);
       console.log("Time: " + time);
       addTaskTod({
@@ -80,8 +78,12 @@ const AddToDo = () => {
 
       setTaskDetails("");
       setPriority(2);
+    } else {
+      setErrorField(true);
+      toast.error("Task Cannot be added");
     }
   };
+
   useEffect(
     function () {
       const playSound = function () {
@@ -114,15 +116,21 @@ const AddToDo = () => {
           <FormRow label="Title">
             <TextField
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              helperText={ErrorField && !title ? "task title required" : ""}
+              onChange={(e) => {
+                setTitle(e.target.value);
+                setErrorField(false);
+              }}
               placeholder="Enter new task"
               variant="outlined"
               size="small"
               sx={{ width: "60%", marginRight: "10px" }}
+              error={ErrorField && !title ? true : false}
             />
           </FormRow>
           <FormRow label={"Task Date"}>
             <TextField
+              helperText={ErrorField && !date ? "task date required" : ""}
               id="outlined-basic"
               variant="outlined"
               type="date"
@@ -130,31 +138,12 @@ const AddToDo = () => {
               sx={{ width: "60%", marginRight: "10px" }}
               value={date}
               onChange={(e) => setDate(e.target.value)}
+              error={ErrorField && !date ? true : false}
             />
-            {/* <TextField
-              id="outlined-basic"
-              variant="outlined"
-              type="date"
-              placeholder={"YYYY-MM-DD"}
-              size={"small"}
-              width={"40%"}
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-
-            <TextField
-              id="outlined-basic"
-              variant="outlined"
-              type="time"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              placeholder={"00:00 AM/PM"}
-              size={"small"}
-              width={"40%"}
-            /> */}
           </FormRow>
           <FormRow label={"TaskTime"}>
             <TextField
+              helperText={ErrorField && !time ? "task time required" : ""}
               id="outlined-basic"
               variant="outlined"
               type="time"
@@ -162,6 +151,7 @@ const AddToDo = () => {
               onChange={(e) => setTime(e.target.value)}
               placeholder={"00:00 AM/PM"}
               sx={{ width: "60%", marginRight: "10px" }}
+              error={ErrorField && !time ? true : false}
             />
           </FormRow>
           <FormRow label={"Status"}>
@@ -192,15 +182,15 @@ const AddToDo = () => {
                 onChange={handleChange}
                 valueLabelDisplay="auto"
                 valueLabelFormat={(value) => {
-                  if (value === 1) return "Follow Up";
-                  if (value === 2) return "Routine";
-                  if (value === 3) return "Urgent";
+                  if (value === 1) return "1";
+                  if (value === 2) return "2";
+                  if (value === 3) return "3";
                 }}
                 step={1}
                 marks={[
-                  { value: 1, label: "Follow Up" },
-                  { value: 2, label: "Routine" },
-                  { value: 3, label: "Urgent" },
+                  { value: 1, label: "1" },
+                  { value: 2, label: "2" },
+                  { value: 3, label: "3" },
                 ]}
                 min={1}
                 max={3}
@@ -231,13 +221,7 @@ const AddToDo = () => {
                 }}
               />
               <Tooltip
-                title={`${
-                  priority === 1
-                    ? "Follow Up"
-                    : priority === 2
-                      ? "Routine"
-                      : "Urgent"
-                }`}
+                title={`${priority === 1 ? "1" : priority === 2 ? "2" : "3"}`}
                 arrow
                 placement="top"
                 PopperProps={{

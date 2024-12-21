@@ -9,6 +9,9 @@ import {
 } from "@mui/material";
 import AddPhoneNumber from "./AddPhoneNumber";
 import { useClient } from "./useKanban";
+import ProgressCircle from "../../ProgressCircle";
+import { useTheme } from "@emotion/react";
+import { tokens } from "../../../theme";
 
 const typeOptions = ["Warm", "Cold"];
 const statusOptions = [
@@ -26,8 +29,10 @@ function capitalize(word) {
 }
 
 function LeadPreview({ lead }) {
-  const { data, isLoading, isError, error } = useClient(lead.id);
+  const { data, isPending, isError, error } = useClient(lead.id);
   console.log(data);
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
   // Initialize state with defaults or use `data` values once available
   const [name, setName] = useState("");
   const [age, setAge] = useState(1);
@@ -56,8 +61,6 @@ function LeadPreview({ lead }) {
   }, [data]);
 
   // Handle loading and error states
-  if (isLoading) return <Typography>Loading...</Typography>;
-  if (isError) return <Typography>Error: {error.message}</Typography>;
 
   const handleAdd = () => {
     if (newPhoneNumber.trim() !== "") {
@@ -86,223 +89,237 @@ function LeadPreview({ lead }) {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-around",
+        justifyContent: ` ${isPending || isError ? "center" : "space-around"}`,
+        alignItems: `${isPending || isError ? "center" : ""}`,
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "30px",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-around",
-            width: "50%",
-            gap: "12px",
-          }}
-        >
-          <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
-            Name
-          </Typography>
-          <TextField
-            variant="outlined"
-            sx={{ width: "100%" }}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+      {data && (
+        <>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "30px",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-around",
+                width: "50%",
+                gap: "12px",
+              }}
+            >
+              <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
+                Name
+              </Typography>
+              <TextField
+                variant="outlined"
+                sx={{ width: "100%" }}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                width: "50%",
+                gap: "12px",
+              }}
+            >
+              <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
+                Age
+              </Typography>
+              <TextField
+                variant="outlined"
+                sx={{ width: "40%" }}
+                type="number"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+              />
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "30px",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-around",
+                width: "65%",
+                gap: "12px",
+              }}
+            >
+              <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
+                Email
+              </Typography>
+              <TextField
+                variant="outlined"
+                sx={{ width: "100%" }}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "30px",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-around",
+                width: "50%",
+                gap: "12px",
+              }}
+            >
+              <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
+                Street
+              </Typography>
+              <TextField
+                variant="outlined"
+                sx={{ width: "100%" }}
+                value={street}
+                onChange={(e) => setStreet(e.target.value)}
+              />
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                width: "50%",
+                gap: "12px",
+              }}
+            >
+              <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
+                Channel
+              </Typography>
+              <TextField
+                variant="outlined"
+                sx={{ width: "100%" }}
+                value={channel}
+                onChange={(e) => setChannel(e.target.value)}
+              />
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "30px",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-around",
+                width: "50%",
+                gap: "12px",
+              }}
+            >
+              <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
+                Status
+              </Typography>
+              <FormControl fullWidth sx={{ width: "100%" }}>
+                <Select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                >
+                  {statusOptions.map((option, i) => (
+                    <MenuItem value={option} key={i}>
+                      {option}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                width: "50%",
+                gap: "12px",
+              }}
+            >
+              <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
+                Type
+              </Typography>
+              <FormControl fullWidth sx={{ width: "55%" }}>
+                <Select value={type} onChange={(e) => setType(e.target.value)}>
+                  {typeOptions.map((option, i) => (
+                    <MenuItem value={option} key={i}>
+                      {option}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "30px",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-around",
+                width: "50%",
+                gap: "12px",
+              }}
+            >
+              <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
+                Budget
+              </Typography>
+              <TextField
+                variant="outlined"
+                type="number"
+                sx={{ width: "100%" }}
+                value={budget}
+                onChange={(e) => setBudget(e.target.value)}
+              />
+            </Box>
+          </Box>
+          <AddPhoneNumber
+            handleAdd={handleAdd}
+            handleRemove={handleRemove}
+            handleChange={handleChange}
+            numbersList={numbersList}
+            setNumbersList={setNumbersList}
+            newPhoneNumber={newPhoneNumber}
+            setNewPhoneNumber={setNewPhoneNumber}
           />
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            width: "50%",
-            gap: "12px",
-          }}
-        >
-          <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
-            Age
-          </Typography>
-          <TextField
-            variant="outlined"
-            sx={{ width: "40%" }}
-            type="number"
-            value={age}
-            onChange={(e) => setAge(e.target.value)}
-          />
-        </Box>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "30px",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-around",
-            width: "65%",
-            gap: "12px",
-          }}
-        >
-          <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
-            Email
-          </Typography>
-          <TextField
-            variant="outlined"
-            sx={{ width: "100%" }}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </Box>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "30px",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-around",
-            width: "50%",
-            gap: "12px",
-          }}
-        >
-          <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
-            Street
-          </Typography>
-          <TextField
-            variant="outlined"
-            sx={{ width: "100%" }}
-            value={street}
-            onChange={(e) => setStreet(e.target.value)}
-          />
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            width: "50%",
-            gap: "12px",
-          }}
-        >
-          <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
-            Channel
-          </Typography>
-          <TextField
-            variant="outlined"
-            sx={{ width: "100%" }}
-            value={channel}
-            onChange={(e) => setChannel(e.target.value)}
-          />
-        </Box>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "30px",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-around",
-            width: "50%",
-            gap: "12px",
-          }}
-        >
-          <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
-            Status
-          </Typography>
-          <FormControl fullWidth sx={{ width: "100%" }}>
-            <Select value={status} onChange={(e) => setStatus(e.target.value)}>
-              {statusOptions.map((option, i) => (
-                <MenuItem value={option} key={i}>
-                  {option}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            width: "50%",
-            gap: "12px",
-          }}
-        >
-          <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
-            Type
-          </Typography>
-          <FormControl fullWidth sx={{ width: "55%" }}>
-            <Select value={type} onChange={(e) => setType(e.target.value)}>
-              {typeOptions.map((option, i) => (
-                <MenuItem value={option} key={i}>
-                  {option}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "30px",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-around",
-            width: "50%",
-            gap: "12px",
-          }}
-        >
-          <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
-            Budget
-          </Typography>
-          <TextField
-            variant="outlined"
-            type="number"
-            sx={{ width: "100%" }}
-            value={budget}
-            onChange={(e) => setBudget(e.target.value)}
-          />
-        </Box>
-      </Box>
-      <AddPhoneNumber
-        handleAdd={handleAdd}
-        handleRemove={handleRemove}
-        handleChange={handleChange}
-        numbersList={numbersList}
-        setNumbersList={setNumbersList}
-        newPhoneNumber={newPhoneNumber}
-        setNewPhoneNumber={setNewPhoneNumber}
-      />
+        </>
+      )}
+      {isPending && <ProgressCircle rotate />}
+      {isError && (
+        <Typography sx={{ color: colors.redAccent[600] }}>
+          Failed Getting Client Data
+        </Typography>
+      )}
     </Box>
   );
 }

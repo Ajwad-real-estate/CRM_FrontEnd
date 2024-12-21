@@ -14,18 +14,13 @@ function ItemsList() {
   //const todos = useSelector((state) => state.todolist.todos);
   const { isPending, data, error, isError } = useTasks();
   let All_TASKS = [];
-  let TODAY = [];
+
   console.log(data);
   if (!isPending) {
     All_TASKS = data.allTasks;
-    TODAY = data.todayTasks;
 
     All_TASKS = All_TASKS.map((task) => formatTaskDates(task));
-    TODAY = TODAY.map((task) => formatTaskDates(task));
     All_TASKS = All_TASKS.sort((a, b) => b.priority_level - a.priority_level);
-    TODAY = TODAY.sort((a, b) => b.priority_level - a.priority_level);
-    console.log(All_TASKS);
-    console.log(TODAY);
   }
   //length
   function HandleNavigate() {
@@ -71,37 +66,6 @@ function ItemsList() {
             gap: "30px",
           }}
         >
-          <Typography
-            variant="h3"
-            sx={{ marginBottom: "10px", marginTop: "18px" }}
-          >
-            Today&apos;s Tasks
-          </Typography>
-          <Box
-            mt="20px"
-            sx={{
-              height: "200px",
-              width: "100%",
-              overflowY: "scroll",
-              borderRadius: "10px",
-            }}
-          >
-            {TODAY.length > 0 ? (
-              TODAY.map((todo) => <ToDoItem key={todo.id} todo={todo} />)
-            ) : (
-              <Typography
-                variant="h2"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginTop: "60px",
-                }}
-              >
-                No Tasks Today
-              </Typography>
-            )}
-          </Box>
           <Typography
             variant="h3"
             sx={{ marginBottom: "10px", marginTop: "18px" }}

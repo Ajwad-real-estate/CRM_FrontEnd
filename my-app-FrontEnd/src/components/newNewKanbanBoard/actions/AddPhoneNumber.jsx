@@ -32,6 +32,7 @@ function AddPhoneNumber({
         display: "flex",
         justifyContent: "center",
         gap: "26px",
+        height: "170px",
       }}
     >
       <List
@@ -39,6 +40,8 @@ function AddPhoneNumber({
           width: "50%",
           borderRadius: "10px",
           border: "1px solid",
+          height: "100%",
+          overflowY: "scroll",
         }}
       >
         {numbersList.map((item, index) => (

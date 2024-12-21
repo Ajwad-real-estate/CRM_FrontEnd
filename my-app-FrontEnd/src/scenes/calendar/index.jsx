@@ -30,17 +30,13 @@ const Calendar = () => {
   //  Task Date
   const { isPending, data, error, isError } = useTasks();
   let All_TASKS = [];
-  let TODAY = [];
   if (!isPending) {
     All_TASKS = data.allTasks;
-    TODAY = data.todayTasks;
 
     All_TASKS = All_TASKS.map((task) => formatTaskDates(task));
-    TODAY = TODAY.map((task) => formatTaskDates(task));
     console.log(All_TASKS);
-    console.log(TODAY);
   }
-  const allTasks = [...TODAY, ...All_TASKS];
+  const allTasks = All_TASKS;
 
   //
 

@@ -25,6 +25,7 @@ import FormRow from "../../ui/FormRow";
 import styled from "styled-components";
 import { useUpdateTask } from "../../components/todolist/useUpdate";
 import toast from "react-hot-toast";
+import { Pending } from "@mui/icons-material";
 //import { useDeleteTask } from "./useDeleteTask";
 
 const Form = styled.form`
@@ -51,16 +52,16 @@ const options = [
   { value: "trying", label: "trying" },
   { value: "done", label: "done" },
 ];
-const EditDialogue = ({ todo, taskId }) => {
+const EditDialogue = ({ todo }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [addSound, setAddSound] = useState(false);
-  const [title, setTitle] = useState(todo.title);
-  const [date, setDate] = useState(todo.date);
-  const [time, setTime] = useState(todo.time);
-  const [status, setStatus] = useState(todo.status);
-  const [detail, setDetails] = useState(todo.detail);
-  const [priority, setPriority] = useState(todo.priority_level);
+  const [title, setTitle] = useState(todo.title || "");
+  const [date, setDate] = useState(todo.date || "");
+  const [time, setTime] = useState(todo.time || "00:00:00");
+  const [status, setStatus] = useState(todo.status || Pending);
+  const [detail, setDetails] = useState(todo.detail || "");
+  const [priority, setPriority] = useState(todo.priority_level || "1");
 
   //////////////////////////////////////
   //Deleteing stuff
@@ -88,18 +89,20 @@ const EditDialogue = ({ todo, taskId }) => {
     setPriority(newValue);
   };
 
+  console.log(date);
+  console.log(time);
   const handleEdit = () => {
     handleClose();
     const taskData = {
       title,
-      date,
+      date: new Date(date).toISOString(),
       time,
       detail,
       status,
       priority_level: priority,
     };
 
-    updateTaskById({ taskId, taskData });
+    updateTaskById({ taskId: todo.id, taskData });
   };
 
   //
