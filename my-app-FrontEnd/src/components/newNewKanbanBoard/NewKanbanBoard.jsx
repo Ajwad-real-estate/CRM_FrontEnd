@@ -17,30 +17,6 @@ import { LeadOptionsProvider } from "./actions/LeadContext";
 import Cookies from "js-cookie";
 import ProgressCircle from "../ProgressCircle";
 
-const setupWebSocket = (onMessage) => {
-  const ws = new WebSocket('ws://localhost:3000'); // Update with your WebSocket server URL
-
-  ws.onopen = () => {
-    console.log('WebSocket Connected');
-  };
-
-  ws.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    onMessage(data);
-  };
-
-  ws.onerror = (error) => {
-    console.error('WebSocket Error:', error);
-  };
-
-  ws.onclose = () => {
-    console.log('WebSocket Disconnected');
-    // Attempt to reconnect after 5 seconds
-    setTimeout(() => setupWebSocket(onMessage), 5000);
-  };
-
-  return ws;
-};
 function transformData(clients) {
   const columns = {};
   const leads = {};
@@ -49,7 +25,7 @@ function transformData(clients) {
     if (!columns[client.status]) {
       columns[client.status] = {
         id: client.status,
-        title: client.status.charAt(0).toUpperCase() + client.status.slice(1),
+        title: client.status ? client.status.charAt(0).toUpperCase() + client.status.slice(1) : "Unknown Status",
         leadIds: [],
       };
     }
@@ -61,13 +37,15 @@ function transformData(clients) {
       company: client.city_id || "",
       phoneNumber: client.phone_numbers[0] || "",
       email: client.email || "",
-      tags: [client.channel || ""],
+      // tags: [client.channel || ""],
     };
 
     columns[client.status].leadIds.push(client.id);
   });
 
-  const columnOrder = ["new", "qualified", "reserved", "done_deal"];
+  const columnOrder = ["new", "qualified", "reserved"
+    // , "done_deal"
+  ];
   const orderedColumns = {};
 
   columnOrder.forEach((status) => {
@@ -83,6 +61,8 @@ const KanbanBoard = () => {
   const [clients, setClients] = useState([]);
   const [error, setError] = useState(null);
   const location = useLocation();
+  const isNonMobile = useMediaQuery("(min-width:600px)");
+  const theme = useTheme();
 
   let currentSublink = location.pathname;
   if (currentSublink.includes('/NewNewKanbanBoard/')) {
@@ -95,6 +75,7 @@ const KanbanBoard = () => {
   useEffect(() => {
     const fetchClients = async () => {
       try {
+        // const response = await fetch(`http://localhost:3000/api/clients?status=${currentSublink}`, {
         const response = await fetch(`http://localhost:3000/api/clients?status=${currentSublink}`, {
           method: "GET",
           headers: {
@@ -106,6 +87,7 @@ const KanbanBoard = () => {
         }
 
         const dataFromApi = await response.json();
+        console.log(dataFromApi)
         setClients(dataFromApi);
       } catch (err) {
         console.error(err);
@@ -117,7 +99,7 @@ const KanbanBoard = () => {
   }, [currentSublink]);
 
   const [data, setData] = useState({ columns: {}, leads: {} });
-  
+
   useEffect(() => {
     if (clients.length > 0) {
       const initialData = transformData(clients);
@@ -168,162 +150,6 @@ const KanbanBoard = () => {
   };
 
 
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-  // Handle WebSocket messages
-  const handleWebSocketMessage = (message) => {
-    switch (message.type) {
-      case 'LEAD_UPDATED':
-        setData(prevData => {
-          const updatedLead = message.data;
-          const oldLead = prevData.leads[updatedLead.id];
-
-          // If status changed, update columns
-          if (oldLead && oldLead.status !== updatedLead.status) {
-            const newColumns = { ...prevData.columns };
-
-            // Remove from old column
-            newColumns[oldLead.status].leadIds = newColumns[oldLead.status].leadIds
-              .filter(id => id !== updatedLead.id.toString());
-
-            // Add to new column
-            if (!newColumns[updatedLead.status]) {
-              newColumns[updatedLead.status] = {
-                id: updatedLead.status,
-                title: updatedLead.status.charAt(0).toUpperCase() + updatedLead.status.slice(1),
-                leadIds: [],
-              };
-            }
-            newColumns[updatedLead.status].leadIds.push(updatedLead.id.toString());
-
-            return {
-              columns: newColumns,
-              leads: {
-                ...prevData.leads,
-                [updatedLead.id]: updatedLead,
-              },
-            };
-          }
-
-          // If only lead data changed
-          return {
-            ...prevData,
-            leads: {
-              ...prevData.leads,
-              [updatedLead.id]: updatedLead,
-            },
-          };
-        });
-        break;
-
-      case 'LEAD_CREATED':
-        setData(prevData => {
-          const newLead = message.data;
-          const newColumns = { ...prevData.columns };
-
-          if (!newColumns[newLead.status]) {
-            newColumns[newLead.status] = {
-              id: newLead.status,
-              title: newLead.status.charAt(0).toUpperCase() + newLead.status.slice(1),
-              leadIds: [],
-            };
-          }
-
-          newColumns[newLead.status].leadIds.push(newLead.id.toString());
-
-          return {
-            columns: newColumns,
-            leads: {
-              ...prevData.leads,
-              [newLead.id]: newLead,
-            },
-          };
-        });
-        break;
-
-      case 'LEAD_DELETED':
-        setData(prevData => {
-          const deletedLeadId = message.data.id;
-          const newData = { ...prevData };
-          const leadStatus = prevData.leads[deletedLeadId]?.status;
-
-          if (leadStatus) {
-            newData.columns[leadStatus].leadIds = newData.columns[leadStatus].leadIds
-              .filter(id => id !== deletedLeadId.toString());
-          }
-
-          delete newData.leads[deletedLeadId];
-          return newData;
-        });
-        break;
-
-      default:
-        console.log('Unknown message type:', message.type);
-    }
-  };
-
-  // Initial data fetch
-  useEffect(() => {
-    const fetchClients = async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/api/clients?status=${currentSublink}`, {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          },
-        });
-        if (!response.ok) throw new Error(`Error: ${response.statusText}`);
-
-        const dataFromApi = await response.json();
-        setClients(dataFromApi);
-      } catch (err) {
-        console.error(err);
-        setError(err.message);
-      }
-    };
-
-    fetchClients();
-  }, [currentSublink]);
-
-  // Setup WebSocket connection
-  useEffect(() => {
-    const ws = setupWebSocket(handleWebSocketMessage);
-    return () => ws.close();
-  }, []);
-
-  // Transform and set initial data
-  useEffect(() => {
-    if (clients.length > 0) {
-      const initialData = transformData(clients);
-      setData(initialData);
-    }
-  }, [clients]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-  const isNonMobile = useMediaQuery("(min-width:600px)");
-  const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   const filteredLeads = Object.values(data.leads).filter(
@@ -463,7 +289,7 @@ const KanbanBoard = () => {
             ))}
           </div>
         )}
-        
+
         {isModalOpen && (
           <LeadModal
             lead={selectedLead}
@@ -472,12 +298,12 @@ const KanbanBoard = () => {
         )}
       </Box>
       <LeadOptionsProvider>
-        <Action
+        {/* <Action
           open={isDrawerOpen}
           onClose={handleDrawerClose}
           lead={selectedLead}
           onUpdate={updateLead}
-        />
+        /> */}
       </LeadOptionsProvider>
     </Box>
   );
