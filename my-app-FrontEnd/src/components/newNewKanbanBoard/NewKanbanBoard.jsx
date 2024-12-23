@@ -17,15 +17,63 @@ import { LeadOptionsProvider } from "./actions/LeadContext";
 import Cookies from "js-cookie";
 import ProgressCircle from "../ProgressCircle";
 
+// function transformData(clients) {
+//   const columns = {};
+//   const leads = {};
+
+//   clients.forEach((client) => {
+//     if (!columns[client.status]) {
+//       columns[client.status] = {
+//         id: client.status,
+//         title: client.status ? client.status.charAt(0).toUpperCase() + client.status.slice(1) : "Unknown Status",
+//         leadIds: [],
+//       };
+//     }
+
+//     leads[client.id] = {
+//       id: client.id,
+//       title: client.name || "Untitled Lead",
+//       amount: client.budget || "No Value",
+//       company: client.city_id || "",
+//       phoneNumber: client.phone_numbers[0] || "",
+//       email: client.email || "",
+//       // tags: [client.channel || ""],
+//     };
+
+//     columns[client.status].leadIds.push(client.id);
+//   });
+
+//   const columnOrder = ["new", "qualified", "reserved"
+//     // , "done_deal"
+//   ];
+//   const orderedColumns = {};
+
+//   columnOrder.forEach((status) => {
+//     if (columns[status]) {
+//       orderedColumns[status] = columns[status];
+//     }
+//   });
+
+//   return { columns: orderedColumns, leads };
+// }
 function transformData(clients) {
   const columns = {};
   const leads = {};
 
+  // Map status IDs to readable names
+  const statusMap = {
+    1: "new",
+    2: "qualified",
+    3: "reserved",
+  };
+
   clients.forEach((client) => {
-    if (!columns[client.status]) {
-      columns[client.status] = {
-        id: client.status,
-        title: client.status ? client.status.charAt(0).toUpperCase() + client.status.slice(1) : "Unknown Status",
+    const statusKey = statusMap[client.status_id] || "unknown";
+
+    if (!columns[statusKey]) {
+      columns[statusKey] = {
+        id: statusKey,
+        title: statusKey.charAt(0).toUpperCase() + statusKey.slice(1),
         leadIds: [],
       };
     }
@@ -33,19 +81,16 @@ function transformData(clients) {
     leads[client.id] = {
       id: client.id,
       title: client.name || "Untitled Lead",
-      amount: client.budget || "No Value",
-      company: client.city_id || "",
-      phoneNumber: client.phone_numbers[0] || "",
-      email: client.email || "",
-      // tags: [client.channel || ""],
+      amount: client.budget ? `$${client.budget}` : "No Value",
+      company: client.city_id ? `City ID: ${client.city_id}` : "Unknown City",
+      phoneNumber: client.phone_numbers && client.phone_numbers[0] ? client.phone_numbers[0] : "No Phone",
+      email: client.email || "No Email",
     };
 
-    columns[client.status].leadIds.push(client.id);
+    columns[statusKey].leadIds.push(client.id);
   });
 
-  const columnOrder = ["new", "qualified", "reserved"
-    // , "done_deal"
-  ];
+  const columnOrder = ["new", "qualified", "reserved"];
   const orderedColumns = {};
 
   columnOrder.forEach((status) => {
@@ -99,7 +144,8 @@ const KanbanBoard = () => {
   }, [currentSublink]);
 
   const [data, setData] = useState({ columns: {}, leads: {} });
-
+  console.log("data")
+  console.log(data)
   useEffect(() => {
     if (clients.length > 0) {
       const initialData = transformData(clients);
@@ -298,12 +344,12 @@ const KanbanBoard = () => {
         )}
       </Box>
       <LeadOptionsProvider>
-        {/* <Action
+        <Action
           open={isDrawerOpen}
           onClose={handleDrawerClose}
           lead={selectedLead}
           onUpdate={updateLead}
-        /> */}
+        />
       </LeadOptionsProvider>
     </Box>
   );

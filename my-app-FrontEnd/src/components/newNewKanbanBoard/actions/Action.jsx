@@ -11,6 +11,7 @@ import { tokens } from "../../../theme";
 import EditPage from "./contents/EditPage";
 import LeadPreview from "./LeadPreview";
 const Action = ({ open, onClose, onOpen, lead, onUpdate }) => {
+
   const { TabValue } = useLeadOpt();
   // Drawer content
   const isNonMobile = useMediaQuery("(min-width:600px)");
