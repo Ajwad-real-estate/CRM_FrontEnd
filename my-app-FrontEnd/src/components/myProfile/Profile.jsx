@@ -8,6 +8,10 @@ import {
   Alert,
   Stack,
   Collapse,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
 } from "@mui/material";
 import { useTheme } from "@mui/material";
 import axios from "axios";
@@ -27,6 +31,7 @@ const Profile = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [statuses, setStatuses] = useState([]);
 
   // Form states
   const [emailForm, setEmailForm] = useState({
@@ -43,12 +48,21 @@ const Profile = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const agentResponse = await axios.get(`${apiUrl}/api/agentDetails`, {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          },
-        });
+        const [agentResponse, statusesResponse] = await Promise.all([
+          // const agentResponse = await
+          axios.get(`${apiUrl}/api/agentDetails`, {
+            headers: {
+              Authorization: `Bearer ${Cookies.get("accessToken")}`,
+            },
+          }),
+          axios.get(`${apiUrl}/api/agent-statuses`, {
+            headers: {
+              Authorization: `Bearer ${Cookies.get("accessToken")}`,
+            },
+          }),
+        ]);
         setFormData(agentResponse.data);
+        setStatuses(statusesResponse.data.statuses)
         setEmailForm(prev => ({ ...prev, currentEmail: agentResponse.data.email }));
         setPasswordForm(prev => ({ ...prev, email: agentResponse.data.email }));
         setIsLoading(false);
@@ -63,6 +77,8 @@ const Profile = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(name)
+    console.log(value)
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
@@ -80,6 +96,8 @@ const Profile = () => {
     e.preventDefault();
     setIsUpdating(true);
     try {
+      formData.target = parseInt(formData.target)
+      console.log(formData.target)
       await axios.put(`${apiUrl}/api/agentDetails`, formData, {
         headers: {
           Authorization: `Bearer ${Cookies.get("accessToken")}`,
@@ -205,23 +223,31 @@ const Profile = () => {
               value={formData?.street || ""}
               onChange={handleInputChange}
             />
-            <TextField
-              fullWidth
-              margin="normal"
-              label="Status"
-              name="status"
-              value={formData?.status || ""}
-              onChange={handleInputChange}
-            />
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Status</InputLabel>
+              <Select
+                label="Status"
+                name="status_id"
+                value={formData.status_id}
+                onChange={handleInputChange}
+              >
+                {statuses.map((status) => (
+                  <MenuItem key={status.id} value={status.id}>
+                    {status.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <TextField
               fullWidth
               margin="normal"
               label="Target"
               name="target"
               type="number"
-              value={formData?.target || ""}
+              value={formData.target || ""}
               onChange={handleInputChange}
             />
+            <p>HINT : Target is All Your People Target, if you manage people</p>
             <Box sx={{ mt: 2, display: 'flex', gap: 2, flexWrap: 'wrap' }}>
               <Button
                 type="submit"
