@@ -51,7 +51,7 @@ const ActionItem = ({ todo }) => {
  const theme = useTheme();
  const colors = tokens(theme.palette.mode);
  const [open, setOpen] = useState(false);
-
+// return(<Box></Box>)
  // Form state
  const [formData, setFormData] = useState({
   comment: todo.comment,
@@ -78,7 +78,7 @@ const ActionItem = ({ todo }) => {
    answered: todo.answered,
    unit_id: todo.unit_id,
    project_id: todo.project_id,
-   type_id: todo.type_id,
+  //  type_id: todo.type_id,
    location: todo.location,
   });
   setOpen(false);

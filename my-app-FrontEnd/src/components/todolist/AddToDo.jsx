@@ -6,6 +6,9 @@ import {
   Slider,
   Tooltip,
   MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import FormRow from "../../ui/FormRow";
 import Form from "../../ui/Form";
@@ -14,6 +17,8 @@ import { useNavigate } from "react-router-dom";
 import add from "./../../assets/add.mp3";
 import { useAddTasks } from "./useTasks";
 import toast from "react-hot-toast";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 function convertDate(dateString) {
   // Parse the date string
@@ -46,10 +51,47 @@ const AddToDo = () => {
   const [priority, setPriority] = useState(2);
   const options = [{ value: "pending", label: "pending" }];
   const { addTaskTod, isCreating } = useAddTasks();
-  const [status, setStatus] = useState("pending");
+  const [status_id, setStatus_id] = useState("pending");
+  const [isLoading, setIsLoading] = useState(true);
+  const [statuses, setStatuses] = useState([]);
+  const [error, setError] = useState("");
+
+  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [statusesResponse] = await Promise.all([
+          axios.get(`${apiUrl}/api/task-statuses`, {
+            headers: {
+              Authorization: `Bearer ${Cookies.get("accessToken")}`,
+            },
+          }),
+        ]);
+
+        // setFormData({
+        //   name: agentResponse.data.name || "",
+        //   street: agentResponse.data.street || "",
+        //   status_id: agentResponse.data.status_id || "",
+        //   target: agentResponse.data.target || "",
+        //   role_id: agentResponse.data.role_id || "",
+        // });
+
+        setStatuses(statusesResponse.data.statuses);
+        setIsLoading(false);
+      } catch (err) {
+        setError("Failed to fetch data. Please try again.");
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [apiUrl]);
+
+
 
   const handleChangeStatus = (event) => {
-    setStatus(event.target.value);
+    setStatus_id(event.target.value);
   };
 
   const handleChange = (event, newValue) => {
@@ -68,8 +110,8 @@ const AddToDo = () => {
       addTaskTod({
         title,
         detail: taskDetails,
-        priority_level: priority,
-        status,
+        priority_id: priority,
+        status_id,
         date: convertDate(date),
         time: convertTime(time),
       });
@@ -154,10 +196,10 @@ const AddToDo = () => {
               error={ErrorField && !time ? true : false}
             />
           </FormRow>
-          <FormRow label={"Status"}>
+          {/* <FormRow label={"Status"}>
             <TextField
-              select // Indicates this is a dropdown select
-              value={status}
+              TextField // Indicates this is a dropdown select
+              value={status_id}
               onChange={handleChangeStatus}
               fullWidth
               variant="outlined"
@@ -168,7 +210,22 @@ const AddToDo = () => {
                 </MenuItem>
               ))}
             </TextField>
-          </FormRow>
+          </FormRow> */}
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Status</InputLabel>
+            <Select
+              label="Status"
+              name="status_id"
+              value={status_id}
+              onChange={handleChangeStatus}
+            >
+              {statuses.map((status) => (
+                <MenuItem key={status.id} value={status.id}>
+                  {status.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <FormRow label={"Priority Level"}>
             <Box
               sx={{
@@ -245,13 +302,12 @@ const AddToDo = () => {
               >
                 <Box
                   sx={{
-                    background: `${
-                      priority === 1
-                        ? "grey"
-                        : priority === 2
-                          ? "#1976d2"
-                          : "red"
-                    }`,
+                    background: `${priority === 1
+                      ? "grey"
+                      : priority === 2
+                        ? "#1976d2"
+                        : "red"
+                      }`,
                     cursor: "pointer",
                     height: "14px",
                     width: "14px",

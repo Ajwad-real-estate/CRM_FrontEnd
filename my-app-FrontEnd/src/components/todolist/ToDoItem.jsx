@@ -60,9 +60,9 @@ const ToDoItem = ({ todo }) => {
   const [title, setTitle] = useState(todo.title);
   const [date, setDate] = useState(todo.date);
   const [time, setTime] = useState(todo.time);
-  const [status, setStatus] = useState(todo.status);
+  const [status_id, setStatus_id] = useState(todo.status_id);
   const [detail, setDetails] = useState(todo.detail);
-  const [priority, setPriority] = useState(todo.priority_level);
+  const [priority_id, setPriority_id] = useState(todo.priority_id);
 
   //////////////////////////////////////
   //Deleteing stuff
@@ -82,13 +82,13 @@ const ToDoItem = ({ todo }) => {
     setTitle(todo.title);
     setTime(todo.time);
     setDate(todo.date);
-    setPriority(todo.priority_level);
-    setStatus(todo.status);
+    setPriority_id(todo.priority_id);
+    setStatus_id(todo.status_id);
     setDetails(todo.detail);
     setOpen(false);
   };
   const handleChange = (event, newValue) => {
-    setPriority(newValue);
+    setPriority_id(newValue);
   };
 
   const handleEdit = () => {
@@ -98,8 +98,9 @@ const ToDoItem = ({ todo }) => {
       date,
       time,
       detail,
-      status,
-      priority_level: priority,
+      status_id,
+      priority_id,
+      // priority_id: priority,
     };
 
     updateTaskById({ taskId: todo.id, taskData });
@@ -107,7 +108,7 @@ const ToDoItem = ({ todo }) => {
 
   //
   const handleChangeStatus = (event) => {
-    setStatus(event.target.value);
+    setStatus_id(event.target.value);
   };
   //
   return (
@@ -190,7 +191,7 @@ const ToDoItem = ({ todo }) => {
           padding="auto"
           marginInline="auto"
           borderRadius="4px"
-          // width="50%"
+        // width="50%"
         >
           <Typography
             variant="body1"
@@ -226,7 +227,7 @@ const ToDoItem = ({ todo }) => {
               marginRight: "60px",
             }}
           >
-            {todo.status}
+            {todo.status_id}
           </Box>
 
           <EditIcon onClick={handleClickOpen} sx={{ cursor: "pointer" }} />
@@ -308,7 +309,7 @@ const ToDoItem = ({ todo }) => {
                   }}
                 >
                   <Slider
-                    value={priority}
+                    value={priority_id}
                     onChange={handleChange}
                     valueLabelDisplay="auto"
                     valueLabelFormat={(value) => {
@@ -331,9 +332,9 @@ const ToDoItem = ({ todo }) => {
                         width: 15,
                         height: 15,
                         backgroundColor:
-                          priority === 1
+                          priority_id === 1
                             ? "grey"
-                            : priority === 2
+                            : priority_id === 2
                               ? "#1976d2"
                               : "red",
                       },
@@ -342,22 +343,21 @@ const ToDoItem = ({ todo }) => {
                       },
                       "& .MuiSlider-track": {
                         backgroundColor:
-                          priority === 1
+                          priority_id === 1
                             ? "grey"
-                            : priority === 2
+                            : priority_id === 2
                               ? "#1976d2"
                               : "red",
                       },
                     }}
                   />
                   <Tooltip
-                    title={`${
-                      priority === 1
-                        ? "Follow Up"
-                        : priority === 2
-                          ? "Routine"
-                          : "Urgent"
-                    }`}
+                    title={`${priority_id === 1
+                      ? "Follow Up"
+                      : priority_id === 2
+                        ? "Routine"
+                        : "Urgent"
+                      }`}
                     arrow
                     placement="top"
                     PopperProps={{
@@ -381,13 +381,12 @@ const ToDoItem = ({ todo }) => {
                   >
                     <Box
                       sx={{
-                        background: `${
-                          priority === 1
-                            ? "grey"
-                            : priority === 2
-                              ? "#1976d2"
-                              : "red"
-                        }`,
+                        background: `${priority_id === 1
+                          ? "grey"
+                          : priority_id === 2
+                            ? "#1976d2"
+                            : "red"
+                          }`,
                         cursor: "pointer",
                         height: "14px",
                         width: "14px",
