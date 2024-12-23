@@ -25,29 +25,24 @@ const Sales = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  // Simplified state structure
-  const [formData, setFormData] = useState({
-    name: "",
-    street: "",
-    status_id: "",
-    target: "",
-    role_id: "",
-  });
-
+  const [formData, setFormData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [roles, setRoles] = useState([]);
-  const [statuses, setStatuses] = useState([]);
+  const [theRole, setTheRole] = useState("");
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [showPasswordForm, setShowPasswordForm] = useState(false);
 
+  // Email and Password form states
   const [emailForm, setEmailForm] = useState({
+
     newEmail: "",
   });
 
   const [passwordForm, setPasswordForm] = useState({
+
     newPassword: "",
     confirmPassword: "",
   });
@@ -55,34 +50,29 @@ const Sales = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [agentResponse, rolesResponse, statusesResponse] = await Promise.all([
-          axios.get(`${apiUrl}/api/agentDetails/${id}`, {
+        const agentResponse = await axios.get(
+          `${apiUrl}/api/agentDetails/${id}`,
+          {
             headers: {
               Authorization: `Bearer ${Cookies.get("accessToken")}`,
             },
-          }),
-          axios.get(`${apiUrl}/api/roles`, {
-            headers: {
-              Authorization: `Bearer ${Cookies.get("accessToken")}`,
-            },
-          }),
-          axios.get(`${apiUrl}/api/agent-statuses`, {
-            headers: {
-              Authorization: `Bearer ${Cookies.get("accessToken")}`,
-            },
-          }),
-        ]);
+          }
+        );
+        setFormData(agentResponse.data);
+        setTheRole(agentResponse.data.role_id);
+        setEmailForm(prev => ({
+          ...prev
+          // , currentEmail: agentResponse.data.email 
+        }));
+        setPasswordForm(prev => ({ ...prev, email: agentResponse.data.email }));
 
-        setFormData({
-          name: agentResponse.data.name || "",
-          street: agentResponse.data.street || "",
-          status_id: agentResponse.data.status_id || "",
-          target: agentResponse.data.target || "",
-          role_id: agentResponse.data.role_id || "",
+        const rolesResponse = await axios.get(`${apiUrl}/api/roles`, {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("accessToken")}`,
+          },
         });
-
         setRoles(rolesResponse.data.roles);
-        setStatuses(statusesResponse.data.statuses);
+
         setIsLoading(false);
       } catch (err) {
         setError("Failed to fetch data. Please try again.");
@@ -91,31 +81,36 @@ const Sales = () => {
     };
 
     fetchData();
-  }, [id, apiUrl]);
+  }, [id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleEmailInputChange = (e) => {
+    const { name, value } = e.target;
+    setEmailForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handlePasswordInputChange = (e) => {
+    const { name, value } = e.target;
+    setPasswordForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleRoleChange = (e) => {
+    const { value } = e.target;
+    setTheRole(value);
+    setFormData(prev => ({ ...prev, role_id: value }));
   };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setIsUpdating(true);
     try {
-      const payload = {
-        name: formData.name,
-        street: formData.street,
-        status_id: parseInt(formData.status_id),
-        target: parseInt(formData.target),
-        role_id: parseInt(formData.role_id),
-      };
-
       await axios.put(
         `${apiUrl}/api/agentDetails/${id}`,
-        payload,
+        formData,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("accessToken")}`,
@@ -125,7 +120,7 @@ const Sales = () => {
       setSuccessMessage("Agent details updated successfully!");
       setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to update agent details. Please try again.");
+      setError("Failed to update agent details. Please try again.");
       setTimeout(() => setError(""), 3000);
     } finally {
       setIsUpdating(false);
@@ -136,17 +131,16 @@ const Sales = () => {
     e.preventDefault();
     setIsUpdating(true);
     try {
-      await axios.post(
-        `${apiUrl}/api/auth/regmailbyid/${id}`,
-        { newEmail: emailForm.newEmail },
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          },
-        }
-      );
+      await axios.post(`${apiUrl}/api/auth/regmailbyid/${id}`, {
+        // currentEmail: emailForm.currentEmail,
+        newEmail: emailForm.newEmail,
+      }, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("accessToken")}`,
+        },
+      });
       setSuccessMessage("Email updated successfully!");
-      setEmailForm({ newEmail: "" });
+      setEmailForm(prev => ({ ...prev, newEmail: "" }));
       setShowEmailForm(false);
       setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
@@ -173,17 +167,20 @@ const Sales = () => {
 
     setIsUpdating(true);
     try {
-      await axios.post(
-        `${apiUrl}/api/auth/repassbyid/${id}`,
-        { newPassword: passwordForm.newPassword },
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          },
-        }
-      );
+      await axios.post(`${apiUrl}/api/auth/repassbyid/${id}`, {
+        // email: passwordForm.email,
+        newPassword: passwordForm.newPassword,
+      }, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("accessToken")}`,
+        },
+      });
       setSuccessMessage("Password updated successfully!");
-      setPasswordForm({ newPassword: "", confirmPassword: "" });
+      setPasswordForm(prev => ({
+        ...prev,
+        newPassword: "",
+        confirmPassword: ""
+      }));
       setShowPasswordForm(false);
       setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
@@ -194,10 +191,33 @@ const Sales = () => {
     }
   };
 
+  const toggleEmailForm = () => {
+    setShowEmailForm(!showEmailForm);
+    setShowPasswordForm(false);
+  };
+
+  const togglePasswordForm = () => {
+    setShowPasswordForm(!showPasswordForm);
+    setShowEmailForm(false);
+  };
+
   if (isLoading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
         <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error && !successMessage) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", flexDirection: "column" }}>
+        <Typography variant="h4" color={colors.redAccent[500]}>
+          {error}
+        </Typography>
+        <Button variant="contained" color="primary" sx={{ mt: 3 }} onClick={() => window.location.reload()}>
+          Retry
+        </Button>
       </Box>
     );
   }
@@ -208,6 +228,7 @@ const Sales = () => {
       {successMessage && <Alert severity="success" sx={{ mb: 2 }}>{successMessage}</Alert>}
 
       <Stack spacing={4}>
+        {/* Main Form Section */}
         <Box sx={{ backgroundColor: colors.primary[400], p: 3, borderRadius: "8px" }}>
           <Typography variant="h4" sx={{ mb: 3, color: colors.grey[100], textAlign: "center" }}>
             Update Agent Details
@@ -219,7 +240,7 @@ const Sales = () => {
               margin="normal"
               label="Name"
               name="name"
-              value={formData.name}
+              value={formData?.name || ""}
               onChange={handleInputChange}
             />
             <TextField
@@ -227,33 +248,24 @@ const Sales = () => {
               margin="normal"
               label="Street"
               name="street"
-              value={formData.street}
+              value={formData?.street || ""}
               onChange={handleInputChange}
             />
-
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Status</InputLabel>
-              <Select
-                label="Status"
-                name="status_id"
-                value={formData.status_id}
-                onChange={handleInputChange}
-              >
-                {statuses.map((status) => (
-                  <MenuItem key={status.id} value={status.id}>
-                    {status.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
+            <TextField
+              fullWidth
+              margin="normal"
+              label="status_id"
+              name="status_id"
+              value={formData?.status_id || 1}
+              onChange={handleInputChange}
+            />
             <TextField
               fullWidth
               margin="normal"
               label="Target"
               name="target"
               type="number"
-              value={formData.target}
+              value={formData?.target || ""}
               onChange={handleInputChange}
             />
 
@@ -261,9 +273,9 @@ const Sales = () => {
               <InputLabel>Role</InputLabel>
               <Select
                 label="Role"
-                name="role_id"
-                value={formData.role_id}
-                onChange={handleInputChange}
+                name="role"
+                value={theRole || ""}
+                onChange={handleRoleChange}
               >
                 {roles.map((role) => (
                   <MenuItem key={role.id} value={role.id}>
@@ -297,7 +309,7 @@ const Sales = () => {
                   type="button"
                   variant="contained"
                   color="secondary"
-                  onClick={() => setShowEmailForm(!showEmailForm)}
+                  onClick={toggleEmailForm}
                 >
                   {showEmailForm ? "Hide Email Form" : "Change Email"}
                 </Button>
@@ -305,7 +317,7 @@ const Sales = () => {
                   type="button"
                   variant="contained"
                   color="secondary"
-                  onClick={() => setShowPasswordForm(!showPasswordForm)}
+                  onClick={togglePasswordForm}
                 >
                   {showPasswordForm ? "Hide Password Form" : "Change Password"}
                 </Button>
@@ -314,12 +326,21 @@ const Sales = () => {
           </form>
         </Box>
 
+        {/* Email Update Section */}
         <Collapse in={showEmailForm}>
           <Box sx={{ backgroundColor: colors.primary[400], p: 3, borderRadius: "8px" }}>
             <Typography variant="h4" sx={{ mb: 3, color: colors.grey[100], textAlign: "center" }}>
               Update Email
             </Typography>
             <form onSubmit={handleEmailUpdate}>
+              {/* <TextField
+                fullWidth
+                margin="normal"
+                label="Current Email"
+                name="currentEmail"
+                value={emailForm.currentEmail}
+                onChange={handleEmailInputChange}
+              /> */}
               <TextField
                 fullWidth
                 margin="normal"
@@ -327,7 +348,7 @@ const Sales = () => {
                 name="newEmail"
                 type="email"
                 value={emailForm.newEmail}
-                onChange={(e) => setEmailForm({ newEmail: e.target.value })}
+                onChange={handleEmailInputChange}
                 required
               />
               <Button
@@ -343,6 +364,7 @@ const Sales = () => {
           </Box>
         </Collapse>
 
+        {/* Password Update Section */}
         <Collapse in={showPasswordForm}>
           <Box sx={{ backgroundColor: colors.primary[400], p: 3, borderRadius: "8px" }}>
             <Typography variant="h4" sx={{ mb: 3, color: colors.grey[100], textAlign: "center" }}>
@@ -356,7 +378,7 @@ const Sales = () => {
                 name="newPassword"
                 type="password"
                 value={passwordForm.newPassword}
-                onChange={(e) => setPasswordForm(prev => ({ ...prev, newPassword: e.target.value }))}
+                onChange={handlePasswordInputChange}
                 required
                 helperText="Password must be at least 6 characters long"
               />
@@ -367,7 +389,7 @@ const Sales = () => {
                 name="confirmPassword"
                 type="password"
                 value={passwordForm.confirmPassword}
-                onChange={(e) => setPasswordForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                onChange={handlePasswordInputChange}
                 required
               />
               <Button

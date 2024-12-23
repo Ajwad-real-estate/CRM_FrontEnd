@@ -36,7 +36,7 @@ const Dashboard = () => {
             Authorization: `Bearer ${Cookies.get('accessToken')}`, // Assuming token is stored in cookies
           },
         });
-
+        console.log(response.data)
         setDashboardData(response.data);
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
@@ -96,14 +96,14 @@ const Dashboard = () => {
 
   // StatBox data to display
   const statBoxes = [
-    { title: "Done Clients", value: dashboardData.doneClientsCount || 99999999999999, icon: <EmailIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
-    { title: "Follow Ups", value: dashboardData.followUpCount || 99999999999999, icon: <PointOfSaleIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
-    { title: "Meetings", value: dashboardData.meetingCount || 99999999999999, icon: <PersonAddIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
-    { title: "Calls", value: dashboardData.callCount || 99999999999999, icon: <TrafficIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
-    { title: "Emails", value: dashboardData.emailCount || 99999999999999, icon: <EmailIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
-    { title: "New Clients", value: dashboardData.newClientsCount || 99999999999999, icon: <PointOfSaleIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
-    { title: "Qualified Clients", value: dashboardData.qualifiedClientsCount || 99999999999999, icon: <PersonAddIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
-    { title: "Reserved Clients", value: dashboardData.reservedClientsCount || 99999999999999, icon: <TrafficIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
+    { title: "Follow Ups", value: dashboardData.followUpCount , icon: <PointOfSaleIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
+    { title: "Meetings", value: dashboardData.meetingCount , icon: <PersonAddIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
+    { title: "follow Meet", value: dashboardData.followMeetCount , icon: <TrafficIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
+    { title: "Emails", value: dashboardData.emailCount , icon: <EmailIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
+    { title: "New Clients", value: dashboardData.newClientsCount , icon: <PointOfSaleIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
+    { title: "Qualified Clients", value: dashboardData.qualifiedClientsCount , icon: <PersonAddIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
+    { title: "Reserved Clients", value: dashboardData.reservedClientsCount, icon: <TrafficIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
+    { title: "Done Clients", value: dashboardData.doneClientsCount , icon: <EmailIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
   ];
 
   // Set target and doneDeals data for the BarChart component

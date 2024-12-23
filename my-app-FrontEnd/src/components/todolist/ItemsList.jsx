@@ -7,6 +7,7 @@ import delet from "../../assets/delet.mp3";
 import { useTasks } from "./useTasks";
 import formatTaskDates from "./date-visualization";
 import ProgressCircle from "../ProgressCircle";
+import ActionItem from "./ActionItem";
 
 function ItemsList() {
   const [searchQuery, setSearchQuery] = useState();
@@ -14,14 +15,22 @@ function ItemsList() {
   //const todos = useSelector((state) => state.todolist.todos);
   const { isPending, data, error, isError } = useTasks();
   let All_TASKS = [];
+  let All_ACTIONS = [];
 
-  console.log(data);
+  console.log("data");
+  // console.log(data.allTasks);
+  // console.log(data.allActions);
   if (!isPending) {
     All_TASKS = data.allTasks;
-
     All_TASKS = All_TASKS.map((task) => formatTaskDates(task));
     All_TASKS = All_TASKS.sort((a, b) => b.priority_level - a.priority_level);
+
+    All_ACTIONS = data.allActions;
+    All_ACTIONS = All_ACTIONS.map((task) => formatTaskDates(task));
+    All_ACTIONS = All_ACTIONS.sort((a, b) => b.priority_level - a.priority_level);
   }
+  console.log(All_ACTIONS)
+  console.log(All_TASKS)
   //length
   function HandleNavigate() {
     navigate("addtask");
@@ -86,6 +95,33 @@ function ItemsList() {
                   alignItems: "center",
                   justifyContent: "center",
                   marginTop: "60px",
+                }}
+              >
+                Task List is Empty
+              </Typography>
+            )}
+            <Typography
+              variant="h3"
+              sx={{ marginBottom: "10px", marginTop: "18px" }}
+            >
+              All Actions
+            </Typography>
+            {All_ACTIONS.length > 0 ? (
+              All_ACTIONS.map((todo) => <ActionItem sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: "60px",
+                border: " 10px solid "
+              }} key={todo.id} todo={todo} />)
+            ) : (
+              <Typography
+                variant="h2"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginTop: "60px"
                 }}
               >
                 Task List is Empty

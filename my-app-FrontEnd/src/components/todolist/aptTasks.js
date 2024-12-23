@@ -15,7 +15,13 @@ export async function getTasks() {
     }
 
     const data = await response.json();
-
+    // const dataFetched = await response.json();
+    // const data = {
+    //   tasks: dataFetched.allTasks || [],
+    //   actions: dataFetched.allActions || [],
+    // };
+    // console.log(data.tasks)
+    // console.log(data.actions)
     return data;
   } catch (error) {
     console.error("Error fetching data:", error);

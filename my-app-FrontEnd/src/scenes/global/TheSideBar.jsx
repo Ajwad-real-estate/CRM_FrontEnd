@@ -195,21 +195,21 @@ const TheSideBar = () => {
               <MenuItem
                 title="Done Deal"
                 icon={<ContactsOutlinedIcon />}
-                onClick={() => navigate("/done_deal")}
+                onClick={() => navigate("NewNewKanbanBoard/done_deal")}
               >
                 Done Deal
               </MenuItem>
               <MenuItem
                 title="Archived"
                 icon={<ContactsOutlinedIcon />}
-                onClick={() => navigate("/archived")}
+                onClick={() => navigate("NewNewKanbanBoard/archived")}
               >
                 Archived
               </MenuItem>
               <MenuItem
                 title="Lost"
                 icon={<ContactsOutlinedIcon />}
-                onClick={() => navigate("/lost")}
+                onClick={() => navigate("NewNewKanbanBoard/lost")}
               >
                 Lost
               </MenuItem>
