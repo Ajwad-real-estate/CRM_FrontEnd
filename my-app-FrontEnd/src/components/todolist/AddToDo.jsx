@@ -49,13 +49,13 @@ const AddToDo = () => {
   const [taskDetails, setTaskDetails] = useState("");
   const [addsound, setAddSound] = useState(false);
   const [priority, setPriority] = useState(2);
-  const options = [{ value: "pending", label: "pending" }];
+  // const options = [{ value: "pending", label: "pending" }];
   const { addTaskTod, isCreating } = useAddTasks();
-  const [status_id, setStatus_id] = useState("pending");
+  // const [status_id, setStatus_id] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [statuses, setStatuses] = useState([]);
   const [error, setError] = useState("");
-
+  const status_id = 1 ;
   const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const AddToDo = () => {
         //   role_id: agentResponse.data.role_id || "",
         // });
 
-        setStatuses(statusesResponse.data.statuses);
+        setStatuses(2);
         setIsLoading(false);
       } catch (err) {
         setError("Failed to fetch data. Please try again.");
@@ -111,7 +111,7 @@ const AddToDo = () => {
         title,
         detail: taskDetails,
         priority_id: priority,
-        status_id,
+        status_id: 1,
         date: convertDate(date),
         time: convertTime(time),
       });
@@ -211,7 +211,7 @@ const AddToDo = () => {
               ))}
             </TextField>
           </FormRow> */}
-          <FormControl fullWidth margin="normal">
+          {/* <FormControl fullWidth margin="normal">
             <InputLabel>Status</InputLabel>
             <Select
               label="Status"
@@ -225,7 +225,7 @@ const AddToDo = () => {
                 </MenuItem>
               ))}
             </Select>
-          </FormControl>
+          </FormControl> */}
           <FormRow label={"Priority Level"}>
             <Box
               sx={{
