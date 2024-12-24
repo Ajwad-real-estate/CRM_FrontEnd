@@ -27,7 +27,7 @@ export const useUpdateAction = () => {
       );
 
       setIsUpdating(false);
-      toast.success("Task Updated Successfully");
+      toast.success("Action Updated Successfully");
 
       return response.data;
     } catch (err) {
