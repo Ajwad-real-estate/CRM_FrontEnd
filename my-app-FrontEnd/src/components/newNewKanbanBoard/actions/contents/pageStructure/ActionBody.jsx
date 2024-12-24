@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Checkbox,
+  CircularProgress,
   InputAdornment,
   MenuItem,
   Popper,
@@ -17,16 +18,10 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import Dialogue from "./Dialogue";
 import Reservation from "./Reservation";
-const actionOptions = [
-  "Follow Up",
-  "Meeting",
-  "Follow Up after Meeting",
-  "Cancel",
-  "Cancel after Meeting",
-  "Done Deal",
-  "Archieve",
-  "Reservation",
-];
+import Classification from "../NextModal";
+import { useAddActions } from "../../useAddAction";
+import { processDate } from "./dateHELPER";
+const actionOptions = ["Follow Up", "Meeting", "Follow Up after Meeting"];
 const cancelOptions = [
   "Location",
   "Budget",
@@ -40,19 +35,24 @@ function ActionBody() {
   //
 
   //
+  const [activeTab, setActiveTab] = useState(0);
+
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  };
   const [dateTime, setDateTime] = useState("");
+  const [callCase, setCall] = useState(true);
 
   // Next Action
   // const [searchValue, setSearchValue] = useState("");
   //const [selectedAction, setSelectedAction] = useState("");
-  const [searchValue, setSearchValue] = useState("");
-  const [selectedValue, setSelectedValue] = useState("Follow Up");
+  const [selectedValue, setSelectedValue] = useState(1);
+  const [commentField, setComment] = useState("");
   const [selectedCancel, setSelectedCancel] = useState("");
   const [checked, setChecked] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [pendingCheck, setPendingCheck] = useState(false);
   //Modal Options
-
   const handleCloseModal = () => {
     setOpenModal(false);
   };
@@ -68,13 +68,9 @@ function ActionBody() {
     setOpenModal(false); // Close the modal
   };
   //
-  const handleSearchChange = (event) => {
-    setSearchValue(event.target.value);
-  };
 
   const handleSelectAction = (option) => {
     setSelectedValue(option);
-    setSearchValue(option); // Optionally update search value to selected value
   };
   const handleSelectCancel = (option) => {
     setSelectedCancel(option);
@@ -86,6 +82,35 @@ function ActionBody() {
   const handleDateChange = (event) => {
     setDateTime(event.target.value);
   };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const result = await AddAction({
+  //       completed: checked,
+  //       answered: false,
+  //       date: processDate(dateTime).date,
+  //       time: processDate(dateTime).time,
+  //       comment: commentField,
+  //       type_id: selectedValue,
+  //       status_id: activeTab,
+  //     });
+  //   } catch (err) {
+  //     console.error("Error adding action:", err);
+  //   }
+  // };
+  const { isAdding, addActionContent } = useAddActions();
+  function handleSubmit() {
+    addActionContent({
+      completed: checked,
+      answered: callCase,
+      date: processDate(dateTime).date,
+      time: processDate(dateTime).time,
+      comment: commentField,
+      type_id: selectedValue,
+      status_id: activeTab,
+    });
+  }
   return (
     <Box
       sx={{
@@ -94,12 +119,13 @@ function ActionBody() {
         height: "100%",
         gridTemplateAreas: `
           "input options"
+          "clas clas"
           "comment comment"
           "buttons buttons" 
           
         `,
         gridTemplateColumns: "1fr 1.15fr",
-        gridTemplateRows: "150px auto auto ",
+        gridTemplateRows: "150px auto auto auto",
         gap: "11px",
       }}
     >
@@ -128,8 +154,6 @@ function ActionBody() {
               id="outlined-select-currency-native"
               select
               defaultValue="Follow Up"
-              value={searchValue}
-              onChange={handleSearchChange}
               slotProps={{
                 select: {
                   native: true,
@@ -140,8 +164,8 @@ function ActionBody() {
               {actionOptions.map((option, index) => (
                 <MenuItem
                   key={index}
-                  value={option}
-                  onClick={() => handleSelectAction(option)}
+                  value={index + 1}
+                  onClick={() => handleSelectAction(index + 1)}
                   sx={{
                     padding: "10px 20px", // Custom padding
                     transition: "all 0.3s ease",
@@ -156,20 +180,19 @@ function ActionBody() {
                 </MenuItem>
               ))}
             </TextField>
-            {selectedValue === "Meeting" && (
-              <Checkbox
-                icon={<CheckCircleOutlineIcon />}
-                checkedIcon={<VerifiedIcon />}
-                checked={checked} // Bind checkbox state
-                onChange={handleCheckboxChange}
-                sx={{
-                  color: colors.greenAccent[700],
-                  "&.Mui-checked": {
-                    color: colors.greenAccent[600],
-                  },
-                }}
-              />
-            )}
+
+            <Checkbox
+              icon={<CheckCircleOutlineIcon />}
+              checkedIcon={<VerifiedIcon />}
+              checked={checked} // Bind checkbox state
+              onChange={handleCheckboxChange}
+              sx={{
+                color: colors.greenAccent[700],
+                "&.Mui-checked": {
+                  color: colors.greenAccent[600],
+                },
+              }}
+            />
           </Box>
         </Box>
         <Box>
@@ -250,10 +273,15 @@ function ActionBody() {
           paddingTop: "24px",
         }}
       >
-        <CallGroup />
+        <CallGroup callCase={callCase} setCall={setCall} />
         {selectedValue !== "Cancel" &&
           selectedValue !== "Cancel after Meeting" && <FollowUpStat />}
       </Box>
+      <Classification
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        handleTabChange={handleTabChange}
+      />
       {selectedValue === "Reservation" ? (
         <Reservation />
       ) : (
@@ -277,6 +305,8 @@ function ActionBody() {
               multiline
               rows={5}
               variant="outlined"
+              value={commentField}
+              onChange={(e) => setComment(e.target.value)}
               sx={{
                 width: "100%",
                 height: "80%",
@@ -316,9 +346,22 @@ function ActionBody() {
               "&:hover": {
                 bgcolor: colors.blueAccent[600],
               },
+              fontSize: "1.1rem",
             }}
+            disabled={isAdding}
+            onClick={handleSubmit}
           >
-            Save
+            {isAdding ? (
+              <>
+                Adding
+                <CircularProgress
+                  size={20}
+                  sx={{ color: "white", marginRight: "8px" }}
+                />
+              </>
+            ) : (
+              "Save"
+            )}
           </Button>
           <Button
             variant="outlined"
@@ -331,6 +374,7 @@ function ActionBody() {
               width: "45%",
               marginInline: "auto",
               transition: "all 0.3s ease",
+              fontSize: "1.1rem",
               "&:hover": {
                 borderColor: colors.redAccent[400],
                 borderWidth: "2px",

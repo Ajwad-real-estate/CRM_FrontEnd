@@ -5,11 +5,9 @@ import PhoneCallbackIcon from "@mui/icons-material/PhoneCallback";
 import CallEndIcon from "@mui/icons-material/CallEnd";
 import { tokens } from "../../../../../theme";
 
-function CallGroup() {
-  const [selectedValue, setSelectedValue] = useState("a");
-
+function CallGroup({ setCall, callCase }) {
   const handleChange = (value) => {
-    setSelectedValue(value);
+    setCall(value);
   };
 
   const theme = useTheme();
@@ -27,7 +25,7 @@ function CallGroup() {
     >
       {/* First Radio Group */}
       <Box
-        onClick={() => handleChange("a")}
+        onClick={() => handleChange(true)}
         sx={{
           display: "flex",
           alignItems: "center",
@@ -39,24 +37,21 @@ function CallGroup() {
           padding: "8px",
           cursor: "pointer",
           background:
-            selectedValue === "a" ? colors.blueAccent[800] : "transparent",
-          border:
-            selectedValue === "a" ? "none" : `1px solid ${colors.grey[400]}`,
+            callCase === true ? colors.blueAccent[800] : "transparent",
+          border: callCase === true ? "none" : `1px solid ${colors.grey[400]}`,
         }}
       >
         <Radio
-          checked={selectedValue === "a"}
-          onChange={() => handleChange("a")}
-          value="a"
+          checked={callCase === true}
+          onChange={() => handleChange(true)}
+          value={true}
           name="radio-buttons"
           sx={{ display: "none" }}
         />
         <PhoneCallbackIcon
           sx={{
             color:
-              selectedValue === "a"
-                ? colors.greenAccent[500]
-                : colors.grey[700],
+              callCase === true ? colors.greenAccent[500] : colors.grey[700],
           }}
         />
         <Typography
@@ -73,7 +68,7 @@ function CallGroup() {
 
       {/* Second Radio Group */}
       <Box
-        onClick={() => handleChange("b")}
+        onClick={() => handleChange(false)}
         sx={{
           display: "flex",
           alignItems: "center",
@@ -84,22 +79,21 @@ function CallGroup() {
           padding: "8px",
           cursor: "pointer",
           background:
-            selectedValue === "b" ? colors.blueAccent[800] : "transparent",
-          border:
-            selectedValue === "b" ? "none" : `1px solid ${colors.grey[400]}`,
+            callCase === false ? colors.blueAccent[800] : "transparent",
+          border: callCase === false ? "none" : `1px solid ${colors.grey[400]}`,
         }}
       >
         <Radio
-          checked={selectedValue === "b"}
-          onChange={() => handleChange("b")}
-          value="b"
+          checked={callCase === false}
+          onChange={() => handleChange(false)}
+          value={false}
           name="radio-buttons"
           sx={{ display: "none" }}
         />
         <CallEndIcon
           sx={{
             color:
-              selectedValue === "b" ? colors.redAccent[500] : colors.grey[700],
+              callCase === false ? colors.redAccent[500] : colors.grey[700],
           }}
         />
         <Typography

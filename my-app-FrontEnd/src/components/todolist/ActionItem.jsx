@@ -15,9 +15,20 @@ import { tokens } from "../../theme";
 import { useTheme } from "@emotion/react";
 import FormRow from "../../ui/FormRow";
 import ShowMoreLess from "./ShowMoreLess";
-//import { useUpdateAction } from "./useUpdateAction";
+
+import { useUpdateAction } from "./useUpdateAction";
 import { ActionMenu } from "./ActionMenu";
-import { useUpdateAction } from "./actionQueries";
+
+// Replace the Form array definition with
+const Form = styled("form")(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  width: "100%",
+  gap: "0.8rem",
+  alignItems: "center",
+  justifyContent: "space-between",
+  padding: "40px 70px",
+}));
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -176,18 +187,8 @@ const ActionItem = ({ todo }) => {
           <CloseIcon />
         </IconButton>
 
-        <Box
-          component="form"
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-            gap: "0.8rem",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "40px 70px",
-          }}
-        >
+        <Box>action edit</Box>
+        <Form>
           <FormRow label="Comment">
             <TextField
               value={formData.comment}
@@ -199,7 +200,7 @@ const ActionItem = ({ todo }) => {
             />
           </FormRow>
 
-          <FormRow label="Date">
+          {/* <FormRow label="Date">
             <TextField
               type="date"
               value={formData.date}
@@ -207,8 +208,8 @@ const ActionItem = ({ todo }) => {
               variant="outlined"
               size="small"
             />
-          </FormRow>
-
+          </FormRow> */}
+          {/* 
           <FormRow label="Time">
             <TextField
               type="time"
@@ -217,9 +218,9 @@ const ActionItem = ({ todo }) => {
               variant="outlined"
               size="small"
             />
-          </FormRow>
+          </FormRow> */}
 
-          <FormRow label="Status">
+          {/* <FormRow label="Status">
             <TextField
               select
               value={formData.status_id}
@@ -233,7 +234,7 @@ const ActionItem = ({ todo }) => {
                 </MenuItem>
               ))}
             </TextField>
-          </FormRow>
+          </FormRow> */}
 
           <Button
             variant="contained"
@@ -242,7 +243,7 @@ const ActionItem = ({ todo }) => {
           >
             {isLoading ? "Updating..." : "Update"}
           </Button>
-        </Box>
+        </Form>
       </BootstrapDialog>
     </Box>
   );

@@ -64,13 +64,20 @@ function ActionContent({ lead }) {
         </Box>
         {/* <Box sx={centering}>
           <TagIcon />
+
           {lead.phone_numbers.map((cur, i) => (
             <Typography key={i} variant="p" sx={{ display: "inline" }}>
               {cur}
             </Typography>
           ))}
         </Box> */}
+        {/* {lead.tags.map((cur, i) => (
+            <Typography key={i} variant="p" sx={{ display: "inline" }}>
+              {cur}
+            </Typography>
+          ))} */}
       </Box>
+
       <ActionBody />
     </>
   );
