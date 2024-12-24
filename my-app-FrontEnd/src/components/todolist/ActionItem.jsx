@@ -21,16 +21,17 @@ import ShowMoreLess from "./ShowMoreLess";
 import { useUpdateAction } from "./useUpdateAction";
 import { ActionMenu } from './ActionMenu';
 
-const Form = [];
-//  // = styled.form`
-//  //  display: flex;
-//  //  flex-direction: column;
-//  //  width: 100%;
-//  //  gap: 0.8rem;
-//  //  align-items: center;
-//  //  justify-content: space-between;
-//  //  padding: 40px 70px;
-// `;
+
+// Replace the Form array definition with
+const Form = styled('form')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  gap: '0.8rem',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  padding: '40px 70px'
+}));
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -184,6 +185,7 @@ const ActionItem = ({ todo }) => {
           <CloseIcon />
         </IconButton>
 
+        <Box>action edit</Box>
         <Form>
           <FormRow label="Comment">
             <TextField
@@ -196,7 +198,7 @@ const ActionItem = ({ todo }) => {
             />
           </FormRow>
 
-          <FormRow label="Date">
+          {/* <FormRow label="Date">
             <TextField
               type="date"
               value={formData.date}
@@ -204,8 +206,8 @@ const ActionItem = ({ todo }) => {
               variant="outlined"
               size="small"
             />
-          </FormRow>
-
+          </FormRow> */}
+{/* 
           <FormRow label="Time">
             <TextField
               type="time"
@@ -214,9 +216,9 @@ const ActionItem = ({ todo }) => {
               variant="outlined"
               size="small"
             />
-          </FormRow>
+          </FormRow> */}
 
-          <FormRow label="Status">
+          {/* <FormRow label="Status">
             <TextField
               select
               value={formData.status_id}
@@ -230,7 +232,7 @@ const ActionItem = ({ todo }) => {
                 </MenuItem>
               ))}
             </TextField>
-          </FormRow>
+          </FormRow> */}
 
           <Button
             variant="contained"
