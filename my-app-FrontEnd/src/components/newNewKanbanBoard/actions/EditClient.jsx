@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   Box,
+  Button,
   FormControl,
   MenuItem,
   Select,
@@ -12,6 +13,8 @@ import { useClient } from "./useKanban";
 import ProgressCircle from "../../ProgressCircle";
 import { useTheme } from "@emotion/react";
 import { tokens } from "../../../theme";
+import { useUpdateClient } from "./useUpdateClient";
+import ClientData from "../ClientData";
 
 const typeOptions = ["Warm", "Cold"];
 const statusOptions = [
@@ -28,8 +31,8 @@ function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 }
 
-function LeadPreview({ lead }) {
-  const { data, isPending, isError, error } = useClient(lead.id);
+function EditClient({ lead }) {
+  const { data, isLoading, isSHIT, badError } = useClient(lead.id);
   console.log(data);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -61,7 +64,7 @@ function LeadPreview({ lead }) {
   }, [data]);
 
   // Handle loading and error states
-
+  const { isPending, isError, error, editClient } = useUpdateClient();
   const handleAdd = () => {
     if (newPhoneNumber.trim() !== "") {
       setNumbersList([...numbersList, newPhoneNumber.trim()]);
@@ -81,7 +84,21 @@ function LeadPreview({ lead }) {
       setNewPhoneNumber(value);
     }
   };
+  console.log(data.id);
+  const handleEdit = () => {
+    const clientData = {
+      name,
+      age,
+      email,
+      type,
 
+      budget,
+      street,
+      phone_numbers: numbersList,
+    };
+
+    editClient({ clientID: data.id, ClientData });
+  };
   return (
     <Box
       sx={{
@@ -320,8 +337,20 @@ function LeadPreview({ lead }) {
           Failed Getting Client Data
         </Typography>
       )}
+      <Button
+        variant="contained"
+        sx={{
+          width: "48%",
+          bgcolor: colors.blueAccent[700],
+          fontSize: "1.3rem",
+          alignSelf: "center",
+        }}
+        onClick={handleEdit}
+      >
+        {!isLoading ? "Submit Changes" : "Editing..."}
+      </Button>
     </Box>
   );
 }
 
-export default LeadPreview;
+export default EditClient;

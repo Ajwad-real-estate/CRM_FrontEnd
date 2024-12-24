@@ -16,8 +16,9 @@ function ItemsList() {
   const { isPending, data, error, isError } = useTasks();
   let All_TASKS = [];
   let All_ACTIONS = [];
-
-  console.log("data");
+  if (!isPending) {
+    console.log(data);
+  }
   // console.log(data.allTasks);
   // console.log(data.allActions);
   if (!isPending) {
@@ -27,10 +28,13 @@ function ItemsList() {
 
     All_ACTIONS = data.allActions;
     All_ACTIONS = All_ACTIONS.map((task) => formatTaskDates(task));
-    All_ACTIONS = All_ACTIONS.sort((a, b) => b.priority_level - a.priority_level);
+    All_ACTIONS = All_ACTIONS.sort(
+      (a, b) => b.priority_level - a.priority_level
+    );
+    console.log(All_TASKS);
   }
-  console.log(All_ACTIONS)
-  console.log(All_TASKS)
+  console.log(All_ACTIONS);
+  console.log(All_TASKS);
   //length
   function HandleNavigate() {
     navigate("addtask");
@@ -107,13 +111,19 @@ function ItemsList() {
               All Actions
             </Typography>
             {All_ACTIONS.length > 0 ? (
-              All_ACTIONS.map((todo) => <ActionItem sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                marginTop: "60px",
-                border: " 10px solid "
-              }} key={todo.id} todo={todo} />)
+              All_ACTIONS.map((todo) => (
+                <ActionItem
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginTop: "60px",
+                    border: " 10px solid ",
+                  }}
+                  key={todo.id}
+                  todo={todo}
+                />
+              ))
             ) : (
               <Typography
                 variant="h2"
@@ -121,7 +131,7 @@ function ItemsList() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  marginTop: "60px"
+                  marginTop: "60px",
                 }}
               >
                 Task List is Empty

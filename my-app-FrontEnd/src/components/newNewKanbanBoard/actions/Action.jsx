@@ -8,15 +8,20 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Button, Typography, useMediaQuery, useTheme } from "@mui/material";
 import ActionContent from "./contents/ActionContent";
 import { tokens } from "../../../theme";
-import EditPage from "./contents/EditPage";
-import LeadPreview from "./LeadPreview";
+import EditClient from "./EditClient";
+import LeadPreview from "./LeadPrev";
+import { useClient } from "./useKanban";
 const Action = ({ open, onClose, onOpen, lead, onUpdate }) => {
-
   const { TabValue } = useLeadOpt();
   // Drawer content
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  console.log(lead);
+
+  const { data, isPending, isError, error } = useClient(lead.id);
+
   const drawerContent = (
     <Box
       sx={{
@@ -46,7 +51,7 @@ const Action = ({ open, onClose, onOpen, lead, onUpdate }) => {
         >
           <CloseIcon sx={{ color: colors.primary[200] }} />
         </Button>
-        <Box sx={{ width: "230px" }}>
+        <Box sx={{ width: `"230px"` }}>
           {/*Title-------------------------------------------------------------*/}
           {TabValue === 0 && (
             <Typography variant="h2"> Lead Preview</Typography>
@@ -70,8 +75,15 @@ const Action = ({ open, onClose, onOpen, lead, onUpdate }) => {
           gap: "10px",
         }}
       >
-        {TabValue === 0 && lead && <LeadPreview lead={lead} open={open} />}
-        {TabValue === 1 && lead && <EditPage lead={lead} onUpdate={onUpdate} />}
+        {TabValue === 0 && lead && (
+          <LeadPreview
+            lead={lead}
+            data={data}
+            isPending={isPending}
+            isError={isError}
+          />
+        )}
+        {TabValue === 1 && lead && <EditClient lead={lead} />}
         {TabValue === 3 && lead && <ActionContent lead={lead} />}
       </Box>
       {/* Content ----------------------------------------------------------------------------- */}

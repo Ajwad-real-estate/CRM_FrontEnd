@@ -25,6 +25,7 @@ function ActionContent({ lead }) {
     flex: "1 1 calc(33.33% - 20px)", // Adjust for 3 items per row with spacing
     boxSizing: "border-box", // Ensure padding is included in width
   };
+  console.log(lead);
 
   return (
     <>
@@ -55,20 +56,20 @@ function ActionContent({ lead }) {
         </Box>
         <Box sx={centering}>
           <PhoneEnabledIcon />
-          <Typography variant="p">{lead.phoneNumber}</Typography>
+          <Typography variant="p">{lead.street}</Typography>
         </Box>
         <Box sx={centering}>
           <ReceiptLongIcon />
           <Typography variant="p">{lead.amount}</Typography>
         </Box>
-        <Box sx={centering}>
+        {/* <Box sx={centering}>
           <TagIcon />
-          {lead.tags.map((cur, i) => (
+          {lead.phone_numbers.map((cur, i) => (
             <Typography key={i} variant="p" sx={{ display: "inline" }}>
               {cur}
             </Typography>
           ))}
-        </Box>
+        </Box> */}
       </Box>
       <ActionBody />
     </>

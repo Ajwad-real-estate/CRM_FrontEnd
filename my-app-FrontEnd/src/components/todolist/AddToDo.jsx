@@ -55,7 +55,7 @@ const AddToDo = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [statuses, setStatuses] = useState([]);
   const [error, setError] = useState("");
-  const status_id = 1 ;
+  const status_id = 1;
   const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
   useEffect(() => {
@@ -88,10 +88,8 @@ const AddToDo = () => {
     fetchData();
   }, [apiUrl]);
 
-
-
   const handleChangeStatus = (event) => {
-    setStatus_id(event.target.value);
+    setStatuses(event.target.value);
   };
 
   const handleChange = (event, newValue) => {
@@ -302,12 +300,13 @@ const AddToDo = () => {
               >
                 <Box
                   sx={{
-                    background: `${priority === 1
-                      ? "grey"
-                      : priority === 2
-                        ? "#1976d2"
-                        : "red"
-                      }`,
+                    background: `${
+                      priority === 1
+                        ? "grey"
+                        : priority === 2
+                          ? "#1976d2"
+                          : "red"
+                    }`,
                     cursor: "pointer",
                     height: "14px",
                     width: "14px",

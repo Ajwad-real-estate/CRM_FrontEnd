@@ -83,7 +83,10 @@ function transformData(clients) {
       title: client.name || "Untitled Lead",
       amount: client.budget ? `$${client.budget}` : "No Value",
       company: client.city_id ? `City ID: ${client.city_id}` : "Unknown City",
-      phoneNumber: client.phone_numbers && client.phone_numbers[0] ? client.phone_numbers[0] : "No Phone",
+      phoneNumber:
+        client.phone_numbers && client.phone_numbers[0]
+          ? client.phone_numbers[0]
+          : "No Phone",
       email: client.email || "No Email",
     };
 
@@ -110,29 +113,32 @@ const KanbanBoard = () => {
   const theme = useTheme();
 
   let currentSublink = location.pathname;
-  if (currentSublink.includes('/NewNewKanbanBoard/')) {
-    currentSublink = currentSublink.replace('/NewNewKanbanBoard/', '');
+  if (currentSublink.includes("/NewNewKanbanBoard/")) {
+    currentSublink = currentSublink.replace("/NewNewKanbanBoard/", "");
   }
-  if (currentSublink.includes('/NewNewKanbanBoard')) {
-    currentSublink = currentSublink.replace('/NewNewKanbanBoard', '');
+  if (currentSublink.includes("/NewNewKanbanBoard")) {
+    currentSublink = currentSublink.replace("/NewNewKanbanBoard", "");
   }
 
   useEffect(() => {
     const fetchClients = async () => {
       try {
         // const response = await fetch(`http://localhost:3000/api/clients?status=${currentSublink}`, {
-        const response = await fetch(`http://localhost:3000/api/clients?status=${currentSublink}`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          },
-        });
+        const response = await fetch(
+          `http://localhost:3000/api/clients?status=${currentSublink}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${Cookies.get("accessToken")}`,
+            },
+          }
+        );
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
         }
 
         const dataFromApi = await response.json();
-        console.log(dataFromApi)
+        console.log(dataFromApi);
         setClients(dataFromApi);
       } catch (err) {
         console.error(err);
@@ -144,8 +150,8 @@ const KanbanBoard = () => {
   }, [currentSublink]);
 
   const [data, setData] = useState({ columns: {}, leads: {} });
-  console.log("data")
-  console.log(data)
+  console.log("data");
+  console.log(data);
   useEffect(() => {
     if (clients.length > 0) {
       const initialData = transformData(clients);
@@ -195,7 +201,6 @@ const KanbanBoard = () => {
     setSelectedLead(null);
   };
 
-
   const colors = tokens(theme.palette.mode);
 
   const filteredLeads = Object.values(data.leads).filter(
@@ -232,7 +237,6 @@ const KanbanBoard = () => {
       };
     });
   };
-
   return (
     <Box m="20px">
       <Box
@@ -317,7 +321,9 @@ const KanbanBoard = () => {
               >
                 <PipelineColumn title={column.title}>
                   {filteredLeads
-                    .filter((lead) => column.leadIds.includes(lead.id.toString()))
+                    .filter((lead) =>
+                      column.leadIds.includes(lead.id.toString())
+                    )
                     .map((lead) => (
                       <div
                         key={lead.id}
@@ -337,20 +343,19 @@ const KanbanBoard = () => {
         )}
 
         {isModalOpen && (
-          <LeadModal
-            lead={selectedLead}
-            onClose={handleCloseModal}
-          />
+          <LeadModal lead={selectedLead} onClose={handleCloseModal} />
         )}
       </Box>
-      <LeadOptionsProvider>
-        <Action
-          open={isDrawerOpen}
-          onClose={handleDrawerClose}
-          lead={selectedLead}
-          onUpdate={updateLead}
-        />
-      </LeadOptionsProvider>
+      {selectedLead && (
+        <LeadOptionsProvider>
+          <Action
+            open={isDrawerOpen}
+            onClose={handleDrawerClose}
+            lead={selectedLead}
+            onUpdate={updateLead}
+          />
+        </LeadOptionsProvider>
+      )}
     </Box>
   );
 };
