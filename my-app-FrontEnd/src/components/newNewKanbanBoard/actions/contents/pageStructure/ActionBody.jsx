@@ -1,14 +1,4 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  InputAdornment,
-  MenuItem,
-  Popper,
-  TextField,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Box, Button, Checkbox, InputAdornment, MenuItem, Popper, TextField, Typography, useTheme } from "@mui/material";
 import FollowUpStat from "./FollowUpStat";
 import { useEffect, useState } from "react";
 import { tokens } from "../../../../../theme";
@@ -17,6 +7,75 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import Dialogue from "./Dialogue";
 import Reservation from "./Reservation";
+
+
+
+const API_URL = 'http://localhost:3000/api';
+
+export const createAction = async (actionData) => {
+  try {
+    const response = await fetch(`${API_URL}/actions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        agent_id: actionData.agentId,
+        client_id: actionData.clientId,
+        unit_id: actionData.unitId,
+        project_id: actionData.projectId,
+        completed: false,
+        answered: false,
+        date: actionData.date,
+        time: new Date().toLocaleTimeString(),
+        location: actionData.location,
+        comment: actionData.comment,
+        type_id: getTypeId(actionData.selectedValue),
+        status_id: actionData.statusId
+      })
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('Error creating action:', error);
+    throw error;
+  }
+};
+export const updateAction = async (id, actionData) => {
+  try {
+    const response = await fetch(`${API_URL}/actions/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...actionData,
+        completed: true,
+        answered: actionData.answered,
+        updated_at: new Date().toISOString()
+      })
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('Error updating action:', error);
+    throw error;
+  }
+};
+
+// Helper function to convert action type to type_id
+const getTypeId = (actionType) => {
+  const typeMap = {
+    'Follow Up': 1,
+    'Meeting': 2,
+    'Follow Up after Meeting': 3,
+    'Cancel': 4,
+    'Cancel after Meeting': 5,
+    'Done Deal': 6,
+    'Archieve': 7,
+    'Reservation': 8
+  };
+  return typeMap[actionType] || 1;
+};
+
 const actionOptions = [
   "Follow Up",
   "Meeting",
@@ -36,7 +95,7 @@ const cancelOptions = [
   "Other Reason",
   "المدام قالت لأ",
 ];
-function ActionBody() {
+function ActionBody({ agentId, clientId, unitId, projectId }) {
   //
 
   //
@@ -51,8 +110,59 @@ function ActionBody() {
   const [checked, setChecked] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [pendingCheck, setPendingCheck] = useState(false);
+  const [clientResponse, setClientResponse] = useState(false);
+  const [clientStatus, setClientStatus] = useState('');
+  const [comment, setComment] = useState('');
+  const [answered, setAnswered] = useState(false);
+  const [statusId, setStatusId] = useState(1);
   //Modal Options
 
+  const handleSave = async () => {
+    try {
+      const actionData = {
+        agentId,
+        clientId,
+        unitId,
+        projectId,
+        selectedValue,
+        date: dateTime,
+        comment,
+        answered,
+        statusId,
+        location: selectedValue === 'Meeting' ? 'Meeting Location' : null
+      };
+
+      await createAction(actionData);
+      // Handle success
+    } catch (error) {
+      // Handle error
+    }
+  };
+
+  const handleComplete = async (id) => {
+    try {
+      // const actionData = {
+      //   selectedValue,
+      //   selectedCancel,
+      //   dateTime,
+      //   comment,
+      //   clientResponse,
+      //   clientStatus,
+
+      // };
+      await updateAction(id, {
+        answered,
+        comment,
+        statusId
+      });
+      // await updateAction(id, actionData);
+      // Handle success
+    } catch (error) {
+      // Handle error
+    }
+  };
+
+  //
   const handleCloseModal = () => {
     setOpenModal(false);
   };
@@ -174,7 +284,7 @@ function ActionBody() {
         </Box>
         <Box>
           {selectedValue === "Cancel after Meeting" ||
-          selectedValue === "Cancel" ? (
+            selectedValue === "Cancel" ? (
             <>
               <Typography
                 variant="body1"
@@ -317,9 +427,12 @@ function ActionBody() {
                 bgcolor: colors.blueAccent[600],
               },
             }}
+            onClick={handleSave}
           >
             Save
           </Button>
+          <Button onClick={() => handleComplete(actionId)}>Complete</Button>
+
           <Button
             variant="outlined"
             sx={{
