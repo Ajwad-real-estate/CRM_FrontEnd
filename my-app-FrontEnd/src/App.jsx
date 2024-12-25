@@ -59,6 +59,7 @@ import { useNavigate } from "react-router-dom"; // For navigation
 import Sales from "./scenes/team/sales";
 import Profile from "./components/myProfile/Profile";
 import ClientDetails from "./scenes/contacts/ClientDetails";
+import AssignContacts from "./components/assignContacts/AssignContacts";
 
 function App() {
  const dispatch = useDispatch();
@@ -188,6 +189,7 @@ function App() {
          {/* <Route path="/Contact" element={<ContactPage />} /> */}
          <Route path="/SalesProcess" element={<SalesProcessPage />} />
          <Route path="/GetContacts" element={<GetContacts />} />
+         <Route path="/AssignContacts" element={<AssignContacts />} />
          <Route path="/clients/:id" element={<ClientDetails />} />
 
         </Routes>
