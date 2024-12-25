@@ -68,6 +68,7 @@ import Reservation from "./Reservation";
 import Classification from "../NextModal";
 import { useAddActions } from "../../useAddAction";
 import { processDate } from "./dateHELPER";
+import toast from "react-hot-toast";
 const actionOptions = ["Follow Up", "Meeting", "Follow Up after Meeting"];
 const cancelOptions = [
   "Location",
@@ -82,6 +83,8 @@ function ActionBody({ lead }) {
   //
 
   //
+  console.log("lead")
+  console.log(lead)
   const [activeTab, setActiveTab] = useState(0);
 
   const handleTabChange = (event, newValue) => {
@@ -148,18 +151,24 @@ function ActionBody({ lead }) {
   // };
   const { isAdding, addActionContent } = useAddActions();
   function handleSubmit() {
+    if (!lead?.id || !commentField) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+    console.log("lead.id")
+    console.log(lead.id)
     const addedActionObj = {
       client_id: lead.id,
-      unit_id: null,
-      project_id: null,
+      // unit_id: null,
+      // project_id: null,
       completed: checked,
       answered: callCase,
-      date: processDate(dateTime).date,
-      time: processDate(dateTime).time,
-      location: null,
+      // date: processDate(dateTime).date,
+      // time: processDate(dateTime).time,
+      // location: null,
       comment: commentField,
       type_id: selectedValue,
-      status_id: activeTab,
+      // status_id: activeTab,
     };
     console.log(addedActionObj);
     console.log(activeTab);
@@ -251,7 +260,7 @@ function ActionBody({ lead }) {
         </Box>
         <Box>
           {selectedValue === "Cancel after Meeting" ||
-          selectedValue === "Cancel" ? (
+            selectedValue === "Cancel" ? (
             <>
               <Typography
                 variant="body1"
