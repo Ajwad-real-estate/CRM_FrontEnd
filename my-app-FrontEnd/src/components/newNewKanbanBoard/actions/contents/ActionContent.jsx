@@ -78,7 +78,7 @@ function ActionContent({ lead }) {
           ))} */}
       </Box>
 
-      <ActionBody />
+      <ActionBody lead={lead} />
     </>
   );
 }

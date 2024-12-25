@@ -49,35 +49,34 @@ async function addAction(actionData) {
 
   try {
     const response = await fetch(apiUrl + "/api/actions", {
-      method: "POST", // Use POST for adding data
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${Cookies.get("accessToken")}`, // Use the user's token for authorization
+        Authorization: `Bearer ${Cookies.get("accessToken")}`,
       },
-      body: JSON.stringify(actionData), // Send the action data as JSON
+      body: JSON.stringify(actionData),
     });
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const data = await response.json(); // Parse the response data
-    return data; // Return the added action data from the API response
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error("Error adding action:", error); // Log any errors that occur during the request
+    console.error("Error adding action:", error);
   }
 }
 
 export function useAddActions() {
   const queryClient = useQueryClient();
 
-  // The mutation for adding an action
   const { mutate: addActionContent, isPending: isAdding } = useMutation({
-    mutationFn: (newAction) => addAction(newAction), // Pass the argument to addAction
+    mutationFn: (newAction) => addAction(newAction),
     onSuccess: () => {
       toast.success("Action Added Successfully");
       queryClient.invalidateQueries({
-        queryKey: ["actions"], // Invalidate the "actions" query to refresh data
+        queryKey: ["actions"],
       });
     },
     onError: (err) => toast.error(err.message),
