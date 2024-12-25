@@ -102,6 +102,8 @@ function ActionBody({ lead, data }) {
   const [checked, setChecked] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [pendingCheck, setPendingCheck] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
   //Modal Options
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -149,7 +151,7 @@ function ActionBody({ lead, data }) {
   //     console.error("Error adding action:", err);
   //   }
   // };
-  const { isAdding, addActionContent } = useAddActions();
+  const { isAdding, addActionContent } = useAddActions(lead.id);
   function handleSubmit() {
     if (!lead?.id || !commentField) {
       toast.error("Please fill in all required fields");
@@ -163,13 +165,12 @@ function ActionBody({ lead, data }) {
       // project_id: null,
       completed: checked,
       answered: callCase,
-      // date: processDate(dateTime).date,
-      // time: processDate(dateTime).time,
+      date: processDate(dateTime).date,
+      time: processDate(dateTime).time,
       // location: null,
       comment: commentField,
       type_id: selectedValue,
-
-      // status_id: activeTab,
+      status_id: activeTab,
     };
     console.log(addedActionObj);
     console.log(activeTab);
@@ -339,7 +340,12 @@ function ActionBody({ lead, data }) {
       >
         <CallGroup callCase={callCase} setCall={setCall} />
         {selectedValue !== "Cancel" &&
-          selectedValue !== "Cancel after Meeting" && <FollowUpStat />}
+          selectedValue !== "Cancel after Meeting" && (
+            <FollowUpStat
+              selectedIndex={selectedIndex}
+              setSelectedIndex={setSelectedIndex}
+            />
+          )}
       </Box>
       <Classification
         activeTab={activeTab}

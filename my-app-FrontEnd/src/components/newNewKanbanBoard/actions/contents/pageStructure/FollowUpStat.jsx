@@ -13,20 +13,15 @@ import { colors } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { tokens } from "../../../../../theme";
 
-const FollowUpStat = () => {
+const FollowUpStat = ({ selectedIndex, setSelectedIndex }) => {
   // Custom theme with color variable
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
-  const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const options = [
-    "After 1 hour",
-    "After 2 hours",
-    "Other and mention in the comments",
-  ];
+  const options = ["After 1 hour", "After 2 hours"];
 
   const handleClick = () => {
     console.info(`You clicked ${options[selectedIndex]}`);

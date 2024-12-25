@@ -11,6 +11,7 @@ import { tokens } from "../../../theme";
 import EditClient from "./EditClient";
 import LeadPreview from "./LeadPrev";
 import { useClient } from "./useKanban";
+import ActionHistory from "./contents/ActionHistory";
 const Action = ({ open, onClose, onOpen, lead, onUpdate }) => {
   const { TabValue } = useLeadOpt();
   // Drawer content
@@ -84,6 +85,7 @@ const Action = ({ open, onClose, onOpen, lead, onUpdate }) => {
           />
         )}
         {TabValue === 1 && lead && <EditClient lead={lead} />}
+        {TabValue === 2 && lead && <ActionHistory lead={lead} />}
         {TabValue === 3 && lead && !isPending && data && (
           <ActionContent lead={lead} data={data} />
         )}

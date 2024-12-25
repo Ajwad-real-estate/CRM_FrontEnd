@@ -8,7 +8,9 @@ async function addAction(actionData) {
 
   // Validate required fields
   if (!actionData.client_id || !actionData.type_id || !actionData.comment) {
-    throw new Error("Missing required fields: client_id, type_id, and comment are required");
+    throw new Error(
+      "Missing required fields: client_id, type_id, and comment are required"
+    );
   }
 
   // Create the payload with required and optional fields
@@ -22,10 +24,10 @@ async function addAction(actionData) {
     date: actionData.date,
     time: actionData.time,
     location: actionData.location,
-    status_id: actionData.status_id
+    status_id: actionData.status_id,
   };
-console.log("payload")
-console.log(payload)
+  console.log("payload");
+  console.log(payload);
   try {
     const response = await axios.post(`${apiUrl}/api/actions`, payload, {
       headers: {
@@ -36,20 +38,23 @@ console.log(payload)
     return response.data;
   } catch (error) {
     // Enhanced error handling
-    const errorMessage = error.response?.data?.message || "Failed to add action";
+    const errorMessage =
+      error.response?.data?.message || "Failed to add action";
     throw new Error(errorMessage);
   }
 }
 
-export function useAddActions() {
+export function useAddActions(clientID) {
   const queryClient = useQueryClient();
 
   const { mutate: addActionContent, isPending: isAdding } = useMutation({
-    mutationFn: addAction,
+    mutationFn: addAction, // Assuming addAction is already defined
     onSuccess: () => {
       toast.success("Action Added Successfully");
+
+      // Invalidate the query for client actions to trigger refetch
       queryClient.invalidateQueries({
-        queryKey: ["actions"],
+        queryKey: ["clientActions", clientID],
       });
     },
     onError: (error) => {
