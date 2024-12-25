@@ -53,26 +53,18 @@ const GetContacts = () => {
 
   const handleBulkCreate = async (clientsData) => {
     setLoading(true);
-    clientsData = data;
-    console.log(data)
     try {
       const result = await createBulkClients(clientsData);
       setResult(result);
-      console.log(result)
-      console.log(result.success)
-      
-      if (result.success) {
 
-        console.log("result.success")
+      if (result.success) {
         // Show success notification
-        toast.success(`Successfully created  clients`);
-      }
-       else {
+        toast.success(`Successfully created ${result.data.data.successCount} clients`);
+      } else {
         // Show error notification
-        toast.error(`Failed to create some clients. `);
+        toast.error(`Failed to create some clients. ${result.error}`);
       }
     } catch (error) {
-      console.log(error)
       setResult({
         success: false,
         error: 'Failed to process request'
@@ -86,25 +78,6 @@ const GetContacts = () => {
 
 
   // Handle file upload and parse the Excel file
-  // const handleFileUpload = (e) => {
-  //   setLoading(true); // Start loading
-  //   const uploadedFile = e.target.files[0];
-  //   setFile(uploadedFile); // Update the file state
-
-  //   const reader = new FileReader();
-  //   reader.readAsArrayBuffer(uploadedFile);
-  //   reader.onload = (event) => {
-  //     const arrayBuffer = event.target.result;
-  //     const data = new Uint8Array(arrayBuffer);
-  //     const workbook = XLSX.read(data, { type: "array" });
-  //     const sheetName = workbook.SheetNames[0];
-  //     const sheet = workbook.Sheets[sheetName];
-  //     const parsedData = XLSX.utils.sheet_to_json(sheet, { defval: "N/A" });
-  //     setData(parsedData);
-  //     setLoading(false); // Stop loading
-  //   };
-  // };
-// chat gpt
   const handleFileUpload = (e) => {
     setLoading(true); // Start loading
     const uploadedFile = e.target.files[0];
@@ -118,31 +91,11 @@ const GetContacts = () => {
       const workbook = XLSX.read(data, { type: "array" });
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
-      const parsedData = XLSX.utils.sheet_to_json(sheet, { defval: null }); // Use null for missing values
-
-      // Transform data to match the required format
-      const normalizedData = parsedData.map((row) => ({
-        name: row.name || null, // Default to null if name is missing
-        age: row.age || null, // Default to null if age is missing
-        email: row.email || null, // Default to null if email is missing
-        city_id: row.city_id || null, // Default to null if city_id is missing
-        street: row.street || null, // Default to null if street is missing
-        // channel: row.channel || "Unknown", // Default to "Unknown" if channel is missing
-        // type: row.type || "Unknown", // Default to "Unknown" if type is missing
-        // status: row.status || "Unknown", // Default to "Unknown" if status is missing
-        budget: row.budget || 0, // Default to 0 if budget is missing
-        phoneNumbers: Array.isArray(row.phoneNumbers)
-          ? row.phoneNumbers
-          : [String(row.phoneNumbers || "")], // Ensure phoneNumbers is an array
-      }));
-
-      setData(normalizedData);
+      const parsedData = XLSX.utils.sheet_to_json(sheet, { defval: "N/A" });
+      setData(parsedData);
       setLoading(false); // Stop loading
     };
   };
-
-
-
 
   // Handle deleting a row
   const handleDeleteRow = (index) => {
@@ -154,8 +107,8 @@ const GetContacts = () => {
   // Remove all invalid rows (those with red background)
   const handleRemoveInvalidRows = () => {
     const updatedData = data.filter((row) => {
-      const isNameValid = isValidName(row.name);
-      const isPhoneValid = isValidPhone(row.phoneNumbers);
+      const isNameValid = isValidName(row.Name);
+      const isPhoneValid = isValidPhone(row.Phone);
       return isNameValid && isPhoneValid;
     });
     setData(updatedData);
@@ -240,8 +193,8 @@ const GetContacts = () => {
                     <TableBody>
                       {data.map((row, index) => {
                         // Check if any field is invalid
-                        const isNameValid = isValidName(row.name);
-                        const isPhoneValid = isValidPhone(row.phoneNumbers);
+                        const isNameValid = isValidName(row.Name);
+                        const isPhoneValid = isValidPhone(row.Phone);
 
                         return (
                           <TableRow
@@ -252,9 +205,9 @@ const GetContacts = () => {
                                 : "white",
                             }}
                           >
-                            <TableCell>{row.name || "N/A"}</TableCell>
-                            <TableCell>{row.phoneNumbers || "N/A"}</TableCell>
-                            <TableCell>{row.email || "N/A"}</TableCell>
+                            <TableCell>{row.Name || "N/A"}</TableCell>
+                            <TableCell>{row.Phone || "N/A"}</TableCell>
+                            <TableCell>{row.Email || "N/A"}</TableCell>
                             <TableCell>
                               <IconButton
                                 color="error"
@@ -281,8 +234,7 @@ const GetContacts = () => {
                   <Button
                     variant="contained"
                     color="primary"
-                    // onClick={() => alert("Contacts processed successfully!")}
-                    onClick={handleBulkCreate}
+                    onClick={() => alert("Contacts processed successfully!")}
                   >
                     Process Contacts
                   </Button>

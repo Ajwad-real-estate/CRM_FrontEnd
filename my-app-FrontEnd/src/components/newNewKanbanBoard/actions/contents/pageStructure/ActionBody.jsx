@@ -1,3 +1,50 @@
+//  },
+//  body: JSON.stringify({
+//   agent_id: actionData.agentId,
+//   client_id: actionData.clientId,
+//   unit_id: actionData.unitId,
+//   project_id: actionData.projectId,
+//   completed: false,
+//   answered: false,
+//   date: actionData.date,
+//   time: new Date().toLocaleTimeString(),
+//   location: actionData.location,
+//   comment: actionData.comment,
+//   type_id: getTypeId(actionData.selectedValue),
+//   status_id: actionData.statusId
+//  })
+// });
+//  const handleSave = async () => {
+//   try {
+//    const actionData = {
+//     agentId,
+//     clientId,
+//     unitId,
+//     projectId,
+//     selectedValue,
+//     date: dateTime,
+//     comment,
+//     answered,
+//     statusId,
+//     location: selectedValue === 'Meeting' ? 'Meeting Location' : null
+//    };
+
+// const handleSubmit = async (e) => {
+//   e.preventDefault();
+//   try {
+//     const result = await AddAction({
+//       completed: checked,
+//       answered: false,
+//       date: processDate(dateTime).date,
+//       time: processDate(dateTime).time,
+//       comment: commentField,
+//       type_id: selectedValue,
+//       status_id: activeTab,
+//     });
+//   } catch (err) {
+//     console.error("Error adding action:", err);
+//   }
+// };
 import {
   Box,
   Button,
