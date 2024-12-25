@@ -78,7 +78,7 @@ const cancelOptions = [
   "Other Reason",
   "المدام قالت لأ",
 ];
-function ActionBody({ lead }) {
+function ActionBody({ lead, data }) {
   //
 
   //
@@ -148,9 +148,11 @@ function ActionBody({ lead }) {
   // };
   const { isAdding, addActionContent } = useAddActions();
   function handleSubmit() {
+    console.log(data);
     const addedActionObj = {
       client_id: lead.id,
       unit_id: null,
+      agent_id: data.agent_id,
       project_id: null,
       completed: checked,
       answered: callCase,
@@ -159,7 +161,7 @@ function ActionBody({ lead }) {
       location: null,
       comment: commentField,
       type_id: selectedValue,
-      status_id: activeTab,
+      status_id: activeTab + 1,
     };
     console.log(addedActionObj);
     console.log(activeTab);

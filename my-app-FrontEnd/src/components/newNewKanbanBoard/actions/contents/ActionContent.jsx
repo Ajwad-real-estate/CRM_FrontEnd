@@ -9,7 +9,7 @@ import BusinessIcon from "@mui/icons-material/Business";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import { tokens } from "../../../../theme";
 
-function ActionContent({ lead }) {
+function ActionContent({ lead, data }) {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -78,7 +78,7 @@ function ActionContent({ lead }) {
           ))} */}
       </Box>
 
-      <ActionBody lead={lead} />
+      <ActionBody lead={lead} data={data} />
     </>
   );
 }

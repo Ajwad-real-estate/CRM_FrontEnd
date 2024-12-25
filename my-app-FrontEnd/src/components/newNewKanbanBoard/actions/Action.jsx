@@ -84,7 +84,9 @@ const Action = ({ open, onClose, onOpen, lead, onUpdate }) => {
           />
         )}
         {TabValue === 1 && lead && <EditClient lead={lead} />}
-        {TabValue === 3 && lead && <ActionContent lead={lead} />}
+        {TabValue === 3 && lead && !isPending && data && (
+          <ActionContent lead={lead} data={data} />
+        )}
       </Box>
       {/* Content ----------------------------------------------------------------------------- */}
     </Box>
