@@ -136,7 +136,6 @@ const AssignContacts = () => {
 
 
  const columns = [
-  // { field: "id", headerName: "ID", flex: 0.5 },
   {
    field: 'checkbox',
    headerName: '',
@@ -157,13 +156,6 @@ const AssignContacts = () => {
    flex: 1,
    cellClassName: "name-column--cell",
   },
-  // {
-  //  field: "age",
-  //  headerName: "Age",
-  //  type: "number",
-  //  headerAlign: "left",
-  //  align: "left",
-  // },
   {
    field: "phone_numbers",
    headerName: "Phone Numbers",
@@ -211,21 +203,15 @@ const AssignContacts = () => {
  return (
   <div className="p-4 max-w-4xl mx-auto">
    <Card>
-    <CardHeader title="Assign Contacts to Agents" />
     <CardContent>
-     {loading ? (
-      <div className="flex justify-center p-4">
-       <Loader />
-      </div>
-     ) : (
-      <>
-
-       <div className="space-y-4">
-        <div className="grid gap-4">
-         <h3 className="text-lg font-medium">
-          Select Clients ({selectedClients.length} selected)
-         </h3>
-         <div className="grid gap-2">
+     <>
+      <div className="space-y-4">
+       <div className="grid gap-4">
+        <div className="grid gap-2">
+         <Box m="20px">
+          <h3 className="text-lg font-medium">
+           Select Clients ({selectedClients.length} selected)
+          </h3>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
            <Button
             variant="outlined"
@@ -235,242 +221,108 @@ const AssignContacts = () => {
            >
             Select All Clients
            </Button>
-           <Box m="20px">
-            <Box
-             m="40px 0 0 0"
-             // height="75vh"
-             sx={{
-              "& .MuiDataGrid-root": {
-               border: "none",
-               fontSize: isNonMobile ? "14px" : "8px",
-              },
-              "& .MuiDataGrid-cell": {
-               borderBottom: "none",
-               cursor: "pointer",
-              },
-              "& .name-column--cell": {
-               color: colors.greenAccent[300],
-              },
-              "& .MuiDataGrid-columnHeaders": {
-               backgroundColor: colors.blueAccent[700],
-               borderBottom: "none",
-              },
-              "& .MuiDataGrid-virtualScroller": {
-               backgroundColor: colors.primary[400],
-              },
-              "& .MuiDataGrid-footerContainer": {
-               borderTop: "none",
-               backgroundColor: colors.blueAccent[700],
-              },
-              "& .MuiCheckbox-root": {
-               color: `${colors.greenAccent[200]} !important`,
-              },
-              "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-               color: `${colors.grey[100]} !important`,
-              },
-             }}
-            >
-             <DataGrid
-              // checkboxSelection
-              rows={clients}
-              columns={columns}
-              components={{ Toolbar: GridToolbar }}
-              loading={loading}
-              autoHeight
-              onSelectionModelChange={(newSelection) => {
-               setSelectedClients(newSelection.selectionModel);
-              }}
-             />
-             <div className="grid gap-4">
-              <h3 className="text-lg font-medium">Assign to Agents</h3>
+           <Box
+            m="40px 0 0 0"
+            // height="75vh"
+            sx={{
+             "& .MuiDataGrid-root": {
+              border: "none",
+              fontSize: isNonMobile ? "14px" : "8px",
+             },
+             "& .MuiDataGrid-cell": {
+              borderBottom: "none",
+              cursor: "pointer",
+             },
+             "& .name-column--cell": {
+              color: colors.greenAccent[300],
+             },
+             "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: colors.blueAccent[700],
+              borderBottom: "none",
+             },
+             "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: colors.primary[400],
+             },
+             "& .MuiDataGrid-footerContainer": {
+              borderTop: "none",
+              backgroundColor: colors.blueAccent[700],
+             },
+             "& .MuiCheckbox-root": {
+              color: `${colors.greenAccent[200]} !important`,
+             },
+             "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+              color: `${colors.grey[100]} !important`,
+             },
+            }}
+           >
 
-              <TableContainer>
-               <Table>
-                <TableHead>
-                 <TableRow>
-                  <TableCell>Agent Name</TableCell>
-                  <TableCell>Quantity</TableCell>
-                 </TableRow>
-                </TableHead>
-                <TableBody>
-                 {agents.map((agent) => (
-                  <TableRow key={agent.id}>
-                   <TableCell>{agent.name}</TableCell>
-                   <TableCell>
-                    <Input
-                     type="number"
-                     min="0"
-                     value={agent.quantity}
-                     onChange={(e) => handleQuantityChange(agent.id, e.target.value)}
-                     className="w-full"
-                    />
-                   </TableCell>
-                  </TableRow>
-                 ))}
-                </TableBody>
-                <TableFooter>
-                 <TableRow>
-                  <TableCell colSpan={2}>
-                   <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleAssign}
-                    disabled={submitting || selectedClients.length === 0}
+            <DataGrid
+             // checkboxSelection
+             rows={clients}
+             columns={columns}
+             components={{ Toolbar: GridToolbar }}
+             loading={loading}
+             autoHeight
+             onSelectionModelChange={(newSelection) => {
+              setSelectedClients(newSelection.selectionModel);
+             }}
+            />
+
+            <div className="grid gap-4">
+             <h3 className="text-lg font-medium">Assign to Agents</h3>
+
+             <TableContainer>
+              <Table>
+               <TableHead>
+                <TableRow>
+                 <TableCell>Agent Name</TableCell>
+                 <TableCell>Quantity</TableCell>
+                </TableRow>
+               </TableHead>
+               <TableBody>
+                {agents.map((agent) => (
+                 <TableRow key={agent.id}>
+                  <TableCell>{agent.name}</TableCell>
+                  <TableCell>
+                   <Input
+                    type="number"
+                    min="0"
+                    value={agent.quantity}
+                    onChange={(e) => handleQuantityChange(agent.id, e.target.value)}
                     className="w-full"
-                   >
-                    {submitting ? "Assigning..." : "Assign Clients"}
-                   </Button>
+                   />
                   </TableCell>
                  </TableRow>
-                </TableFooter>
-               </Table>
-              </TableContainer>
-             </div>
+                ))}
+               </TableBody>
+               <TableFooter>
+                <TableRow>
+                 <TableCell colSpan={2}>
+                  <Button
+                   variant="contained"
+                   color="primary"
+                   onClick={handleAssign}
+                   disabled={submitting || selectedClients.length === 0}
+                   className="w-full"
+                  >
+                   {submitting ? "Assigning..." : "Assign Clients"}
+                  </Button>
+                 </TableCell>
+                </TableRow>
+               </TableFooter>
+              </Table>
+             </TableContainer>
+            </div>
            </Box>
-            </Box>
-
-
-
-
-
-           {/* {clients.map((client) => (
-            <div key={client.id} className="flex items-center space-x-2">
-             <Checkbox
-              checked={selectedClients.includes(client.id)}
-              onChange={() => handleClientToggle(client.id)}
-             />
-             <Box sx={{ ml: '10px' }}>
-              <label htmlFor={client.id} className="text-sm">
-               {client.name || client.id}
-              </label>
-             </Box>
-             <Box sx={{ ml: '10px' }}>
-              <label htmlFor={client.id} className="text-sm">
-               {client.phone_numbers?.[0] || client.email}
-              </label>
-             </Box>
-            </div>
-           ))} */}
           </Box>
-         </div>
+         </Box>
         </div>
-        {/* <div className="grid gap-4">
-          <h3 className="text-lg font-medium">Assign to Agents</h3>
-          <div className="grid gap-4">
-           {agents.map((agent) => (
-            <div key={agent.id} className="flex items-center space-x-4">
-             <span className="flex-grow">{agent.name}</span>
-             <div className="flex flex-col w-24">
-              <label htmlFor={agent.id} className="text-sm">
-               Quantity
-              </label>
-              <Input
-               id={agent.id}
-               type="number"
-               min="0"
-               value={agent.quantity}
-               onChange={(e) => handleQuantityChange(agent.id, e.target.value)}
-               className="w-full"
-              />
-             </div>
-            </div>
-           ))}
-          </div>
-         </div>
-
-         <Button
-          variant="contained"
-          color="primary"
-          onClick={handleAssign}
-          disabled={submitting || selectedClients.length === 0}
-          className="w-full"
-         >
-          {submitting ? "Assigning..." : "Assign Clients"}
-         </Button> */}
-
-        {/* <div className="grid gap-4">
-         <h3 className="text-lg font-medium">Assign to Agents</h3>
-
-         <TableContainer>
-          <Table>
-           <TableHead>
-            <TableRow>
-             <TableCell>Agent Name</TableCell>
-             <TableCell>Quantity</TableCell>
-            </TableRow>
-           </TableHead>
-           <TableBody>
-            {agents.map((agent) => (
-             <TableRow key={agent.id}>
-              <TableCell>{agent.name}</TableCell>
-              <TableCell>
-               <Input
-                type="number"
-                min="0"
-                value={agent.quantity}
-                onChange={(e) => handleQuantityChange(agent.id, e.target.value)}
-                className="w-full"
-               />
-              </TableCell>
-             </TableRow>
-            ))}
-           </TableBody>
-           <TableFooter>
-            <TableRow>
-             <TableCell colSpan={2}>
-              <Button
-               variant="contained"
-               color="primary"
-               onClick={handleAssign}
-               disabled={submitting || selectedClients.length === 0}
-               className="w-full"
-              >
-               {submitting ? "Assigning..." : "Assign Clients"}
-              </Button>
-             </TableCell>
-            </TableRow>
-           </TableFooter>
-          </Table>
-         </TableContainer>
-        </div> */}
-
-
-
-
-        {/* <div className="grid gap-4">
-         <h3 className="text-lg font-medium">Assign to Agents</h3>
-         <div className="grid gap-4">
-          {agents.map((agent) => (
-           <div key={agent.id} className="flex items-center space-x-4">
-            <span className="flex-grow">{agent.name}</span>
-            <Input
-             type="number"
-             min="0"
-             value={agent.quantity}
-             onChange={(e) => handleQuantityChange(agent.id, e.target.value)}
-             className="w-24"
-            />
-           </div>
-          ))}
-         </div>
-        </div>
-
-        <Button
-         variant="contained"
-         color="primary"
-         onClick={handleAssign}
-         disabled={submitting || selectedClients.length === 0}
-         className="w-full"
-        >
-         {submitting ? "Assigning..." : "Assign Clients"}
-        </Button>
-        */}
        </div>
-      </>
-     )}
+      </div>
+     </>
     </CardContent>
    </Card>
-  </div>
+  </div >
  );
 };
 

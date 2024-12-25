@@ -267,6 +267,20 @@ const TheSideBar = () => {
                 selected={selected}
                 setSelected={setSelected}
               />
+              <Item
+                title="Input New Clients"
+                to="/getContacts"
+                icon={<PeopleOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="assign Clients"
+                to="/assignContacts"
+                icon={<PeopleOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
             </SubMenu>
             {/* <Item
               title="Manage Team"

@@ -280,10 +280,10 @@ const TheSideBar = () => {
             </SubMenu>
             <SubMenu
               label="Other"
-        
+
               icon={<PeopleOutlinedIcon />}
               style={{ color: colors.grey[100] }}
-          >
+            >
               <Item
                 title="Done Deal"
                 to="/done_deal"
@@ -313,7 +313,7 @@ const TheSideBar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-          
+
             <Item
               title="To-Do List
 "
@@ -324,7 +324,7 @@ const TheSideBar = () => {
             />
 
             {/* Nested SubMenu for Sales Agent Pages */}
-         
+
             <Item
               title="Calendar"
               to="/calendar"
@@ -402,8 +402,7 @@ const TheSideBar = () => {
        setSelected={setSelected}
       /> */}
             <Item
-              title="To-Do List
-"
+              title="To-Do List"
               to="/todolist"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
@@ -419,6 +418,20 @@ const TheSideBar = () => {
             <Item
               title="Manage Team"
               to="/team"
+              icon={<PeopleOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Input New Clients"
+              to="/getContacts"
+              icon={<PeopleOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="assign Clients"
+              to="/assignContacts"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
