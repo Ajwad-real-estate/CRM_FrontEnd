@@ -80,13 +80,13 @@ export default function ActionHistory({ lead }) {
               variant="subtitle1"
               sx={{ flex: 1, textAlign: "center" }}
             >
-              Type ID
+              Action
             </Typography>
             <Typography
               variant="subtitle1"
               sx={{ flex: 1, textAlign: "center" }}
             >
-              Status ID
+              Status
             </Typography>
             <Typography
               variant="subtitle1"
@@ -121,16 +121,16 @@ export default function ActionHistory({ lead }) {
                 {row.comment}
               </Typography>
               <Typography variant="body2" sx={{ flex: 1, textAlign: "center" }}>
-                {formatDat(row.date)}
+                {row.date ? formatDat(row.date) : "N/A"}
               </Typography>
               <Typography variant="body2" sx={{ flex: 1, textAlign: "center" }}>
-                {formatTim(row.time)}
+                {row.time ? formatTim(row.time) : "N/A"}
               </Typography>
               <Typography variant="body2" sx={{ flex: 1, textAlign: "center" }}>
-                {typeOptions[row.type_id]}
+                {typeOptions[row.type_id - 1]}
               </Typography>
               <Typography variant="body2" sx={{ flex: 1, textAlign: "center" }}>
-                {statusOptions[row.status_id]}
+                {statusOptions[row.status_id - 1]}
               </Typography>
               <Typography variant="body2" sx={{ flex: 1, textAlign: "center" }}>
                 {row.completed ? "Yes" : "No"}
@@ -148,7 +148,12 @@ export default function ActionHistory({ lead }) {
         <Typography
           sx={{ color: "#ff0808", fontSize: "1.4rem", textAlign: "center" }}
         >
-          Error Fetching Actions{" "}
+          Failed To Fetch Actions
+        </Typography>
+      )}
+      {!isError && !isPending && !data?.length && data?.message && (
+        <Typography sx={{ textAlign: "center", fontSize: "1.4rem" }}>
+          {data.message}
         </Typography>
       )}
     </Box>

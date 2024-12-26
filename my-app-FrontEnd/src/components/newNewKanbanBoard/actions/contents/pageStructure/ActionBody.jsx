@@ -67,8 +67,11 @@ import Dialogue from "./Dialogue";
 import Reservation from "./Reservation";
 import Classification from "../NextModal";
 import { useAddActions } from "../../useAddAction";
-import { processDate } from "./dateHELPER";
+import { convertToDateTimeLocalFormat, processDate } from "./dateHELPER";
 import toast from "react-hot-toast";
+import { useCheckAction } from "../../useActionCheckCompleted";
+import { useClientActions } from "../../useGetClientActions";
+import { useUpdateActions } from "../../useUpdateActionClient";
 const actionOptions = ["Follow Up", "Meeting", "Follow Up after Meeting"];
 const cancelOptions = [
   "Location",
@@ -79,12 +82,11 @@ const cancelOptions = [
   "Other Reason",
   "المدام قالت لأ",
 ];
-function ActionBody({ lead, data }) {
+function ActionBody({ lead, onShut }) {
   //
 
   //
-  console.log("lead");
-  console.log(lead);
+
   const [activeTab, setActiveTab] = useState(0);
 
   const handleTabChange = (event, newValue) => {
@@ -105,6 +107,7 @@ function ActionBody({ lead, data }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   //Modal Options
+  // const { data, isPending: isLod } = useClientActions(lead.id);
   const handleCloseModal = () => {
     setOpenModal(false);
   };
@@ -152,30 +155,64 @@ function ActionBody({ lead, data }) {
   //   }
   // };
   const { isAdding, addActionContent } = useAddActions(lead.id);
+  const { nonCompletedActions, isPending } = useCheckAction(lead.id);
+  useEffect(
+    function () {
+      if (nonCompletedActions) {
+        ("Messa");
+        setDateTime(
+          convertToDateTimeLocalFormat(
+            nonCompletedActions[0].date,
+            nonCompletedActions[0].time
+          ) || ""
+        );
+        setComment(nonCompletedActions[0].comment);
+        //data
+        setSelectedValue(nonCompletedActions[0].type_id - 1 || 0);
+      }
+    },
+    [nonCompletedActions]
+  );
+  const { updateActionContent, isUpdating } = useUpdateActions(lead.id);
   function handleSubmit() {
-    if (!lead?.id || !commentField) {
+    if (!lead?.id) {
       toast.error("Please fill in all required fields");
       return;
     }
-    console.log("lead.id");
-    console.log(lead.id);
+
     const addedActionObj = {
       client_id: lead.id,
-      // unit_id: null,
-      // project_id: null,
       completed: checked,
       answered: callCase,
       date: processDate(dateTime).date,
       time: processDate(dateTime).time,
-      // location: null,
       comment: commentField,
-      type_id: selectedValue,
-      status_id: activeTab,
+      type_id: selectedValue + 1,
+      status_id: activeTab + 1,
     };
-    console.log(addedActionObj);
-    console.log(activeTab);
-    addActionContent(addedActionObj);
+
+    const notCompletedAction = {
+      client_id: lead.id,
+      completed: checked,
+      date: processDate(dateTime).date,
+      time: processDate(dateTime).time,
+      type_id: selectedValue + 1,
+    };
+
+    if (Array.isArray(nonCompletedActions) && nonCompletedActions.length > 0) {
+      const actionToUpdate = checked ? addedActionObj : notCompletedAction;
+      updateActionContent({
+        actionData: actionToUpdate,
+        actionId: nonCompletedActions[0].id,
+      });
+    } else if (!checked) {
+      addActionContent(notCompletedAction);
+    }
+
+    // Rely on mutation callbacks to close the form
   }
+
+  function HandleCancel() {}
   return (
     <Box
       sx={{
@@ -218,6 +255,7 @@ function ActionBody({ lead, data }) {
             <TextField
               id="outlined-select-currency-native"
               select
+              value={selectedValue}
               defaultValue="Follow Up"
               slotProps={{
                 select: {
@@ -229,8 +267,8 @@ function ActionBody({ lead, data }) {
               {actionOptions.map((option, index) => (
                 <MenuItem
                   key={index}
-                  value={index + 1}
-                  onClick={() => handleSelectAction(index + 1)}
+                  value={index}
+                  onClick={() => handleSelectAction(index)}
                   sx={{
                     padding: "10px 20px", // Custom padding
                     transition: "all 0.3s ease",
@@ -245,19 +283,20 @@ function ActionBody({ lead, data }) {
                 </MenuItem>
               ))}
             </TextField>
-
-            <Checkbox
-              icon={<CheckCircleOutlineIcon />}
-              checkedIcon={<VerifiedIcon />}
-              checked={checked} // Bind checkbox state
-              onChange={handleCheckboxChange}
-              sx={{
-                color: colors.greenAccent[700],
-                "&.Mui-checked": {
-                  color: colors.greenAccent[600],
-                },
-              }}
-            />
+            {nonCompletedActions && (
+              <Checkbox
+                icon={<CheckCircleOutlineIcon />}
+                checkedIcon={<VerifiedIcon />}
+                checked={checked} // Bind checkbox state
+                onChange={handleCheckboxChange}
+                sx={{
+                  color: colors.greenAccent[700],
+                  "&.Mui-checked": {
+                    color: colors.greenAccent[600],
+                  },
+                }}
+              />
+            )}
           </Box>
         </Box>
         <Box>
@@ -451,6 +490,7 @@ function ActionBody({ lead, data }) {
                 borderStyle: "solid",
               },
             }}
+            onClick={HandleCancel}
           >
             Cancel
           </Button>

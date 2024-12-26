@@ -7,12 +7,10 @@ async function addAction(actionData) {
   const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
   // Validate required fields
-  if (!actionData.client_id || !actionData.type_id || !actionData.comment) {
-    throw new Error(
-      "Missing required fields: client_id, type_id, and comment are required"
-    );
+  if (!actionData.client_id || !actionData.type_id) {
+    throw new Error("Missing required fields: client_id, type_id,");
   }
-
+  console.log(actionData);
   // Create the payload with required and optional fields
   const payload = {
     client_id: actionData.client_id,
@@ -20,7 +18,7 @@ async function addAction(actionData) {
     comment: actionData.comment,
     // Optional fields
     completed: actionData.completed || false,
-    answered: actionData.answered || false,
+    answered: actionData.answered || null,
     date: actionData.date,
     time: actionData.time,
     location: actionData.location,

@@ -19,8 +19,6 @@ const Action = ({ open, onClose, onOpen, lead, onUpdate }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  console.log(lead);
-
   const { data, isPending, isError, error } = useClient(lead.id);
 
   const drawerContent = (
@@ -87,7 +85,7 @@ const Action = ({ open, onClose, onOpen, lead, onUpdate }) => {
         {TabValue === 1 && lead && <EditClient lead={lead} />}
         {TabValue === 2 && lead && <ActionHistory lead={lead} />}
         {TabValue === 3 && lead && !isPending && data && (
-          <ActionContent lead={lead} data={data} />
+          <ActionContent lead={lead} data={data} onClose={onClose} />
         )}
       </Box>
       {/* Content ----------------------------------------------------------------------------- */}

@@ -21,7 +21,7 @@ const FollowUpStat = ({ selectedIndex, setSelectedIndex }) => {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
 
-  const options = ["After 1 hour", "After 2 hours"];
+  const options = ["After 1 hour", "After 2 hours", "Staged date"];
 
   const handleClick = () => {
     console.info(`You clicked ${options[selectedIndex]}`);
