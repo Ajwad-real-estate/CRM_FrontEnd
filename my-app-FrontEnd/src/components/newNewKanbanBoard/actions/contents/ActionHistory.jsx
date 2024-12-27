@@ -148,12 +148,12 @@ export default function ActionHistory({ lead }) {
         <Typography
           sx={{ color: "#ff0808", fontSize: "1.4rem", textAlign: "center" }}
         >
-          Failed To Fetch Actions
+          {error.message}
         </Typography>
       )}
       {!isError && !isPending && !data?.length && data?.message && (
         <Typography sx={{ textAlign: "center", fontSize: "1.4rem" }}>
-          {data.message}
+          {error.message}
         </Typography>
       )}
     </Box>

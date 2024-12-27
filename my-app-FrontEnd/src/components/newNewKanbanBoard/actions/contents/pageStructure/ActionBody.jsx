@@ -100,7 +100,7 @@ function ActionBody({ lead }) {
   const [openModal, setOpenModal] = useState(false);
   const [pendingCheck, setPendingCheck] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-
+  const [reloaded, setReloaded] = useState(false);
   const queryClient = useQueryClient();
 
   const handleCloseModal = () => {
@@ -169,6 +169,8 @@ function ActionBody({ lead }) {
         actionData: addedActionObj,
         actionId: nonCompletedActions[0].id,
       });
+
+      //error
       setComment("");
       setDateTime("");
       setSelectedValue(0);
@@ -200,7 +202,6 @@ function ActionBody({ lead }) {
         setDateTime("");
         setSelectedValue(0);
         queryClient.setQueryData(["checked", lead.id], null);
-        window.location.reload();
       }
 
       // Invalidate queries for refetching
