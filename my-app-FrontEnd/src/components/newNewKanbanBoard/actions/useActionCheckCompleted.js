@@ -40,7 +40,7 @@ export function useCheckAction(clientID) {
     enabled: !!clientID,
     onError: (err) => {
       console.error(
-        "Error fetching Non Completed:",
+        "Error fetching Non Completed Actions",
         err.response || err.message
       );
     },

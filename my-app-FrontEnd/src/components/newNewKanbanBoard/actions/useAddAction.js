@@ -54,6 +54,9 @@ export function useAddActions(clientID) {
       queryClient.invalidateQueries({
         queryKey: ["clientActions", clientID],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["checked", clientID],
+      });
     },
     onError: (error) => {
       toast.error(error.message);

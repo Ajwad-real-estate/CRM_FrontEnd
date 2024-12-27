@@ -23,11 +23,11 @@ async function updateAction(actionData, actionId) {
     date: actionData.date,
     time: actionData.time,
     location: actionData.location || null,
-    status_id: actionData.status_id || null,
+    status_id: actionData.status_id,
   };
 
   try {
-    const response = await axios.patch(
+    const response = await axios.put(
       `${apiUrl}/api/actions/${actionId}`,
       payload,
       {
@@ -56,9 +56,15 @@ export function useUpdateActions(clientID) {
     onSuccess: () => {
       toast.success("Action Updated Successfully");
 
-      // Invalidate the query for client actions to trigger refetch
-      queryClient.invalidateQueries({
-        queryKey: ["clientActions", clientID],
+      // List of query keys to invalidate
+      const queriesToInvalidate = [
+        ["clientActions", clientID],
+        ["checked", clientID],
+      ];
+
+      // Invalidate each query
+      queriesToInvalidate.forEach((key) => {
+        queryClient.invalidateQueries({ queryKey: key });
       });
     },
     onError: (error) => {

@@ -72,6 +72,7 @@ import toast from "react-hot-toast";
 import { useCheckAction } from "../../useActionCheckCompleted";
 import { useClientActions } from "../../useGetClientActions";
 import { useUpdateActions } from "../../useUpdateActionClient";
+import { useQueryClient } from "@tanstack/react-query";
 const actionOptions = ["Follow Up", "Meeting", "Follow Up after Meeting"];
 const cancelOptions = [
   "Location",
@@ -82,23 +83,17 @@ const cancelOptions = [
   "Other Reason",
   "المدام قالت لأ",
 ];
-function ActionBody({ lead, onShut }) {
-  //
-
-  //
-
+function ActionBody({ lead }) {
   const [activeTab, setActiveTab] = useState(0);
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
   };
+
   const [dateTime, setDateTime] = useState("");
   const [callCase, setCall] = useState(true);
 
-  // Next Action
-  // const [searchValue, setSearchValue] = useState("");
-  //const [selectedAction, setSelectedAction] = useState("");
-  const [selectedValue, setSelectedValue] = useState(1);
+  const [selectedValue, setSelectedValue] = useState(0);
   const [commentField, setComment] = useState("");
   const [selectedCancel, setSelectedCancel] = useState("");
   const [checked, setChecked] = useState(false);
@@ -106,91 +101,82 @@ function ActionBody({ lead, onShut }) {
   const [pendingCheck, setPendingCheck] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  //Modal Options
-  // const { data, isPending: isLod } = useClientActions(lead.id);
+  const queryClient = useQueryClient();
+
   const handleCloseModal = () => {
     setOpenModal(false);
   };
 
   const handleCheckboxChange = (event) => {
-    // Prevent immediate change and open the modal
     setPendingCheck(event.target.checked);
     setOpenModal(true);
   };
 
-  const handleModalResponse = (accept) => {
-    setChecked(accept); // Update checkbox state based on modal response
-    setOpenModal(false); // Close the modal
-  };
-  //
-
   const handleSelectAction = (option) => {
     setSelectedValue(option);
   };
+
   const handleSelectCancel = (option) => {
     setSelectedCancel(option);
   };
-  //
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
   const handleDateChange = (event) => {
     setDateTime(event.target.value);
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const result = await AddAction({
-  //       completed: checked,
-  //       answered: false,
-  //       date: processDate(dateTime).date,
-  //       time: processDate(dateTime).time,
-  //       comment: commentField,
-  //       type_id: selectedValue,
-  //       status_id: activeTab,
-  //     });
-  //   } catch (err) {
-  //     console.error("Error adding action:", err);
-  //   }
-  // };
+  // Fetch data for adding and checking actions
   const { isAdding, addActionContent } = useAddActions(lead.id);
   const { nonCompletedActions, isPending } = useCheckAction(lead.id);
-  useEffect(
-    function () {
-      if (nonCompletedActions) {
-        ("Messa");
-        setDateTime(
-          convertToDateTimeLocalFormat(
-            nonCompletedActions[0].date,
-            nonCompletedActions[0].time
-          ) || ""
-        );
-        setComment(nonCompletedActions[0].comment);
-        //data
-        setSelectedValue(nonCompletedActions[0].type_id - 1 || 0);
-      }
-    },
-    [nonCompletedActions]
-  );
-  const { updateActionContent, isUpdating } = useUpdateActions(lead.id);
-  function handleSubmit() {
-    if (!lead?.id) {
-      toast.error("Please fill in all required fields");
-      return;
-    }
 
+  // UseEffect to populate the form from nonCompletedActions
+  useEffect(() => {
+    if (nonCompletedActions && nonCompletedActions.length > 0) {
+      setDateTime(
+        convertToDateTimeLocalFormat(
+          nonCompletedActions[0].date,
+          nonCompletedActions[0].time
+        ) || ""
+      );
+      setSelectedValue(nonCompletedActions[0].type_id - 1 || 0);
+    } else {
+      // Reset states if no nonCompletedActions exist
+      setDateTime("");
+      setSelectedValue(0);
+      setChecked(false);
+      setComment("");
+    }
+  }, [nonCompletedActions]);
+
+  const { updateActionContent, isUpdating } = useUpdateActions(lead.id);
+  const handleModalResponse = (accept) => {
     const addedActionObj = {
       client_id: lead.id,
-      completed: checked,
+      completed: true,
       answered: callCase,
       date: processDate(dateTime).date,
       time: processDate(dateTime).time,
-      comment: commentField,
+      comment: commentField || "N/A",
       type_id: selectedValue + 1,
       status_id: activeTab + 1,
     };
+    setChecked(accept);
+    setOpenModal(false);
+    if (accept) {
+      updateActionContent({
+        actionData: addedActionObj,
+        actionId: nonCompletedActions[0].id,
+      });
+      setComment("");
+      setDateTime("");
+      setSelectedValue(0);
+      queryClient.setQueryData(["checked", lead.id], null);
+    }
+  };
 
+  function handleSubmit() {
     const notCompletedAction = {
       client_id: lead.id,
       completed: checked,
@@ -200,16 +186,32 @@ function ActionBody({ lead, onShut }) {
     };
 
     if (Array.isArray(nonCompletedActions) && nonCompletedActions.length > 0) {
-      const actionToUpdate = checked ? addedActionObj : notCompletedAction;
+      const actionToUpdate = notCompletedAction;
+
+      // Update action
+      console.log(actionToUpdate);
       updateActionContent({
         actionData: actionToUpdate,
         actionId: nonCompletedActions[0].id,
       });
-    } else if (!checked) {
-      addActionContent(notCompletedAction);
-    }
+      if (checked) {
+        console.log(nonCompletedActions);
+        setComment("");
+        setDateTime("");
+        setSelectedValue(0);
+        queryClient.setQueryData(["checked", lead.id], null);
+        window.location.reload();
+      }
 
-    // Rely on mutation callbacks to close the form
+      // Invalidate queries for refetching
+      queryClient.invalidateQueries(["checked", lead.id]);
+      queryClient.invalidateQueries(["clientActions", lead.id]);
+    } else if (!checked) {
+      // Add action if no existing nonCompletedActions
+      addActionContent(notCompletedAction);
+      queryClient.invalidateQueries(["checked", lead.id]);
+      queryClient.invalidateQueries(["clientActions", lead.id]);
+    }
   }
 
   function HandleCancel() {}
