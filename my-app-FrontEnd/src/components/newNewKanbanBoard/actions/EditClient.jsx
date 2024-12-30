@@ -14,7 +14,7 @@ import ProgressCircle from "../../ProgressCircle";
 import { useTheme } from "@emotion/react";
 import { tokens } from "../../../theme";
 import { useUpdateClient } from "./useUpdateClient";
-import ClientData from "../ClientData";
+// import ClientData from "../ClientData";
 
 const typeOptions = ["Warm", "Cold"];
 const statusOptions = [
@@ -91,12 +91,10 @@ function EditClient({ lead }) {
       age,
       email,
       type,
-
       budget,
       street,
       phone_numbers: numbersList,
     };
-
     editClient({ clientID: data.id, ClientData });
   };
   return (

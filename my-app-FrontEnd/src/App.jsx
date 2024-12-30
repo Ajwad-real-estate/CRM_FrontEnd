@@ -53,7 +53,7 @@ import NewNewKanbanBoard from "./components/newNewKanbanBoard/NewKanbanBoard";
 import GetContacts from "./components/getContacts/GetContacts";
 import { Box } from "@mui/material";
 import NetworkStatus from "./NetworkStatus";
-import ClientData from "./components/newNewKanbanBoard/ClientData";
+// import ClientData from "./components/newNewKanbanBoard/ClientData";
 import Cookies from "js-cookie"; // Import js-cookie
 import { useNavigate } from "react-router-dom"; // For navigation
 import Sales from "./scenes/team/sales";
@@ -130,7 +130,7 @@ function App() {
         </Routes>
 
         <Routes>
-         <Route path="getClientsData" element={<ClientData />} />
+         {/* <Route path="getClientsData" element={<ClientData />} /> */}
          <Route path="/" element={<Dashboard />} />
          <Route path="/team" element={<Team />} />
          <Route path="/CreateAccForm" element={<CreateAccForm />} />

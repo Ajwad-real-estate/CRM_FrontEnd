@@ -67,11 +67,6 @@ export const ActionMenu = ({
                 isCompleted ? onCancel() : onComplete();
             },
         },
-        {
-            icon: <DeleteIcon fontSize="small" />,
-            text: 'Delete',
-            onClick: handleDeleteClick,
-        },
     ];
 
     return (

@@ -20,6 +20,10 @@ const Action = ({ open, onClose, onOpen, lead, onUpdate }) => {
   const colors = tokens(theme.palette.mode);
 
   const { data, isPending, isError, error } = useClient(lead.id);
+  console.log("data")
+  console.log(data)
+  console.log("lead")
+  console.log(lead)
 
   const drawerContent = (
     <Box

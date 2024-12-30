@@ -18,10 +18,12 @@ export const useUpdateAction = () => {
       const response = await axios.put(
         `${apiUrl}/api/actions/${actionId}`,
         actionData,
+
+        // body: JSON.stringify(actionData),
         {
           headers: {
             'Content-Type': 'application/json',
-             Authorization: `Bearer ${Cookies.get("accessToken")}`,
+            Authorization: `Bearer ${Cookies.get("accessToken")}`,
           },
         }
       );

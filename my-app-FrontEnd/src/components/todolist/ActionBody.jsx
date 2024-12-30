@@ -1,12 +1,13 @@
 import { Box, Button, Checkbox, InputAdornment, MenuItem, Popper, TextField, Typography, useTheme } from "@mui/material";
-import FollowUpStat from "./FollowUpStat";
+// import FollowUpStat from "./FollowUpStat";
 import { useEffect, useState } from "react";
-import { tokens } from "../../../../../theme";
-import CallGroup from "./CallGroup";
+// import { tokens } from "../../../../../theme";
+// import CallGroup from "./CallGroup";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import VerifiedIcon from "@mui/icons-material/Verified";
-import Dialogue from "./Dialogue";
-import Reservation from "./Reservation";
+// import Dialogue from "./Dialogue";
+// import Reservation from "./Reservation";
+import { tokens } from "../../theme";
 
 
 
@@ -360,12 +361,16 @@ function ActionBody({ agentId, clientId, unitId, projectId }) {
      paddingTop: "24px",
     }}
    >
-    <CallGroup />
+    {/* <CallGroup /> */}
     {selectedValue !== "Cancel" &&
-     selectedValue !== "Cancel after Meeting" && <FollowUpStat />}
+     selectedValue !== "Cancel after Meeting" &&
+      // <FollowUpStat />
+      <div></div>
+      }
    </Box>
    {selectedValue === "Reservation" ? (
-    <Reservation />
+    // <Reservation />
+    <div></div>
    ) : (
     <>
      <Box
@@ -456,11 +461,11 @@ function ActionBody({ agentId, clientId, unitId, projectId }) {
     </Box>
    </Box>{" "}
    {/* <Box sx={{ gridArea: "commentInfo", backgroundColor: "orange" }}>opt</Box> */}
-   <Dialogue
+   {/* <Dialogue
     open={openModal}
     onClose={handleCloseModal}
     setAcceptance={handleModalResponse}
-   />
+   /> */}
   </Box>
  );
 }

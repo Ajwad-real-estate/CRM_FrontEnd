@@ -16,6 +16,7 @@ import Action from "./actions/Action";
 import { LeadOptionsProvider } from "./actions/LeadContext";
 import Cookies from "js-cookie";
 import ProgressCircle from "../ProgressCircle";
+import { useFetchClients } from "./ClientData";
 
 // function transformData(clients) {
 //   const columns = {};
@@ -119,7 +120,9 @@ const KanbanBoard = () => {
   if (currentSublink.includes("/NewNewKanbanBoard")) {
     currentSublink = currentSublink.replace("/NewNewKanbanBoard", "");
   }
-
+  
+  // const { response, error, isLoading, isError, refetch } = useFetchClients();
+  // console.log(response)
   useEffect(() => {
     const fetchClients = async () => {
       try {
