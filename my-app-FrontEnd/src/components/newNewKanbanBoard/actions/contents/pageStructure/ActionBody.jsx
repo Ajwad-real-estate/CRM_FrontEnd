@@ -51,7 +51,7 @@ function ActionBody({ lead }) {
   const [dateTime, setDateTime] = useState("");
   const [callCase, setCall] = useState(true);
   const [isMoreDetails, setIsMoreDetails] = useState(false);
-
+  const [errorDisplay, setErrorDisplay] = useState(false);
   const [selectedValue, setSelectedValue] = useState(0);
   const [commentField, setComment] = useState("");
   const [selectedCancel, setSelectedCancel] = useState("");
@@ -115,6 +115,10 @@ function ActionBody({ lead }) {
 
   const { updateActionContent, isUpdating } = useUpdateActions(lead.id);
   const handleModalResponse = (accept) => {
+    if ((!commentField || !dateTime) && accept) {
+      toast.error("Comment Required");
+      return;
+    }
     const addedActionObj = {
       client_id: lead.id,
       completed: true,
@@ -153,7 +157,10 @@ function ActionBody({ lead }) {
       time: processDate(dateTime).time,
       type_id: selectedValue + 1,
     };
-
+    if (!dateTime) {
+      toast.error("Date Field Required");
+      return;
+    }
     if (Array.isArray(nonCompletedActions) && nonCompletedActions.length > 0) {
       const actionToUpdate = notCompletedAction;
 

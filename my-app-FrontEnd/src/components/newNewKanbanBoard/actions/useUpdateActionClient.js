@@ -13,6 +13,9 @@ async function updateAction(actionData, actionId) {
     throw new Error("Missing required fields: actionId, type_id");
   }
   console.log(actionData);
+  console.log(actionData.location);
+  console.log(actionData.unit_id);
+  console.log(actionData.project_id);
   // Create the payload with required and optional fields
   const payload = {
     type_id: actionData.type_id,
@@ -22,7 +25,7 @@ async function updateAction(actionData, actionId) {
     answered: actionData.answered || null,
     date: actionData.date,
     time: actionData.time,
-    location: actionData.location || null,
+    location: actionData.location,
     status_id: actionData.status_id || null,
     unit_id: actionData.unit_id || null,
     project_id: actionData.project_id || null,
