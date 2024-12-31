@@ -1,55 +1,12 @@
-//  },
-//  body: JSON.stringify({
-//   agent_id: actionData.agentId,
-//   client_id: actionData.clientId,
-//   unit_id: actionData.unitId,
-//   project_id: actionData.projectId,
-//   completed: false,
-//   answered: false,
-//   date: actionData.date,
-//   time: new Date().toLocaleTimeString(),
-//   location: actionData.location,
-//   comment: actionData.comment,
-//   type_id: getTypeId(actionData.selectedValue),
-//   status_id: actionData.statusId
-//  })
-// });
-//  const handleSave = async () => {
-//   try {
-//    const actionData = {
-//     agentId,
-//     clientId,
-//     unitId,
-//     projectId,
-//     selectedValue,
-//     date: dateTime,
-//     comment,
-//     answered,
-//     statusId,
-//     location: selectedValue === 'Meeting' ? 'Meeting Location' : null
-//    };
-
-// const handleSubmit = async (e) => {
-//   e.preventDefault();
-//   try {
-//     const result = await AddAction({
-//       completed: checked,
-//       answered: false,
-//       date: processDate(dateTime).date,
-//       time: processDate(dateTime).time,
-//       comment: commentField,
-//       type_id: selectedValue,
-//       status_id: activeTab,
-//     });
-//   } catch (err) {
-//     console.error("Error adding action:", err);
-//   }
-// };
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import {
   Box,
   Button,
   Checkbox,
   CircularProgress,
+  Collapse,
+  IconButton,
   InputAdornment,
   MenuItem,
   Popper,
@@ -84,7 +41,8 @@ const cancelOptions = [
   "المدام قالت لأ",
 ];
 function ActionBody({ lead }) {
-  const [activeTab, setActiveTab] = useState(0);
+  //queryClient
+  const [activeTab, setActiveTab] = useState(lead.statusID - 1);
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -92,6 +50,7 @@ function ActionBody({ lead }) {
 
   const [dateTime, setDateTime] = useState("");
   const [callCase, setCall] = useState(true);
+  const [isMoreDetails, setIsMoreDetails] = useState(false);
 
   const [selectedValue, setSelectedValue] = useState(0);
   const [commentField, setComment] = useState("");
@@ -100,13 +59,17 @@ function ActionBody({ lead }) {
   const [openModal, setOpenModal] = useState(false);
   const [pendingCheck, setPendingCheck] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [reloaded, setReloaded] = useState(false);
+  const [Location, setLocation] = useState("");
+  const [unitID, setUnitID] = useState("");
+  const [projectID, setProjectID] = useState("");
   const queryClient = useQueryClient();
 
   const handleCloseModal = () => {
     setOpenModal(false);
   };
-
+  const handleToggleExpand = () => {
+    setIsMoreDetails(!isMoreDetails);
+  };
   const handleCheckboxChange = (event) => {
     setPendingCheck(event.target.checked);
     setOpenModal(true);
@@ -161,6 +124,9 @@ function ActionBody({ lead }) {
       comment: commentField || "N/A",
       type_id: selectedValue + 1,
       status_id: activeTab + 1,
+      location: Location,
+      project_id: projectID,
+      unit_id: unitID,
     };
     setChecked(accept);
     setOpenModal(false);
@@ -175,6 +141,7 @@ function ActionBody({ lead }) {
       setDateTime("");
       setSelectedValue(0);
       queryClient.setQueryData(["checked", lead.id], null);
+      queryClient.invalidateQueries({ queryKey: ["clientsList"] });
     }
   };
 
@@ -404,31 +371,78 @@ function ActionBody({ lead }) {
               width: "100%",
             }}
           >
-            <Typography
-              variant="body1"
-              component="label"
-              htmlFor="custom-textfield"
-            >
-              Comment
-            </Typography>
-
-            <TextField
-              id="outlined-multiline-static"
-              multiline
-              rows={5}
-              variant="outlined"
-              value={commentField}
-              onChange={(e) => setComment(e.target.value)}
+            <Box
               sx={{
                 width: "100%",
-                height: "80%",
-                bgcolor: colors.primary[800],
-                borderRadius: "5px",
-                "& .MuiOutlinedInput-notchedOutline": {
-                  border: "none", // Removes the border
-                },
               }}
-            />
+            >
+              <Typography
+                variant="body1"
+                component="label"
+                htmlFor="custom-textfield"
+              >
+                Comment
+              </Typography>
+
+              <TextField
+                id="outlined-multiline-static"
+                multiline
+                rows={5}
+                variant="outlined"
+                value={commentField}
+                onChange={(e) => setComment(e.target.value)}
+                sx={{
+                  width: "100%",
+                  height: "80%",
+                  bgcolor: colors.primary[800],
+                  borderRadius: "5px",
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    border: "none", // Removes the border
+                  },
+                }}
+              />
+            </Box>
+            <Box>
+              <Box display="flex" alignItems="center" mt={2}>
+                <Typography variant="body1" sx={{ flexGrow: 1 }}>
+                  {isMoreDetails ? "Show Less" : "More Field Details"}
+                </Typography>
+                <IconButton onClick={handleToggleExpand}>
+                  {isMoreDetails ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                </IconButton>
+              </Box>
+              <Collapse in={isMoreDetails}>
+                <Box mt={2}>
+                  <TextField
+                    label="Location"
+                    value={Location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    margin="normal"
+                  />
+                  <TextField
+                    label="Project ID"
+                    value={projectID}
+                    onChange={(e) => setProjectID(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    margin="normal"
+                  />
+                  <TextField
+                    label="Unit ID"
+                    value={unitID}
+                    onChange={(e) => setUnitID(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    margin="normal"
+                  />
+                </Box>
+              </Collapse>
+            </Box>
           </Box>
         </>
       )}

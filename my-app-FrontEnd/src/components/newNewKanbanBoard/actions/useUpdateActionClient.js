@@ -23,7 +23,9 @@ async function updateAction(actionData, actionId) {
     date: actionData.date,
     time: actionData.time,
     location: actionData.location || null,
-    status_id: actionData.status_id,
+    status_id: actionData.status_id || null,
+    unit_id: actionData.unit_id || null,
+    project_id: actionData.project_id || null,
   };
 
   try {

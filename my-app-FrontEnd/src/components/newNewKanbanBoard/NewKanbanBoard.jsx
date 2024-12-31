@@ -17,6 +17,8 @@ import { LeadOptionsProvider } from "./actions/LeadContext";
 import Cookies from "js-cookie";
 import ProgressCircle from "../ProgressCircle";
 import { useFetchClients } from "./ClientData";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import useClients from "./useMainKanbanData";
 
 // function transformData(clients) {
 //   const columns = {};
@@ -89,6 +91,7 @@ function transformData(clients) {
           ? client.phone_numbers[0]
           : "No Phone",
       email: client.email || "No Email",
+      statusID: client.status_id,
     };
 
     columns[statusKey].leadIds.push(client.id);
@@ -108,59 +111,66 @@ function transformData(clients) {
 
 const KanbanBoard = () => {
   const [clients, setClients] = useState([]);
-  const [error, setError] = useState(null);
   const location = useLocation();
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const theme = useTheme();
-
+  const queryClient = useQueryClient();
   let currentSublink = location.pathname;
   if (currentSublink.includes("/NewNewKanbanBoard/")) {
     currentSublink = currentSublink.replace("/NewNewKanbanBoard/", "");
+    queryClient.invalidateQueries({ queryKey: ["clientsList"] });
   }
   if (currentSublink.includes("/NewNewKanbanBoard")) {
     currentSublink = currentSublink.replace("/NewNewKanbanBoard", "");
+    queryClient.invalidateQueries({ queryKey: ["clientsList"] });
   }
-  
+
   // const { response, error, isLoading, isError, refetch } = useFetchClients();
   // console.log(response)
-  useEffect(() => {
-    const fetchClients = async () => {
-      try {
-        // const response = await fetch(`http://localhost:3000/api/clients?status=${currentSublink}`, {
-        const response = await fetch(
-          `http://localhost:3000/api/clients?status=${currentSublink}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${Cookies.get("accessToken")}`,
-            },
-          }
-        );
-        if (!response.ok) {
-          throw new Error(`Error: ${response.statusText}`);
-        }
+  const { data: io, isPending } = useClients(currentSublink);
+  useEffect(
+    function () {
+      setClients(io);
+      console.log(io);
+    },
+    [currentSublink, io]
+  );
+  // useEffect(() => {
+  //   const fetchClients = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         `http://localhost:3000/api/clients?status=${currentSublink}`,
+  //         {
+  //           method: "GET",
+  //           headers: {
+  //             Authorization: `Bearer ${Cookies.get("accessToken")}`,
+  //           },
+  //         }
+  //       );
 
-        const dataFromApi = await response.json();
-        console.log(dataFromApi);
-        setClients(dataFromApi);
-      } catch (err) {
-        console.error(err);
-        setError(err.message);
-      }
-    };
+  //       if (!response.ok) {
+  //         throw new Error(`Error: ${response.statusText}`);
+  //       }
 
-    fetchClients();
-  }, [currentSublink]);
+  //       const dataFromApi = await response.json();
+  //       setClients(dataFromApi);
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   };
+
+  //   fetchClients();
+  // }, [currentSublink]);
 
   const [data, setData] = useState({ columns: {}, leads: {} });
   console.log("data");
   console.log(data);
   useEffect(() => {
-    if (clients.length > 0) {
+    if (clients?.length > 0) {
       const initialData = transformData(clients);
       setData(initialData);
     }
-  }, [clients]);
+  }, [clients, io]);
 
   const [selectedLead, setSelectedLead] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -216,7 +226,6 @@ const KanbanBoard = () => {
         tag.toLowerCase().includes(searchQuery.toLowerCase())
       )
   );
-
   const updateLead = (updatedLead) => {
     setData((prevData) => {
       const { id } = updatedLead;

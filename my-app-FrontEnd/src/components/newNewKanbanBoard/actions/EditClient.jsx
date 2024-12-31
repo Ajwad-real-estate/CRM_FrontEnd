@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
+  CircularProgress,
   FormControl,
   MenuItem,
   Select,
@@ -13,18 +14,9 @@ import { useClient } from "./useKanban";
 import ProgressCircle from "../../ProgressCircle";
 import { useTheme } from "@emotion/react";
 import { tokens } from "../../../theme";
-import { useUpdateClient } from "./useUpdateClient";
+import { useUpdateClient } from "./useEditCient";
+import { useQueryClient } from "@tanstack/react-query";
 // import ClientData from "../ClientData";
-
-const typeOptions = ["Warm", "Cold"];
-const statusOptions = [
-  "New",
-  "Qualified",
-  "Reserved",
-  "Archive",
-  "Done Deal",
-  "Lost",
-];
 
 function capitalize(word) {
   if (!word) return ""; // Handle empty input
@@ -32,7 +24,10 @@ function capitalize(word) {
 }
 
 function EditClient({ lead }) {
-  const { data, isLoading, isSHIT, badError } = useClient(lead.id);
+  const queryClient = useQueryClient();
+
+  const { data, isLoading, isError, error } = useClient(lead.id);
+  const { isUpdating, updateClientData } = useUpdateClient(lead.id);
   console.log(data);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -40,31 +35,41 @@ function EditClient({ lead }) {
   const [name, setName] = useState("");
   const [age, setAge] = useState(1);
   const [email, setEmail] = useState("");
-  const [type, setType] = useState("");
-  const [status, setStatus] = useState("");
+  const [type, setType] = useState(0);
+  const [status, setStatus] = useState(0);
   const [budget, setBudget] = useState("");
   const [street, setStreet] = useState("");
   const [channel, setChannel] = useState("");
   const [numbersList, setNumbersList] = useState([]);
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
+  const [nationalID, setNationalID] = useState("");
 
+  const typeState = [
+    "New",
+    "Qualified",
+    "Reserved",
+    "Done Deal",
+    "Archieved",
+    "Lost",
+  ];
+  const StatusState = ["Follow Up", "Meeting", "Follow up after Meeting"];
   // Update state when data becomes available
   useEffect(() => {
     if (data) {
       setName(data.name || "");
       setAge(data.age || 1);
       setEmail(data.email || "");
-      setType(capitalize(data.type) || "");
-      setStatus(capitalize(data.status) || "");
+      setType(data.type_id - 1 || 0);
+      setStatus(data.status_id - 1 || 0);
       setBudget(data.budget || "");
       setStreet(data.street || "");
-      setChannel(data.channel || "");
+      setChannel(data.channel_id || "");
       setNumbersList(data.phone_numbers || []);
+      setNationalID(data.nat_id || "");
     }
   }, [data]);
 
   // Handle loading and error states
-  const { isPending, isError, error, editClient } = useUpdateClient();
   const handleAdd = () => {
     if (newPhoneNumber.trim() !== "") {
       setNumbersList([...numbersList, newPhoneNumber.trim()]);
@@ -84,7 +89,7 @@ function EditClient({ lead }) {
       setNewPhoneNumber(value);
     }
   };
-  console.log(data.id);
+
   const handleEdit = () => {
     const clientData = {
       name,
@@ -93,9 +98,14 @@ function EditClient({ lead }) {
       type,
       budget,
       street,
+      nat_id: nationalID,
+      type_id: type + 1,
+      status_id: status + 1,
+      channel_id: channel,
       phone_numbers: numbersList,
     };
-    editClient({ clientID: data.id, ClientData });
+    updateClientData({ clientData, clientId: data.id });
+    queryClient.invalidateQueries({ queryKey: ["clientsList"] });
   };
   return (
     <Box
@@ -104,8 +114,9 @@ function EditClient({ lead }) {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        justifyContent: ` ${isPending || isError ? "center" : "space-around"}`,
-        alignItems: `${isPending || isError ? "center" : ""}`,
+        justifyContent: ` ${isLoading || isError ? "center" : "space-around"}`,
+        alignItems: `${isLoading || isError ? "center" : ""}`,
+        gap: "20px",
       }}
     >
       {data && (
@@ -199,6 +210,34 @@ function EditClient({ lead }) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-around",
+                width: "65%",
+                gap: "12px",
+              }}
+            >
+              <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
+                National ID
+              </Typography>
+              <TextField
+                variant="outlined"
+                sx={{ width: "100%" }}
+                value={nationalID}
+                onChange={(e) => setNationalID(e.target.value)}
+              />
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "30px",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-around",
                 width: "50%",
                 gap: "12px",
               }}
@@ -258,8 +297,8 @@ function EditClient({ lead }) {
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
                 >
-                  {statusOptions.map((option, i) => (
-                    <MenuItem value={option} key={i}>
+                  {StatusState.map((option, i) => (
+                    <MenuItem value={i} key={i}>
                       {option}
                     </MenuItem>
                   ))}
@@ -280,8 +319,8 @@ function EditClient({ lead }) {
               </Typography>
               <FormControl fullWidth sx={{ width: "55%" }}>
                 <Select value={type} onChange={(e) => setType(e.target.value)}>
-                  {typeOptions.map((option, i) => (
-                    <MenuItem value={option} key={i}>
+                  {typeState.map((option, i) => (
+                    <MenuItem value={i} key={i}>
                       {option}
                     </MenuItem>
                   ))}
@@ -329,7 +368,7 @@ function EditClient({ lead }) {
           />
         </>
       )}
-      {isPending && <ProgressCircle rotate />}
+      {isLoading && <ProgressCircle rotate />}
       {isError && (
         <Typography sx={{ color: colors.redAccent[600] }}>
           Failed Getting Client Data
@@ -344,8 +383,19 @@ function EditClient({ lead }) {
           alignSelf: "center",
         }}
         onClick={handleEdit}
+        disabled={isUpdating}
       >
-        {!isLoading ? "Submit Changes" : "Editing..."}
+        {!isUpdating ? (
+          "Submit Changes"
+        ) : (
+          <>
+            Editing
+            <CircularProgress
+              size={20}
+              sx={{ color: "white", marginRight: "8px" }}
+            />
+          </>
+        )}
       </Button>
     </Box>
   );

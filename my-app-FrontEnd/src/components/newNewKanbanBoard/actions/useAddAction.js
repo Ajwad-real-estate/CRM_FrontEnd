@@ -21,8 +21,10 @@ async function addAction(actionData) {
     answered: actionData.answered || null,
     date: actionData.date,
     time: actionData.time,
-    location: actionData.location,
+    location: actionData.location || null,
     status_id: actionData.status_id,
+    project_id: actionData.project_id || null,
+    unit_id: actionData.unit_id || null,
   };
   console.log("payload");
   console.log(payload);
