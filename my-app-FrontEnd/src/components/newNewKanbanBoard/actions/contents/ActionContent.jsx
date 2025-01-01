@@ -56,7 +56,7 @@ function ActionContent({ lead, data, onClose }) {
         </Box>
         <Box sx={centering}>
           <PhoneEnabledIcon />
-          <Typography variant="p">{lead.street}</Typography>
+          <Typography variant="p">{lead.phoneNumber}</Typography>
         </Box>
         <Box sx={centering}>
           <ReceiptLongIcon />

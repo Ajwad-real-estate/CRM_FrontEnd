@@ -62,6 +62,7 @@ function ActionBody({ lead }) {
   const [Location, setLocation] = useState("");
   const [unitID, setUnitID] = useState("");
   const [projectID, setProjectID] = useState("");
+  const [commentError, setCommentError] = useState(false);
   const queryClient = useQueryClient();
 
   const handleCloseModal = () => {
@@ -71,8 +72,14 @@ function ActionBody({ lead }) {
     setIsMoreDetails(!isMoreDetails);
   };
   const handleCheckboxChange = (event) => {
-    setPendingCheck(event.target.checked);
-    setOpenModal(true);
+    if (commentField) {
+      setCommentError(false);
+      setPendingCheck(event.target.checked);
+      setOpenModal(true);
+    } else {
+      setCommentError(true);
+      toast.error("Action Comment Field Required");
+    }
   };
 
   const handleSelectAction = (option) => {
@@ -88,6 +95,7 @@ function ActionBody({ lead }) {
 
   const handleDateChange = (event) => {
     setDateTime(event.target.value);
+    setErrorDisplay(false);
   };
 
   // Fetch data for adding and checking actions
@@ -112,13 +120,9 @@ function ActionBody({ lead }) {
       setComment("");
     }
   }, [nonCompletedActions]);
-
+  //Stage
   const { updateActionContent, isUpdating } = useUpdateActions(lead.id);
   const handleModalResponse = (accept) => {
-    if ((!commentField || !dateTime) && accept) {
-      toast.error("Comment Required");
-      return;
-    }
     const addedActionObj = {
       client_id: lead.id,
       completed: true,
@@ -150,42 +154,48 @@ function ActionBody({ lead }) {
   };
 
   function handleSubmit() {
-    const notCompletedAction = {
-      client_id: lead.id,
-      completed: checked,
-      date: processDate(dateTime).date,
-      time: processDate(dateTime).time,
-      type_id: selectedValue + 1,
-    };
-    if (!dateTime) {
-      toast.error("Date Field Required");
-      return;
-    }
-    if (Array.isArray(nonCompletedActions) && nonCompletedActions.length > 0) {
-      const actionToUpdate = notCompletedAction;
+    if (dateTime) {
+      const notCompletedAction = {
+        client_id: lead.id,
+        completed: checked,
+        date: processDate(dateTime).date,
+        time: processDate(dateTime).time,
+        type_id: selectedValue + 1,
+      };
 
-      // Update action
-      console.log(actionToUpdate);
-      updateActionContent({
-        actionData: actionToUpdate,
-        actionId: nonCompletedActions[0].id,
-      });
-      if (checked) {
-        console.log(nonCompletedActions);
-        setComment("");
-        setDateTime("");
-        setSelectedValue(0);
-        queryClient.setQueryData(["checked", lead.id], null);
+      setErrorDisplay(false);
+      if (
+        Array.isArray(nonCompletedActions) &&
+        nonCompletedActions.length > 0
+      ) {
+        const actionToUpdate = notCompletedAction;
+
+        // Update action
+        console.log(actionToUpdate);
+        updateActionContent({
+          actionData: actionToUpdate,
+          actionId: nonCompletedActions[0].id,
+        });
+        if (checked) {
+          console.log(nonCompletedActions);
+          setComment("");
+          setDateTime("");
+          setSelectedValue(0);
+          queryClient.setQueryData(["checked", lead.id], null);
+        }
+
+        // Invalidate queries for refetching
+        queryClient.invalidateQueries(["checked", lead.id]);
+        queryClient.invalidateQueries(["clientActions", lead.id]);
+      } else if (!checked) {
+        // Add action if no existing nonCompletedActions
+        addActionContent(notCompletedAction);
+        queryClient.invalidateQueries(["checked", lead.id]);
+        queryClient.invalidateQueries(["clientActions", lead.id]);
       }
-
-      // Invalidate queries for refetching
-      queryClient.invalidateQueries(["checked", lead.id]);
-      queryClient.invalidateQueries(["clientActions", lead.id]);
-    } else if (!checked) {
-      // Add action if no existing nonCompletedActions
-      addActionContent(notCompletedAction);
-      queryClient.invalidateQueries(["checked", lead.id]);
-      queryClient.invalidateQueries(["clientActions", lead.id]);
+    } else {
+      setErrorDisplay(true);
+      toast.error("Date Field is Required");
     }
   }
 
@@ -329,6 +339,11 @@ function ActionBody({ lead }) {
                 type="datetime-local"
                 value={dateTime}
                 onChange={handleDateChange}
+                required
+                error={errorDisplay && !dateTime ? true : false}
+                helperText={
+                  errorDisplay && !dateTime ? "Action Date is Required" : ""
+                }
                 slotProps={{
                   select: {
                     native: true,
@@ -336,7 +351,7 @@ function ActionBody({ lead }) {
                 }}
                 fullWidth
                 InputLabelProps={{
-                  shrink: true, // Ensures the label shrinks when using datetime-local
+                  shrink: true,
                 }}
               />
             </>
@@ -397,7 +412,16 @@ function ActionBody({ lead }) {
                 rows={5}
                 variant="outlined"
                 value={commentField}
-                onChange={(e) => setComment(e.target.value)}
+                helperText={
+                  commentError && !commentField
+                    ? "Action Comment is Required"
+                    : ""
+                }
+                error={commentError && !commentField ? true : false}
+                onChange={(e) => {
+                  setComment(e.target.value);
+                  setCommentError(false);
+                }}
                 sx={{
                   width: "100%",
                   height: "80%",
