@@ -1,167 +1,207 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
-
 import { formatDate } from "@fullcalendar/core";
 import {
- Box,
- List,
- ListItem,
- ListItemText,
- Typography,
- useTheme,
+  Box,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+  useTheme,
+  Tabs,
+  Tab,
 } from "@mui/material";
 import { tokens } from "../../theme";
-import { useSelector } from "react-redux";
 import { useTasks } from "../../components/todolist/useTasks";
 import formatTaskDates from "../../components/todolist/date-visualization";
 import ProgressCircle from "../../components/ProgressCircle";
 import EditDialogue from "./EditDialogue";
-import { format, parseISO } from "date-fns";
 
 const Calendar = () => {
- const theme = useTheme();
- const colors = tokens(theme.palette.mode);
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  const [activeTab, setActiveTab] = useState(0);
+  const { isPending, data, isError } = useTasks();
 
-  //const tasks = useSelector((state) => state.todolist.todos);
-  //  Task Date
-  const { isPending, data, error, isError } = useTasks();
-  let All_TASKS = [];
-  if (!isPending) {
-    All_TASKS = data.allTasks;
+  // Process tasks and actions data
+  const { formattedTasks, formattedActions } = useMemo(() => {
+    if (!data || isPending) {
+      return { formattedTasks: [], formattedActions: [] };
+    }
 
-    All_TASKS = All_TASKS.map((task) => formatTaskDates(task));
-    console.log(All_TASKS);
-  }
-  const allTasks = All_TASKS;
+    const tasks = data.allTasks.map((task) => formatTaskDates(task));
+    const actions = data.allActions.map((action) => formatTaskDates(action));
 
- //
+    const formatEvents = (items, type) =>
+      items.map((item, i) => ({
+      id: item?.id || `${type}-${i}`,
+        title: item?.title || item?.ClientName ||"Action" ,
+      status: item?.status || "pending",
+      priority_level: item?.priority_level || 1,
+      date: item?.date?.split(" ")[0] || new Date().toISOString(),
+      time: item?.time || "",
+      detail: item?.detail || "No Description",
+      start: type === 'action' ? null : item?.created_at?.split(" ")[0] || item?.date || new Date().toISOString(),
+      end: item?.date?.split(" ")[0] || new Date().toISOString(),
+      allDay: item?.allDay || false,
+      type: type, // Add type to distinguish between tasks and actions
+      }));
 
- //const [currentEvents, setCurrentEvents] = useState([]);
- let formattedEvents = [];
- if (data && !isPending) {
-  formattedEvents = allTasks.map((task, i) => ({
-   id: task?.id || i,
-   title: task?.title || "Untitled Task",
-   status: task?.status || "trying",
-   priority_level: task?.priority_level || 1,
-   date: task?.date?.split(" ")[0] || new Date().toISOString(),
-   time: task?.time || "",
-   detail: task?.detail || "No Description",
+    return {
+      formattedTasks: formatEvents(tasks, 'task'),
+      formattedActions: formatEvents(actions, 'action'),
+    };
+  }, [data, isPending]);
 
-   start:
-    task?.created_at?.split(" ")[0] ||
-    task?.date ||
-    new Date().toISOString(),
-   end: task?.date || new Date().toISOString(),
-   allDay: task?.allDay || false,
-  }));
- }
- return (
-  <>
-   {formatTaskDates && !isPending && (
-    <Box m="20px">
-     <Box display="flex" justifyContent="space-between">
-      {/* CALENDAR SIDEBAR */}
-      <Box
-       flex="1 1 20%"
-       backgroundColor={colors.primary[400]}
-       p="15px"
-       borderRadius="4px"
-      >
-       <Typography variant="h5">Events</Typography>
-       <List>
-        {formattedEvents.map((event) => (
-         <ListItem
-          key={event.id}
-          taskId={event.id}
-          sx={{
-           backgroundColor: colors.greenAccent[500],
-           margin: "10px 0",
-           borderRadius: "2px",
-          }}
-         >
-          <ListItemText
-           primary={event.title}
-           secondary={
-            <Typography>
-             {formatDate(event.start, {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-             })}
-            </Typography>
-           }
-          />
-          <EditDialogue todo={event} />
-         </ListItem>
-        ))}
-       </List>
-      </Box>
-      {/* CALENDAR */}
-      <Box flex="1 1 100%" ml="15px">
-       <FullCalendar
-        height="75vh"
-        plugins={[
-         dayGridPlugin,
-         timeGridPlugin,
-         interactionPlugin,
-         listPlugin,
-        ]}
-        headerToolbar={{
-         left: "prev,next today",
-         center: "title",
-         right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
+  // Combine events based on active tab
+  const activeEvents = useMemo(() => {
+    switch (activeTab) {
+      case 0: // All
+        return [...formattedTasks, ...formattedActions];
+      case 1: // Tasks
+        return formattedTasks;
+      case 2: // Actions
+        return formattedActions;
+      default:
+        return [];
+    }
+  }, [activeTab, formattedTasks, formattedActions]);
+
+  const handleTabChange = (_, newValue) => {
+    setActiveTab(newValue);
+  };
+
+  // Event color handling
+  const eventContent = (eventInfo) => {
+    const isAction = eventInfo.event.extendedProps.type === 'action';
+    return (
+      <div
+        style={{
+          backgroundColor: isAction ? colors.blueAccent[500] : colors.greenAccent[500],
+          borderColor: isAction ? colors.blueAccent[700] : colors.greenAccent[700],
         }}
-        initialView="dayGridMonth"
-        editable={true}
-        selectable={true}
-        selectMirror={true}
-        dayMaxEvents={false}
-        //select={handleDateClick}
-        // eventClick={handleEventClick}
-        // eventsSet={(events) => setCurrentEvents(events)}
-        events={formattedEvents}
-       />
+      >
+        {eventInfo.event.title}
+      </div>
+    );
+  };
+
+  if (isPending) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "75vh" }}>
+        <ProgressCircle rotate />
       </Box>
-     </Box>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Box sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "75vh",
+        color: colors.redAccent[600]
+      }}>
+        <Typography variant="h3">Error occurred when fetching Calendar data!</Typography>
+      </Box>
+    );
+  }
+
+  return (
+    <Box m="20px">
+      <Box display="flex" justifyContent="space-between">
+        {/* SIDEBAR */}
+        <Box
+          flex="1 1 20%"
+          backgroundColor={colors.primary[400]}
+          p="15px"
+          borderRadius="4px"
+        >
+          <Typography variant="h5" mb={2}>Events</Typography>
+
+          <Tabs
+            value={activeTab}
+            onChange={handleTabChange}
+            sx={{ mb: 2 }}
+          >
+            <Tab label="All" />
+            <Tab label="Tasks" />
+            <Tab label="Actions" />
+          </Tabs>
+
+          <List>
+            {activeEvents.map((event) => (
+              <ListItem
+                key={event.id}
+                sx={{
+                  backgroundColor: event.type === 'action'
+                    ? colors.blueAccent[500]
+                    : colors.greenAccent[500],
+                  margin: "10px 0",
+                  borderRadius: "2px",
+                }}
+              >
+                <ListItemText
+                  primary={
+                    <Typography variant="body1" fontWeight="bold">
+                      {event.title}
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        sx={{ ml: 1 }}
+                      >
+                        ({event.type})
+                      </Typography>
+                    </Typography>
+                  }
+                  secondary={
+                    <Typography variant="body2">
+                      {formatDate(event.start, {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </Typography>
+                  }
+                />
+                {event.type !== 'action' && <EditDialogue todo={event} />}
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+
+        {/* CALENDAR */}
+        <Box flex="1 1 100%" ml="15px">
+          <FullCalendar
+            height="75vh"
+            plugins={[
+              dayGridPlugin,
+              timeGridPlugin,
+              interactionPlugin,
+              listPlugin,
+            ]}
+            headerToolbar={{
+              left: "prev,next today",
+              center: "title",
+              right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
+            }}
+            initialView="dayGridMonth"
+            editable={true}
+            selectable={true}
+            selectMirror={true}
+            dayMaxEvents={false}
+            events={activeEvents}
+            eventContent={eventContent}
+          />
+        </Box>
+      </Box>
     </Box>
-   )}
-   {isPending && (
-    <Box
-     sx={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      width: "100%",
-      height: "100%",
-     }}
-    >
-     <ProgressCircle rotate />
-    </Box>
-   )}
-   {isError && (
-    <Box
-     sx={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      width: "100%",
-      height: "100%",
-      color: colors.redAccent[600],
-     }}
-    >
-     <Typography variant="h3">
-      {" "}
-      Error occurd when fetching Calender !
-     </Typography>
-    </Box>
-   )}
-  </>
- );
+  );
 };
 
 export default Calendar;

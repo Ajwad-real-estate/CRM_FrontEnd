@@ -62,8 +62,8 @@ const CHANNEL_OPTIONS = [
 ];
 
 const TYPE_OPTIONS = [
-  { value: 1, label: "Individual" },
-  { value: 2, label: "Corporate" },
+  { value: 1, label: "warm" },
+  { value: 2, label: "cold" },
 ];
 
 const CITY_OPTIONS = [
@@ -77,12 +77,17 @@ const actionOptions = [
   { value: 2, label: "Meeting" },
   { value: 3, label: "Follow Up After Meeting" },
 ];
+const taskOptions = [
+  { value: 1, label: "New" },
+  { value: 2, label: "Pending" },
+  { value: 3, label: "Done" },
+];
 
 const ActionItem = ({ todo }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   console.log("todo")
-  console.log(todo.id)
+  console.log(todo)
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [open, setOpen] = useState(false);
@@ -91,6 +96,7 @@ const ActionItem = ({ todo }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   // Fetch client data
   const { data: clientData, isPending: isLoadingClient } = useClient(todo.client_id);
+
   console.log("clientData")
   console.log(clientData)
   // Client mutation hook
@@ -104,7 +110,7 @@ const ActionItem = ({ todo }) => {
     time: "",
     status_id: "",
     location: "",
-    clientName: "",
+    name: "",
     email: "",
     age: "",
     phone_numbers: "",
@@ -140,9 +146,9 @@ const ActionItem = ({ todo }) => {
         comment: todo.comment || "",
         date: todo.date ? new Date(todo.date).toISOString().split("T")[0] : "",
         time: todo.time || "",
-        status_id: todo.status_id || "",
+        status_id: clientData?.status_id || "",
         location: todo.location || "",
-        clientName: clientData.name || "",
+        name: clientData.name || "",
         email: clientData.email || "",
         age: clientData.age || "",
         phone_numbers: clientData.phone_numbers?.[0] || "",
@@ -197,7 +203,7 @@ const ActionItem = ({ todo }) => {
   //     [field]: event.target.value,
   //   }));
   // };
- 
+
 
 
   const handleAnswer = (value) => {
@@ -308,6 +314,61 @@ const ActionItem = ({ todo }) => {
       setIsSubmitting(false);
     }
   };
+  const handleSubmitAction = async () => {
+    try {
+      setIsSubmitting(true);
+
+      // Update action data
+      const actionData = {
+        comment: formData.comment,
+        date: formData.date,
+        time: formData.time,
+        status_id: parseInt(formData.status_id),
+        location: formData.location,
+      };
+
+      await updateActionById({
+        actionId: todo.id,
+        actionData,
+      });
+      setOpen(false);
+    } catch (error) {
+      console.error("Failed to update:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  const handleSubmitClient = async () => {
+    try {
+      setIsSubmitting(true);
+
+
+
+
+
+      // Update client data
+      const clientData = {
+        name: formData.name,
+        email: formData.email,
+        age: parseInt(formData.age),
+        budget: parseInt(formData.budget),
+        phone_numbers: [formData.phone_numbers],
+        nat_id: formData.nat_id,
+        street: formData.street,
+        city_id: parseInt(formData.city_id),
+        channel_id: parseInt(formData.channel_id),
+        type_id: parseInt(formData.type_id),
+        status_id: parseInt(formData.status_id),
+      };
+
+      editClient({ clientID: todo.client_id, clientData });
+      setOpen(false);
+    } catch (error) {
+      console.error("Failed to update:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
     <Box
       p="10px"
@@ -341,14 +402,18 @@ const ActionItem = ({ todo }) => {
             marginLeft: "10px",
           }}
         >
-        {formData.clientName}
+          {formData.name}
         </Typography>
-        {formData.type_id}
-        {TYPE_OPTIONS.map((option) => (
+        <Box sx={{ m: 'auto', textAlign: 'center', display: 'flex' }}>
+
+          {actionOptions.find(option => option.value === formData.type_id)?.label}
+        </Box>
+
+        {/* {TYPE_OPTIONS.map((option) => (
           <MenuItem key={option.value} value={option.value}>
             {option.label}
           </MenuItem>
-        ))}
+        ))} */}
         <Box
           display="flex"
           alignItems="center"
@@ -378,7 +443,7 @@ const ActionItem = ({ todo }) => {
       </Box>
 
       <BootstrapDialog
-       onClose={handleClose}
+        onClose={handleClose}
         open={open}>
         <IconButton
           onClick={handleClose}
@@ -399,11 +464,11 @@ const ActionItem = ({ todo }) => {
             <Typography variant="h6" gutterBottom>
               Client Information
             </Typography>
-            <Box>{formData.clientName}</Box>
+            <Box>{formData.name}</Box>
             <TextField
               label="Client Name"
-              value={formData.clientName}
-              onChange={handleChange("clientName")}
+              value={formData.name}
+              onChange={handleChange("name")}
               variant="outlined"
               size="small"
               fullWidth
@@ -515,10 +580,19 @@ const ActionItem = ({ todo }) => {
               ))}
             </TextField>
           </Box>
+          <Button
+            variant="contained"
+            onClick={handleSubmitClient}
+            disabled={isUpdating}
+          >
+            {isUpdating ? "Updating..." : "Update"}
+          </Button>
+        </Form>
+        <Form>
           <FormRow label="Status">
             <TextField
               select
-              value={formData.status_id}
+              value={formData?.status_id}
               onChange={handleChange("status_id")}
               fullWidth
               variant="outlined"
@@ -530,9 +604,8 @@ const ActionItem = ({ todo }) => {
               ))}
             </TextField>
           </FormRow>
-          <Box>
-            {todo.client_id}
-          </Box>
+
+
           <FormRow label="Comment">
             <TextField
               value={formData.comment}
@@ -638,7 +711,7 @@ const ActionItem = ({ todo }) => {
           </Collapse>
           <Button
             variant="contained"
-            onClick={handleSubmit}
+            onClick={handleSubmitAction}
             disabled={isUpdating}
           >
             {isUpdating ? "Updating..." : "Update"}

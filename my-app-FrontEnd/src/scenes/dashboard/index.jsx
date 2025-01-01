@@ -196,14 +196,14 @@ const Dashboard = () => {
                 fontWeight="600"
                 color={colors.grey[100]}
               >
-                Revenue Generated
+                sales #not work today
               </Typography>
               <Typography
                 variant="h3"
                 fontWeight="bold"
                 color={colors.greenAccent[500]}
               >
-                ${dashboardData.target} revenue generated
+                done deal : {dashboardData.target} sales
               </Typography>
             </Box>
             <Box>

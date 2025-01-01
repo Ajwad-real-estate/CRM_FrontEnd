@@ -134,7 +134,7 @@ function ItemsList() {
                   marginTop: "60px",
                 }}
               >
-                Task List is Empty
+                Action List is Empty
               </Typography>
             )}
           </Box>

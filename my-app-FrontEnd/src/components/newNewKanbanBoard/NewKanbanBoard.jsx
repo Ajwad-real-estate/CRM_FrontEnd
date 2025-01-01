@@ -216,16 +216,16 @@ const KanbanBoard = () => {
 
   const colors = tokens(theme.palette.mode);
 
-  const filteredLeads = Object.values(data.leads).filter(
-    (lead) =>
-      lead.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      lead.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      lead.phoneNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      lead.tags.some((tag) =>
-        tag.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-  );
+  // const filteredLeads = Object.values(data.leads).filter(
+  //   (lead) =>
+  //     lead.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //     lead.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //     lead.phoneNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //     lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //     lead.tags.some((tag) =>
+  //       tag.toLowerCase().includes(searchQuery.toLowerCase())
+  //     )
+  // );
   const updateLead = (updatedLead) => {
     setData((prevData) => {
       const { id } = updatedLead;
@@ -248,6 +248,39 @@ const KanbanBoard = () => {
         leads: updatedLeads,
       };
     });
+  };
+
+
+
+  const matchesSearch = (value, query) => {
+    if (!value) return false;
+    return value.toString().toLowerCase().includes(query.toLowerCase());
+  };
+
+  // Modified filtering logic
+  const getFilteredLeads = () => {
+    if (!data.leads) return [];
+
+    return Object.values(data.leads).filter((lead) => {
+      const query = searchQuery.toLowerCase().trim();
+      if (!query) return true; // Show all leads if search is empty
+
+      return (
+        matchesSearch(lead.title, query) ||
+        matchesSearch(lead.company, query) ||
+        matchesSearch(lead.phoneNumber, query) ||
+        matchesSearch(lead.email, query) ||
+        matchesSearch(lead.amount, query)
+      );
+    });
+  };
+
+  // Get filtered leads for rendering
+  const filteredLeads = getFilteredLeads();
+
+  // Update the search handler to be more responsive
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value);
   };
   return (
     <Box m="20px">
@@ -276,8 +309,10 @@ const KanbanBoard = () => {
           <TextField
             variant="outlined"
             label="Search Leads"
+            value={searchQuery}
+            onChange={handleSearch}
+            placeholder="Search by name, company, phone, email..."
             fullWidth
-            onChange={(e) => setSearchQuery(e.target.value)}
             sx={{ mr: 2, padding: "10px 0px", width: "50%", display: "flex" }}
           />
           <Button
