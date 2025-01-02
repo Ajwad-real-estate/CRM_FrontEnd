@@ -165,6 +165,15 @@ const KanbanBoard = () => {
   const [data, setData] = useState({ columns: {}, leads: {} });
   console.log("data");
   console.log(data);
+  // console.log("data columns");
+  // console.log(data.columns);
+  // Object.values(data.columns).forEach((column) => {
+  //   if (!column.title || column.title.trim() === "") {
+  //     column.title = {currentSublink};
+  //   }
+  //   data.columns[column.id] = column;
+  //   console.log(column.title);
+  // });
   useEffect(() => {
     if (clients?.length > 0) {
       const initialData = transformData(clients);
@@ -387,6 +396,25 @@ const KanbanBoard = () => {
               </div>
             ))}
           </div>
+        )}
+        {Object.keys(data.columns).length === 0 && (
+          <Box textAlign="center" mt="50px">
+            <PipelineColumn title={currentSublink}>
+              {filteredLeads.map((lead) => (
+                <div
+                  key={lead.id}
+                  style={{
+                    marginBottom: "8px",
+                    borderRadius: "4px",
+                  }}
+                  onDoubleClick={() => handleDoubleClick(lead)}
+                >
+                  <LeadCard lead={lead} />
+                </div>
+              ))}
+            </PipelineColumn>
+          
+          </Box>
         )}
 
         {isModalOpen && (

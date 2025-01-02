@@ -209,11 +209,11 @@ const TheSideBar = () => {
                 Done Deal
               </MenuItem>
               <MenuItem
-                title="Archived"
+                title="archieved"
                 icon={<ContactsOutlinedIcon />}
-                onClick={() => navigate("/archived")}
+                onClick={() => navigate("/archieved")}
               >
-                Archived
+                archieved
               </MenuItem>
               <MenuItem
                 title="Lost"
@@ -262,12 +262,12 @@ const TheSideBar = () => {
                 Done Deal
               </MenuItem>
               <MenuItem
-                title="Archived"
-                to="/archived"
+                title="archieved"
+                to="/archieved"
                 icon={<ContactsOutlinedIcon />}
-                onClick={() => navigate("/archived")} // Navigate to specific page
+                onClick={() => navigate("/archieved")} // Navigate to specific page
               >
-                Archived
+                archieved
               </MenuItem>
               <MenuItem
                 title="Lost"
@@ -292,8 +292,8 @@ const TheSideBar = () => {
                 setSelected={setSelected}
               />
               <Item
-                title="Archived"
-                to="/Archived"
+                title="archieved"
+                to="/archieved"
                 icon={<ContactsOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}

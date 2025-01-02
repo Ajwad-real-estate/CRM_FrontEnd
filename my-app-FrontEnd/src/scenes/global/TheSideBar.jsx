@@ -200,11 +200,11 @@ const TheSideBar = () => {
                 Done Deal
               </MenuItem>
               <MenuItem
-                title="Archived"
+                title="archieved"
                 icon={<ContactsOutlinedIcon />}
-                onClick={() => navigate("NewNewKanbanBoard/archived")}
+                onClick={() => navigate("NewNewKanbanBoard/archieved")}
               >
-                Archived
+                archieved
               </MenuItem>
               <MenuItem
                 title="Lost"
