@@ -96,14 +96,14 @@ const Dashboard = () => {
 
   // StatBox data to display
   const statBoxes = [
-    { title: "Follow Ups", value: dashboardData.followUpCount , icon: <PointOfSaleIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
-    { title: "Meetings", value: dashboardData.meetingCount , icon: <PersonAddIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
-    { title: "follow Meet", value: dashboardData.followMeetCount , icon: <TrafficIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
-    { title: "Emails", value: dashboardData.emailCount , icon: <EmailIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
-    { title: "New Clients", value: dashboardData.newClientsCount , icon: <PointOfSaleIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
-    { title: "Qualified Clients", value: dashboardData.qualifiedClientsCount , icon: <PersonAddIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
-    { title: "Reserved Clients", value: dashboardData.reservedClientsCount, icon: <TrafficIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
-    { title: "Done Clients", value: dashboardData.doneClientsCount , icon: <EmailIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/done-clients" },
+    { title: "Follow Ups", value: dashboardData.followUpCount, icon: <PointOfSaleIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/todolist" },
+    { title: "Meetings", value: dashboardData.meetingCount, icon: <PersonAddIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/todolist" },
+    { title: "follow Meetings", value: dashboardData.followMeetCount, icon: <TrafficIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/todolist" },
+    { title: "Emails", value: dashboardData.emailCount, icon: <EmailIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/todolist" },
+    { title: "New Clients", value: dashboardData.newClientsCount, icon: <PointOfSaleIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/NewNewKanbanBoard/new" },
+    { title: "Qualified Clients", value: dashboardData.qualifiedClientsCount, icon: <PersonAddIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/NewNewKanbanBoard/qualified" },
+    { title: "Reserved Clients", value: dashboardData.reservedClientsCount, icon: <TrafficIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/NewNewKanbanBoard/reserved" },
+    { title: "Done Clients", value: dashboardData.doneClientsCount, icon: <EmailIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />, link: "/NewNewKanbanBoard/done_deal" },
   ];
 
   // Set target and doneDeals data for the BarChart component

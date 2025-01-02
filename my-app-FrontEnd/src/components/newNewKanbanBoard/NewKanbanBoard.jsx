@@ -124,7 +124,7 @@ const KanbanBoard = () => {
     currentSublink = currentSublink.replace("/NewNewKanbanBoard", "");
     queryClient.invalidateQueries({ queryKey: ["clientsList"] });
   }
-
+  console.log(currentSublink)
   // const { response, error, isLoading, isError, refetch } = useFetchClients();
   // console.log(response)
   const { data: io, isPending } = useClients(currentSublink);
@@ -413,7 +413,7 @@ const KanbanBoard = () => {
                 </div>
               ))}
             </PipelineColumn>
-          
+
           </Box>
         )}
 
