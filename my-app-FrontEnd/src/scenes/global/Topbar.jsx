@@ -43,37 +43,39 @@ const Topbar = () => {
     return firstPart;
   }
   const pageInfo = {
-    "/": { title: "Dashboard", subtitle: "Handle Global Changes" },
-    "/home": { title: "Home", subtitle: "Welcome to the Home Page" },
-    "/about": { title: "About Us", subtitle: "Learn more about us" },
-    "/todolist": { title: "Todolist", subtitle: "View and Handle Tasks" },
-    "/contact": { title: "Contact Us", subtitle: "Get in touch with us" },
-    "/projects": { title: "Projects", subtitle: "Real estate Projects" },
-    "/calendar": {
-      title: "Calendar",
-      subtitle: "Full Calender Interactive page",
-    },
-    "/faq": { title: "FAQs", subtitle: "Frequently Asked Questions Page" },
-    "/team": { title: "Team", subtitle: "Managing the Team Members" },
-    "/contacts": {
-      title: "Contacts",
-      subtitle: "List of Contacts for future reference",
-    },
-    "/done_deal": { title: "Done deal", subtitle: "Clients done the Deal" },
-    "/CreateAccForm": { title: "Create account", subtitle: "add New user" },
-
-    "/archieved": { title: "Archieved", subtitle: "Archieved Clients" },
-    "/lost": { title: "Lost", subtitle: "Losted Clients" },
-
+    "/": { title: "Dashboard", subtitle: "Manage global settings and changes" },
+    "/home": { title: "Home", subtitle: "Welcome to the homepage" },
+    "/about": { title: "About Us", subtitle: "Learn more about our company" },
+    "/todolist": { title: "To-Do List", subtitle: "View and manage your tasks" },
+    "/contact": { title: "Contact Us", subtitle: "Get in touch with our team" },
+    "/projects": { title: "Projects", subtitle: "Explore our real estate projects" },
+    "/calendar": { title: "Calendar", subtitle: "Interactive calendar view" },
+    "/faq": { title: "FAQs", subtitle: "Frequently asked questions" },
+    "/team": { title: "Team", subtitle: "Manage your team members" },
+    "/contacts": { title: "Contacts", subtitle: "View all saved contacts" },
+    "/clients": { title: "Clients", subtitle: "List of client contacts" },
+    "/done_deal": { title: "Closed Deals", subtitle: "Clients who completed a deal" },
+    "/CreateAccForm": { title: "Create Account", subtitle: "Add a new user" },
+    "/archieved": { title: "Archived", subtitle: "Archived clients list" },
+    "/lost": { title: "Lost Clients", subtitle: "Clients who didn’t close deals" },
     "/NewKanbanBoard": {
-      title: "Contacts Board",
-      subtitle: "Manage your tasks effectively",
+      title: "Task Board",
+      subtitle: "Manage tasks visually with Kanban",
     },
     "/NewNewKanbanBoard": {
-      title: "Contacts Board",
-      subtitle: "Manage your tasks effectively",
+      title: "Task Board",
+      subtitle: "Enhanced Kanban management",
+    },
+    "/getContacts": {
+      title: "Add Contacts",
+      subtitle: "Enter new client contact details",
+    },
+    "/assignContacts": {
+      title: "Assign Contacts",
+      subtitle: "Assign new contacts to team members",
     },
   };
+  
 
   // Function to get page info
   const getPageInfo = (pathname) => {

@@ -9,13 +9,13 @@ import VerifiedIcon from "@mui/icons-material/Verified";
 // import Reservation from "./Reservation";
 import { tokens } from "../../theme";
 
+const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 
-const API_URL = 'http://localhost:3000/api';
 
 export const createAction = async (actionData) => {
  try {
-  const response = await fetch(`${API_URL}/actions`, {
+   const response = await fetch(`${apiUrl}/api/actions`, {
    method: 'POST',
    headers: {
     'Content-Type': 'application/json',

@@ -4,6 +4,7 @@ import { tokens } from "../../theme";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 const Clients = () => {
   const [clients, setClients] = useState([]);
@@ -17,13 +18,18 @@ const Clients = () => {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/clients',
-                  {
-                    headers: {
-                      Authorization: `Bearer ${Cookies.get("accessToken")}`,
-                    },
-                  });
+        const response = await fetch(`${apiUrl}/api/clients`, {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("accessToken")}`,
+          },
+        });
+
         const data = await response.json();
+        console.log("Fetched clients:", data);
+        if (!response.ok) {
+          throw new Error("Failed to fetch clients");
+        }
+        // Check if the response is empty
         setClients(data);
       } catch (error) {
         console.error("Error fetching clients:", error);
@@ -60,7 +66,7 @@ const Clients = () => {
       flex: 1,
       renderCell: (params) => {
         return params.value ? params.value.join(", ") : "-";
-      }
+      },
     },
     {
       field: "email",
@@ -79,7 +85,7 @@ const Clients = () => {
       type: "number",
       renderCell: (params) => {
         return params.value ? `$${params.value.toLocaleString()}` : "-";
-      }
+      },
     },
     {
       field: "status",
@@ -95,7 +101,7 @@ const Clients = () => {
       field: "channel",
       headerName: "Channel",
       flex: 1,
-    }
+    },
   ];
 
   return (
@@ -132,8 +138,7 @@ const Clients = () => {
           "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
             color: `${colors.grey[100]} !important`,
           },
-        }}
-      >
+        }}>
         <DataGrid
           rows={clients}
           columns={columns}
