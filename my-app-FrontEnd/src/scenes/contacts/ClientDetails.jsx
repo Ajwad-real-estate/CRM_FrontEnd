@@ -15,17 +15,18 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { tokens } from "../../theme";
 import Cookies from "js-cookie";
-import { fetchSelectOptions } from "../../helpers/fetchSelectOptions";
+import {
+  cityOptions,
+  statusOptions,
+  typeOptions,
+  channelOptions,
+} from "../../data/clientOptions";
 
 const ClientDetails = () => {
   const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
   const { id } = useParams();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const CustomData = fetchSelectOptions("city");
-  console.log("CustomData", CustomData);
-
-  const [cities, setCities] = useState({});
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -33,9 +34,9 @@ const ClientDetails = () => {
     street: "",
     city_id: "",
     budget: "",
-    status: "",
-    type: "",
-    channel: "",
+    type_id: "",
+    status_id: "",
+    channel_id: "",
     nat_id: "",
     phone_numbers: [""],
   });
@@ -43,80 +44,24 @@ const ClientDetails = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [error, setError] = useState("");
 
-  // Status options
-  const statusOptions = ["New", "Qualified", "Lost", "Reserved", "Done_Deal"];
-  const typeOptions = ["Warm", "Cold"];
-  const channelOptions = [
-    "Google Form",
-    "Facebook",
-    "Twitter",
-    "Instagram",
-    "Website",
-    "Referral",
-  ];
-
+  const fetchClientDetails = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/api/clients/${id}`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("accessToken")}`,
+        },
+      });
+      setFormData(response.data);
+      setIsLoading(false);
+    } catch (err) {
+      setError("Failed to fetch client details. Please try again.");
+      setIsLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchClientDetails = async () => {
-      try {
-        const response = await axios.get(`${apiUrl}/api/clients/${id}`, {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          },
-        });
-        setFormData({
-          ...response.data,
-          // Ensure phone_numbers is always an array
-          phone_numbers: response.data.phone_numbers || [""],
-        });
-        setIsLoading(false);
-      } catch (err) {
-        setError("Failed to fetch client details. Please try again.");
-        setIsLoading(false);
-        console.error("Error fetching client details:", err);
-      }
-    };
-
-    // const fetchCities = async () => {
-    //   //   const cities = await fetchSelectOptions("city");
-    //   //   console.log("cities", cities);
-    //   //   setCities(cities); // Now an array of { value, num }
-    //   // };
-    //   try {
-    //     const response = await axios.get(`${apiUrl}/api/city`, {
-    //       headers: {
-    //         Authorization: `Bearer ${Cookies.get("accessToken")}`,
-    //       },
-    //     });
-
-    //     if (response.data && response.data.cities) {
-    //       const fetchedCities = response.data.cities.map((city) => city.name);
-    //       setCities(fetchedCities);
-    //     }
-    //   } catch (err) {
-    //     console.error("Error fetching cities:", err);
-    //     // Use fallback cities if API fails
-    //     // setCities(cityOptions);
-    //   }
-    // };
-    // const loadCities = async () => {
-    //     const cities = await fetchSelectOptions("city");
-    //     setCities(cities); // Now an array of { value, num }
-    //   };
     fetchClientDetails();
-    // fetchCities();
-
-    // 
   }, [id]);
-  useEffect(() => {
-    const loadCities = async () => {
-      const cityOptions = await fetchSelectOptions("city");
-      console.log("cityOptions", cityOptions);
-      setCities(cityOptions);
-      console.log("2cityOptions", cities);
-    };
 
-    loadCities();
-  }, []);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -126,7 +71,7 @@ const ClientDetails = () => {
   };
 
   const handlePhoneChange = (index, value) => {
-    const newPhoneNumbers = [...formData.phone_numbers];
+    const newPhoneNumbers = [...(formData.phone_numbers || [])];
     newPhoneNumbers[index] = value;
     setFormData((prevData) => ({
       ...prevData,
@@ -137,7 +82,7 @@ const ClientDetails = () => {
   const addPhoneNumber = () => {
     setFormData((prevData) => ({
       ...prevData,
-      phone_numbers: [...prevData.phone_numbers, ""],
+      phone_numbers: [...(prevData.phone_numbers || []), ""],
     }));
   };
 
@@ -161,7 +106,6 @@ const ClientDetails = () => {
       alert("Client details updated successfully!");
     } catch (err) {
       setError("Failed to update client details. Please try again.");
-      console.error("Update error:", err);
     } finally {
       setIsUpdating(false);
     }
@@ -232,7 +176,7 @@ const ClientDetails = () => {
             margin="normal"
             label="Name"
             name="name"
-            value={formData.name || ""}
+            value={formData?.name || ""}
             onChange={handleInputChange}
           />
 
@@ -242,16 +186,15 @@ const ClientDetails = () => {
             label="Age"
             name="age"
             type="number"
-            value={formData.age || ""}
+            value={formData?.age || ""}
             onChange={handleInputChange}
           />
-
           <TextField
             fullWidth
             margin="normal"
             label="Email"
             name="email"
-            value={formData.email || ""}
+            value={formData?.email || ""}
             onChange={handleInputChange}
           />
 
@@ -260,17 +203,16 @@ const ClientDetails = () => {
             margin="normal"
             label="Street"
             name="street"
-            value={formData.street || ""}
+            value={formData?.street || ""}
             onChange={handleInputChange}
           />
-
           <TextField
             fullWidth
             margin="normal"
             label="Budget"
             name="budget"
             type="number"
-            value={formData.budget || ""}
+            value={formData?.budget || ""}
             onChange={handleInputChange}
           />
 
@@ -278,42 +220,40 @@ const ClientDetails = () => {
             <InputLabel>Status</InputLabel>
             <Select
               label="Status"
-              name="status"
-              value={formData.status || ""}
+              name="status_id"
+              value={formData?.status_id || ""}
               onChange={handleInputChange}>
-              {statusOptions.map((status) => (
-                <MenuItem key={status} value={status}>
-                  {status}
+              {statusOptions.map((option) => (
+                <MenuItem key={option.id} value={option.id}>
+                  {option.value}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
-
           <FormControl fullWidth margin="normal">
             <InputLabel>City</InputLabel>
             <Select
               label="City"
               name="city_id"
-              value={formData.city_id || ""}
+              value={formData?.city_id || ""}
               onChange={handleInputChange}>
-              {cities.map((city, index) => (
-                <MenuItem key={`${city}-${index}`} value={index + 1}>
-                  {city}
+              {cityOptions.map((option) => (
+                <MenuItem key={option.id} value={option.id}>
+                  {option.value}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
-
           <FormControl fullWidth margin="normal">
             <InputLabel>Type</InputLabel>
             <Select
               label="Type"
-              name="type"
-              value={formData.type || ""}
+              name="type_id"
+              value={formData?.type_id || ""}
               onChange={handleInputChange}>
-              {typeOptions.map((type) => (
-                <MenuItem key={type} value={type}>
-                  {type}
+              {typeOptions.map((option) => (
+                <MenuItem key={option.id} value={option.id}>
+                  {option.value}
                 </MenuItem>
               ))}
             </Select>
@@ -323,19 +263,14 @@ const ClientDetails = () => {
             <InputLabel>Channel</InputLabel>
             <Select
               label="Channel"
-              name="channel"
-              value={formData.channel || ""}
+              name="channel_id"
+              value={formData?.channel_id || ""}
               onChange={handleInputChange}>
-              {channelOptions.map((channel, index) => (
-                <MenuItem key={index} value={index}>
-                  {channel}
+              {channelOptions.map((option) => (
+                <MenuItem key={option.id} value={option.id}>
+                  {option.value}
                 </MenuItem>
               ))}
-              {/* {channelOptions.map((channel) => (
-                <MenuItem key={channel} value={channel}>
-                  {channel}
-                </MenuItem>
-              ))} */}
             </Select>
           </FormControl>
 
@@ -344,7 +279,7 @@ const ClientDetails = () => {
             margin="normal"
             label="National ID"
             name="nat_id"
-            value={formData.nat_id || ""}
+            value={formData?.nat_id || ""}
             onChange={handleInputChange}
           />
         </Box>
@@ -354,7 +289,7 @@ const ClientDetails = () => {
           <Typography variant="h6" color={colors.grey[100]} sx={{ mb: 2 }}>
             Phone Numbers
           </Typography>
-          {formData.phone_numbers.map((phone, index) => (
+          {formData?.phone_numbers?.map((phone, index) => (
             <Box key={index} sx={{ display: "flex", gap: 1, mb: 2 }}>
               <TextField
                 fullWidth
@@ -362,14 +297,12 @@ const ClientDetails = () => {
                 value={phone || ""}
                 onChange={(e) => handlePhoneChange(index, e.target.value)}
               />
-              {formData.phone_numbers.length > 1 && (
-                <Button
-                  variant="outlined"
-                  color="error"
-                  onClick={() => removePhoneNumber(index)}>
-                  Remove
-                </Button>
-              )}
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => removePhoneNumber(index)}>
+                Remove
+              </Button>
             </Box>
           ))}
           <Button
@@ -380,7 +313,6 @@ const ClientDetails = () => {
             Add Phone Number
           </Button>
         </Box>
-
         <Box
           sx={{
             display: "flex",
@@ -392,7 +324,7 @@ const ClientDetails = () => {
             variant="contained"
             color="primary"
             disabled={isUpdating}>
-            {isUpdating ? <CircularProgress size={24} /> : "Update"}
+            {isUpdating ? "Updating..." : "Update"}
           </Button>
           <Button
             type="button"
