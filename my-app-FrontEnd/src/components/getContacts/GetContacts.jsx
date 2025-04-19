@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import * as XLSX from "xlsx";
 import {
   Box,
@@ -21,10 +21,6 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import { createBulkClients } from "./createBulkClients";
 import toast from "react-hot-toast";
-
-
-
-
 
 // Email validation function
 const isValidEmail = (email) => {
@@ -49,41 +45,35 @@ const GetContacts = () => {
   const [file, setFile] = useState(null); // State to track the uploaded file
   const [result, setResult] = useState(null);
 
-
-
   const handleBulkCreate = async (clientsData) => {
     setLoading(true);
     clientsData = data;
-    console.log(data)
+    console.log(data);
     try {
       const result = await createBulkClients(clientsData);
       setResult(result);
-      console.log(result)
-      console.log(result.success)
-      
-      if (result.success) {
+      console.log(result);
+      console.log(result.success);
 
-        console.log("result.success")
+      if (result.success) {
+        console.log("result.success");
         // Show success notification
         toast.success(`Successfully created  clients`);
-      }
-       else {
+      } else {
         // Show error notification
         toast.error(`Failed to create some clients. `);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       setResult({
         success: false,
-        error: 'Failed to process request'
+        error: "Failed to process request",
       });
-      toast.error('Failed to process request');
+      toast.error("Failed to process request");
     } finally {
       setLoading(false);
     }
   };
-
-
 
   // Handle file upload and parse the Excel file
   // const handleFileUpload = (e) => {
@@ -104,7 +94,7 @@ const GetContacts = () => {
   //     setLoading(false); // Stop loading
   //   };
   // };
-// chat gpt
+  // chat gpt
   const handleFileUpload = (e) => {
     setLoading(true); // Start loading
     const uploadedFile = e.target.files[0];
@@ -119,7 +109,7 @@ const GetContacts = () => {
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
       const parsedData = XLSX.utils.sheet_to_json(sheet, { defval: null }); // Use null for missing values
-
+      //Email
       // Transform data to match the required format
       const normalizedData = parsedData.map((row) => ({
         name: row.name || null, // Default to null if name is missing
@@ -140,9 +130,6 @@ const GetContacts = () => {
       setLoading(false); // Stop loading
     };
   };
-
-
-
 
   // Handle deleting a row
   const handleDeleteRow = (index) => {

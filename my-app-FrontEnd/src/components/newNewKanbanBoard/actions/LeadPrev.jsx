@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import { tokens } from "../../../theme";
 import { useTheme } from "@emotion/react";

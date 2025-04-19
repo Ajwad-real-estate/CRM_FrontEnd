@@ -1,15 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Box,
-  TextField,
-  Button,
-  Slider,
-  Tooltip,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
-} from "@mui/material";
+import { Box, TextField, Button, Slider, Tooltip } from "@mui/material";
 import FormRow from "../../ui/FormRow";
 import Form from "../../ui/Form";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -87,10 +77,6 @@ const AddToDo = () => {
 
     fetchData();
   }, [apiUrl]);
-
-  const handleChangeStatus = (event) => {
-    setStatuses(event.target.value);
-  };
 
   const handleChange = (event, newValue) => {
     setPriority(newValue);

@@ -3,7 +3,7 @@ import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import {
   Box,
   Typography,
@@ -11,20 +11,13 @@ import {
   TextField,
   IconButton,
   MenuItem,
-  FormControlLabel,
-  Checkbox,
   Collapse,
-  Icon,
-  Input,
-  DialogContent,
 } from "@mui/material";
 import { tokens } from "../../theme";
 import { useTheme } from "@emotion/react";
 import FormRow from "../../ui/FormRow";
-import ShowMoreLess from "./ShowMoreLess";
 import { useUpdateAction } from "./useUpdateAction";
-import ActionBody from "./ActionBody";
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import { useClient } from "../newNewKanbanBoard/actions/useKanban";
 import { useUpdateClient } from "../newNewKanbanBoard/actions/useUpdateClient";
 const Form = styled("form")(({ theme }) => ({
@@ -77,28 +70,27 @@ const actionOptions = [
   { value: 2, label: "Meeting" },
   { value: 3, label: "Follow Up After Meeting" },
 ];
-const taskOptions = [
-  { value: 1, label: "New" },
-  { value: 2, label: "Pending" },
-  { value: 3, label: "Done" },
-];
 
 const ActionItem = ({ todo }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  console.log("todo")
-  console.log(todo)
+  console.log("todo");
+  console.log(todo);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [open, setOpen] = useState(false);
   const { updateActionById, isUpdating } = useUpdateAction();
-  const [answered, setAnswered] = useState(todo.answered !== undefined ? todo.answered : true);
+  const [answered, setAnswered] = useState(
+    todo.answered !== undefined ? todo.answered : true
+  );
   const [isExpanded, setIsExpanded] = useState(false);
   // Fetch client data
-  const { data: clientData, isPending: isLoadingClient } = useClient(todo.client_id);
+  const { data: clientData, isPending: isLoadingClient } = useClient(
+    todo.client_id
+  );
 
-  console.log("clientData")
-  console.log(clientData)
+  console.log("clientData");
+  console.log(clientData);
   // Client mutation hook
   const { editClient, isLoading: isUpdatingClient } = useUpdateClient();
   const handleToggleExpand = () => {
@@ -169,9 +161,9 @@ const ActionItem = ({ todo }) => {
   // const handleClose = () => setOpen(false);
 
   const handleChange = (field) => (event) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: event.target.value
+      [field]: event.target.value,
     }));
   };
   // Form state
@@ -204,14 +196,12 @@ const ActionItem = ({ todo }) => {
   //   }));
   // };
 
-
-
   const handleAnswer = (value) => {
     setFormData((prev) => ({
       ...prev,
       answered: value,
     }));
-    setAnswered(value)
+    setAnswered(value);
   };
   // const handleSubmit = () => {
   //   if (!formData.comment || !formData.date || !formData.time) {
@@ -273,47 +263,7 @@ const ActionItem = ({ todo }) => {
   //     setIsSubmitting(false);
   //   }
   // };
-  const handleSubmit = async () => {
-    try {
-      setIsSubmitting(true);
 
-      // Update action data
-      const actionData = {
-        comment: formData.comment,
-        date: formData.date,
-        time: formData.time,
-        status_id: parseInt(formData.status_id),
-        location: formData.location,
-      };
-
-      await updateActionById({
-        actionId: todo.id,
-        actionData,
-      });
-
-      // Update client data
-      const clientData = {
-        name: formData.name,
-        email: formData.email,
-        age: parseInt(formData.age),
-        budget: parseInt(formData.budget),
-        phone_numbers: [formData.phone_numbers],
-        nat_id: formData.nat_id,
-        street: formData.street,
-        city_id: parseInt(formData.city_id),
-        channel_id: parseInt(formData.channel_id),
-        type_id: parseInt(formData.type_id),
-        status_id: parseInt(formData.status_id),
-      };
-
-      editClient({ clientID: todo.client_id, clientData });
-      setOpen(false);
-    } catch (error) {
-      console.error("Failed to update:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
   const handleSubmitAction = async () => {
     try {
       setIsSubmitting(true);
@@ -341,10 +291,6 @@ const ActionItem = ({ todo }) => {
   const handleSubmitClient = async () => {
     try {
       setIsSubmitting(true);
-
-
-
-
 
       // Update client data
       const clientData = {
@@ -385,15 +331,12 @@ const ActionItem = ({ todo }) => {
         boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
       }}
     >
-
-
       <Box
         display="flex"
         alignItems="center"
         justifyContent="space-between"
         width="100%"
       >
-
         <Typography
           variant="body1"
           sx={{
@@ -404,9 +347,11 @@ const ActionItem = ({ todo }) => {
         >
           {formData.name}
         </Typography>
-        <Box sx={{ m: 'auto', textAlign: 'center', display: 'flex' }}>
-
-          {actionOptions.find(option => option.value === formData.type_id)?.label}
+        <Box sx={{ m: "auto", textAlign: "center", display: "flex" }}>
+          {
+            actionOptions.find((option) => option.value === formData.type_id)
+              ?.label
+          }
         </Box>
 
         {/* {TYPE_OPTIONS.map((option) => (
@@ -442,9 +387,7 @@ const ActionItem = ({ todo }) => {
         </Box>
       </Box>
 
-      <BootstrapDialog
-        onClose={handleClose}
-        open={open}>
+      <BootstrapDialog onClose={handleClose} open={open}>
         <IconButton
           onClick={handleClose}
           sx={{
@@ -605,7 +548,6 @@ const ActionItem = ({ todo }) => {
             </TextField>
           </FormRow>
 
-
           <FormRow label="Comment">
             <TextField
               value={formData.comment}
@@ -671,11 +613,7 @@ const ActionItem = ({ todo }) => {
               Additional Data
             </Typography>
             <IconButton onClick={handleToggleExpand}>
-              {isExpanded ?
-                <ArrowUpwardIcon />
-                :
-                <ArrowDownwardIcon />
-              }
+              {isExpanded ? <ArrowUpwardIcon /> : <ArrowDownwardIcon />}
             </IconButton>
           </Box>
           <Collapse in={isExpanded}>

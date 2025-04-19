@@ -1,8 +1,7 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import PhoneEnabledIcon from "@mui/icons-material/PhoneEnabled";
-import HomeIcon from "@mui/icons-material/Home";
-import TagIcon from "@mui/icons-material/Tag";
+
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import ActionBody from "./pageStructure/ActionBody";
 import BusinessIcon from "@mui/icons-material/Business";

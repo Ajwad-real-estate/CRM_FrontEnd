@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -17,11 +17,6 @@ import { tokens } from "../../../theme";
 import { useUpdateClient } from "./useEditCient";
 import { useQueryClient } from "@tanstack/react-query";
 // import ClientData from "../ClientData";
-
-function capitalize(word) {
-  if (!word) return ""; // Handle empty input
-  return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-}
 
 function EditClient({ lead }) {
   const queryClient = useQueryClient();

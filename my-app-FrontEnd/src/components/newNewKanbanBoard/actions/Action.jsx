@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 
@@ -20,10 +19,10 @@ const Action = ({ open, onClose, onOpen, lead, onUpdate }) => {
   const colors = tokens(theme.palette.mode);
 
   const { data, isPending, isError, error } = useClient(lead.id);
-  console.log("data")
-  console.log(data)
-  console.log("lead")
-  console.log(lead)
+  console.log("data");
+  console.log(data);
+  console.log("lead");
+  console.log(lead);
 
   const drawerContent = (
     <Box

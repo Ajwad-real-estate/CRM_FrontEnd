@@ -1,17 +1,14 @@
-import React from "react";
 import PropTypes from "prop-types";
 import {
   Card,
   CardContent,
   Typography,
   Chip,
-  Button,
   Box,
   useTheme,
   IconButton,
 } from "@mui/material";
 import PhoneIcon from "@mui/icons-material/Phone";
-import EmailIcon from "@mui/icons-material/Email";
 import TagIcon from "@mui/icons-material/Label";
 import { tokens } from "../../theme";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";

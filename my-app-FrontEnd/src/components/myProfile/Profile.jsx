@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -62,9 +62,15 @@ const Profile = () => {
           }),
         ]);
         setFormData(agentResponse.data);
-        setStatuses(statusesResponse.data.statuses)
-        setEmailForm(prev => ({ ...prev, currentEmail: agentResponse.data.email }));
-        setPasswordForm(prev => ({ ...prev, email: agentResponse.data.email }));
+        setStatuses(statusesResponse.data.statuses);
+        setEmailForm((prev) => ({
+          ...prev,
+          currentEmail: agentResponse.data.email,
+        }));
+        setPasswordForm((prev) => ({
+          ...prev,
+          email: agentResponse.data.email,
+        }));
         setIsLoading(false);
       } catch (err) {
         setError("Failed to fetch data. Please try again.");
@@ -77,27 +83,27 @@ const Profile = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(name)
-    console.log(value)
-    setFormData(prev => ({ ...prev, [name]: value }));
+    console.log(name);
+    console.log(value);
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleEmailInputChange = (e) => {
     const { name, value } = e.target;
-    setEmailForm(prev => ({ ...prev, [name]: value }));
+    setEmailForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handlePasswordInputChange = (e) => {
     const { name, value } = e.target;
-    setPasswordForm(prev => ({ ...prev, [name]: value }));
+    setPasswordForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setIsUpdating(true);
     try {
-      formData.target = parseInt(formData.target)
-      console.log(formData.target)
+      formData.target = parseInt(formData.target);
+      console.log(formData.target);
       await axios.put(`${apiUrl}/api/agentDetails`, formData, {
         headers: {
           Authorization: `Bearer ${Cookies.get("accessToken")}`,
@@ -117,20 +123,27 @@ const Profile = () => {
     e.preventDefault();
     setIsUpdating(true);
     try {
-      await axios.post(`${apiUrl}/api/auth/regemail`, {
-        currentEmail: emailForm.currentEmail,
-        newEmail: emailForm.newEmail,
-      }, {
-        headers: {
-          Authorization: `Bearer ${Cookies.get("accessToken")}`,
+      await axios.post(
+        `${apiUrl}/api/auth/regemail`,
+        {
+          currentEmail: emailForm.currentEmail,
+          newEmail: emailForm.newEmail,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("accessToken")}`,
+          },
+        }
+      );
       setSuccessMessage("Email updated successfully!");
-      setEmailForm(prev => ({ ...prev, newEmail: "" }));
+      setEmailForm((prev) => ({ ...prev, newEmail: "" }));
       setShowEmailForm(false);
       setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to update email. Please try again.");
+      setError(
+        err.response?.data?.message ||
+          "Failed to update email. Please try again."
+      );
       setTimeout(() => setError(""), 3000);
     } finally {
       setIsUpdating(false);
@@ -153,24 +166,31 @@ const Profile = () => {
 
     setIsUpdating(true);
     try {
-      await axios.post(`${apiUrl}/api/auth/repass`, {
-        email: passwordForm.email,
-        newPassword: passwordForm.newPassword,
-      }, {
-        headers: {
-          Authorization: `Bearer ${Cookies.get("accessToken")}`,
+      await axios.post(
+        `${apiUrl}/api/auth/repass`,
+        {
+          email: passwordForm.email,
+          newPassword: passwordForm.newPassword,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("accessToken")}`,
+          },
+        }
+      );
       setSuccessMessage("Password updated successfully!");
-      setPasswordForm(prev => ({
+      setPasswordForm((prev) => ({
         ...prev,
         newPassword: "",
-        confirmPassword: ""
+        confirmPassword: "",
       }));
       setShowPasswordForm(false);
       setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to update password. Please try again.");
+      setError(
+        err.response?.data?.message ||
+          "Failed to update password. Please try again."
+      );
       setTimeout(() => setError(""), 3000);
     } finally {
       setIsUpdating(false);
@@ -189,7 +209,14 @@ const Profile = () => {
 
   if (isLoading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -197,12 +224,26 @@ const Profile = () => {
 
   return (
     <Box sx={{ maxWidth: "800px", margin: "0 auto", mt: 5, mb: 5 }}>
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-      {successMessage && <Alert severity="success" sx={{ mb: 2 }}>{successMessage}</Alert>}
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
+      {successMessage && (
+        <Alert severity="success" sx={{ mb: 2 }}>
+          {successMessage}
+        </Alert>
+      )}
 
       <Stack spacing={4}>
         {/* Profile Details Section */}
-        <Box sx={{ backgroundColor: colors.primary[400], p: 3, borderRadius: "8px" }}>
+        <Box
+          sx={{
+            backgroundColor: colors.primary[400],
+            p: 3,
+            borderRadius: "8px",
+          }}
+        >
           <Typography variant="h4" sx={{ mb: 3, color: colors.grey[100] }}>
             Profile Details
           </Typography>
@@ -248,7 +289,7 @@ const Profile = () => {
               onChange={handleInputChange}
             />
             <p>HINT : Target is All Your People Target, if you manage people</p>
-            <Box sx={{ mt: 2, display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+            <Box sx={{ mt: 2, display: "flex", gap: 2, flexWrap: "wrap" }}>
               <Button
                 type="submit"
                 variant="contained"
@@ -279,7 +320,13 @@ const Profile = () => {
 
         {/* Email Update Section */}
         <Collapse in={showEmailForm}>
-          <Box sx={{ backgroundColor: colors.primary[400], p: 3, borderRadius: "8px" }}>
+          <Box
+            sx={{
+              backgroundColor: colors.primary[400],
+              p: 3,
+              borderRadius: "8px",
+            }}
+          >
             <Typography variant="h4" sx={{ mb: 3, color: colors.grey[100] }}>
               Update Email
             </Typography>
@@ -317,7 +364,13 @@ const Profile = () => {
 
         {/* Password Update Section */}
         <Collapse in={showPasswordForm}>
-          <Box sx={{ backgroundColor: colors.primary[400], p: 3, borderRadius: "8px" }}>
+          <Box
+            sx={{
+              backgroundColor: colors.primary[400],
+              p: 3,
+              borderRadius: "8px",
+            }}
+          >
             <Typography variant="h4" sx={{ mb: 3, color: colors.grey[100] }}>
               Update Password
             </Typography>

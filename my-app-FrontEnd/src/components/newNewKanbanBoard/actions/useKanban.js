@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { getClient } from "./apiKanbanStuff";
-import toast from "react-hot-toast";
 
 export function useClient(clientID) {
   const { data, isPending, isError, error } = useQuery({

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PipelineColumn from "./PipelineColumn";
 import LeadCard from "./LeadCard";
 import LeadModal from "./LeadModal";
@@ -14,10 +14,8 @@ import { tokens } from "../../theme";
 import { useLocation } from "react-router-dom";
 import Action from "./actions/Action";
 import { LeadOptionsProvider } from "./actions/LeadContext";
-import Cookies from "js-cookie";
 import ProgressCircle from "../ProgressCircle";
-import { useFetchClients } from "./ClientData";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import useClients from "./useMainKanbanData";
 
 // function transformData(clients) {
@@ -124,7 +122,7 @@ const KanbanBoard = () => {
     currentSublink = currentSublink.replace("/NewNewKanbanBoard", "");
     queryClient.invalidateQueries({ queryKey: ["clientsList"] });
   }
-  console.log(currentSublink)
+  console.log(currentSublink);
   // const { response, error, isLoading, isError, refetch } = useFetchClients();
   // console.log(response)
   const { data: io, isPending } = useClients(currentSublink);
@@ -258,8 +256,6 @@ const KanbanBoard = () => {
       };
     });
   };
-
-
 
   const matchesSearch = (value, query) => {
     if (!value) return false;
@@ -413,7 +409,6 @@ const KanbanBoard = () => {
                 </div>
               ))}
             </PipelineColumn>
-
           </Box>
         )}
 

@@ -7,9 +7,7 @@ import {
   CircularProgress,
   Collapse,
   IconButton,
-  InputAdornment,
   MenuItem,
-  Popper,
   TextField,
   Typography,
   useTheme,
@@ -27,7 +25,6 @@ import { useAddActions } from "../../useAddAction";
 import { convertToDateTimeLocalFormat, processDate } from "./dateHELPER";
 import toast from "react-hot-toast";
 import { useCheckAction } from "../../useActionCheckCompleted";
-import { useClientActions } from "../../useGetClientActions";
 import { useUpdateActions } from "../../useUpdateActionClient";
 import { useQueryClient } from "@tanstack/react-query";
 const actionOptions = ["Follow Up", "Meeting", "Follow Up after Meeting"];

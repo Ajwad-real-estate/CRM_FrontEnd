@@ -1,9 +1,7 @@
-import { Box, Button, colors, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import ToDoItem from "./ToDoItem";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import delet from "../../assets/delet.mp3";
 import { useTasks } from "./useTasks";
 import formatTaskDates from "./date-visualization";
 import ProgressCircle from "../ProgressCircle";
