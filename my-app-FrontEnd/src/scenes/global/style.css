@@ -1,0 +1,40 @@
+.sidebar-container {
+  background: var(--primary-400) !important;
+}
+
+.sidebar-container .ps-sidebar-root {
+  border: 0 !important;
+  height: 100% !important;
+}
+
+.sidebar-container .MuiBox-root {
+  background: var(--primary-400) !important;
+  /* margin: var(--primary-400) !important; */
+}
+
+.sidebar-container .ps-sidebar-container {
+  background: var(--primary-400) !important;
+  overflow: hidden auto !important;
+  position: relative !important;
+  /* margin-top: 100px; */
+}
+
+.sidebar-container .ps-icon-wrapper {
+  background-color: transparent !important;
+}
+
+.sidebar-container .ps-menu-button {
+  padding: 5px 30px 5px 15px !important;
+}
+
+.sidebar-container .ps-menu-button:hover {
+  background-color: var(--primary-400) !important;
+  color: var(--hover-color) !important;
+}
+
+.sidebar-container .ps-menu-button.active {
+  color: var(--active-color) !important;
+}
+.MuiBox-root .css-1l8icbj {
+  margin-top: 10px !important;
+}

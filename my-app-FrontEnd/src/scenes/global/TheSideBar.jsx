@@ -1,113 +1,164 @@
-import { useEffect, useState } from "react";
-import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
-import "./Topbar.css";
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import { tokens } from "../../theme";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { tokens } from "../../theme";
 import Cookies from "js-cookie";
 import useLogout from "../../components/Logout";
 import { isDesktop } from "../../hooks/useDeviceDetect";
+import { sidebarItems } from "../../data/sidebarConfig";
+import { iconComponents } from "../../utils/icons";
+import "./style.css";
+import { minutesInHour } from "date-fns/constants";
 
-const Item = ({ title, to, icon, selected, setSelected }) => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+const MemoizedItem = React.memo(
+  ({ title, to, icon, selected, colors, setSelected }) => {
+    return (
+      <Link to={to} className="no-underline">
+        <MenuItem
+          active={selected === title}
+          style={{
+            color: colors.grey[100],
+          }}
+          onClick={() => setSelected(title)}
+          icon={icon}>
+          <Typography>{title}</Typography>
+        </MenuItem>
+      </Link>
+    );
+  }
+);
 
-  return (
-    <Link to={to} className="no-underline">
-      <MenuItem
-        active={selected === title}
-        style={{
-          color: colors.grey[100],
-        }}
-        onClick={() => setSelected(title)}
-        icon={icon}>
-        <Typography>{title}</Typography>
-      </MenuItem>
-    </Link>
-  );
-};
-
-const TheSideBar = () => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  const [selected, setSelected] = useState("Dashboard");
-  const [activeSubMenu, setActiveSubMenu] = useState(null); // Track active submenu
-  const logout = useLogout();
-  useEffect(() => {
-    if (!isDesktop) {
-      setIsCollapsed(true);
-    } else {
-      setIsCollapsed(false);
-    }
-  }, []);
-
-  const navigate = useNavigate();
-
-  const handleSubMenuClick = (submenuKey, to) => {
-    if (activeSubMenu === submenuKey) {
-      setActiveSubMenu(null);
-    } else {
-      setActiveSubMenu(submenuKey);
-    }
-    navigate(to);
-  };
-  const accName = Cookies.get("username");
-  const accRole = Cookies.get("role");
+const UserProfileSection = React.memo(({ isCollapsed, colors, name, role }) => {
+  if (isCollapsed) return <div style={{ minHeight: "50px" }}></div>;
 
   return (
     <Box
+      mt="-25px"
+      textAlign="center"
       sx={{
-        background: `${colors.primary[400]} !important`,
-        "& .ps-sidebar-root": {
-          border: `0px !important`,
-          height: `100% !important`,
-          // width: `270px`,
-        },
-        "& .MuiBox-root": {
-          background: `${colors.primary[400]} !important`,
-          margin: `${colors.primary[400]} !important`,
-        },
-        "& .ps-sidebar-container": {
-          background: `${colors.primary[400]} !important`,
-          overflow: `hidden auto !important`,
-          position: `relative !important`,
-        },
-        "& .ps-icon-wrapper": {
-          backgroundColor: "transparent !important",
-        },
-        "& .ps-menu-button": {
-          padding: "5px 30px 5px 15px !important",
-          "&:hover": {
-            // color: colors.grey[100] + " !important",
-            backgroundColor: colors.primary[400] + " !important",
-          },
-        },
-        "& .ps-menu-button:hover": {
-          color: "#868dfb !important",
-          background: `${colors.primary[400]} !important`,
-        },
-        "& .ps-menu-button.active": {
-          color: "#6870fa !important",
-        },
+        overflow: "hidden",
+        transition: "all 0.5s ease",
+        maxHeight: "200px",
+        opacity: 1,
+        marginBottom: "25px",
       }}>
-      <Sidebar collapsed={isCollapsed}>
+      <Typography
+        variant="h2"
+        color={colors.grey[100]}
+        fontWeight="bold"
+        sx={{ m: "10px 0 0 0" }}>
+        {name}
+      </Typography>
+      <Typography variant="h5" color={colors.greenAccent[500]}>
+        {role}
+      </Typography>
+    </Box>
+  );
+});
+
+const TheSideBar = () => {
+  const theme = useTheme();
+  const colors = useMemo(
+    () => tokens(theme.palette.mode),
+    [theme.palette.mode]
+  );
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [selected, setSelected] = useState("Dashboard");
+  const [activeSubMenu, setActiveSubMenu] = useState(null);
+  const [userData, setUserData] = useState(() => ({
+    name: Cookies.get("username"),
+    role: Cookies.get("role"),
+  }));
+
+  const logout = useLogout();
+  
+  useEffect(() => {
+    setIsCollapsed(!isDesktop);
+  }, [isDesktop]);
+
+  const navigate = useNavigate();
+
+  const handleSubMenuClick = useCallback(
+    (subMenuId, to) => {
+      setActiveSubMenu((prev) => (prev === subMenuId ? null : subMenuId));
+      console.log("Submenu clicked:", subMenuId);
+      // setActiveSubMenu(true);
+      // if (activeSubMenu === subMenuId) {
+      //   setActiveSubMenu(null);
+      // } else {
+      //   setActiveSubMenu(subMenuId);
+      // }
+      navigate(to);
+    },
+    [navigate]
+  );
+  return (
+    // <Box
+    //   sx={{
+    //     background: `${colors.primary[400]} !important`,
+    //     "& .ps-sidebar-root": {
+    //       border: `0px !important`,
+    //       height: `100% !important`,
+    //       // width: `270px`,
+    //     },
+    //     "& .MuiBox-root": {
+    //       background: `${colors.primary[400]} !important`,
+    //       margin: `${colors.primary[400]} !important`,
+    //     },
+    //     "& .ps-sidebar-container": {
+    //       background: `${colors.primary[400]} !important`,
+    //       overflow: `hidden auto !important`,
+    //       position: `relative !important`,
+    //     },
+    //     "& .ps-icon-wrapper": {
+    //       backgroundColor: "transparent !important",
+    //     },
+    //     "& .ps-menu-button": {
+    //       padding: "5px 30px 5px 15px !important",
+    //       "&:hover": {
+    //         backgroundColor: colors.primary[400] + " !important",
+    //       },
+    //     },
+    //     "& .ps-menu-button:hover": {
+    //       color: "#868dfb !important",
+    //       background: `${colors.primary[400]} !important`,
+    //     },
+    //     "& .ps-menu-button.active": {
+    //       color: "#6870fa !important",
+    //     },
+    //   }}>
+    <Box
+      sx={{
+        "--primary-400": colors.primary[400],
+        "--hover-color": "#868dfb",
+        "--active-color": "#6870fa",
+        // position: "relative",
+        // width: isCollapsed ? "80px" : "270px", // Adjust widths as needed
+        transition: "width 0.3s ease",
+        // overflow: "hidden",
+        // height: "100vh",
+        // background: colors.primary[400],
+      }}
+      className="sidebar-container">
+      <Sidebar
+        collapsed={isCollapsed}
+        style={{
+          // position: "absolute",
+          // width: "270px", // Should match your expanded width
+          transition: "transform 0.3s ease",
+          // transform: isCollapsed ? "translateX(-190px)" : "translateX(0)",
+          // height: "100%",
+        }}>
         <Menu iconShape="square">
-          {/* logo and menu icon */}
           <MenuItem
             onClick={() => setIsCollapsed(!isCollapsed)}
             icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
             style={{
               margin: "10px 0 20px 0",
+              transition: "transform 0.3s ease",
+
               color: colors.grey[100],
             }}>
             {!isCollapsed && (
@@ -125,145 +176,52 @@ const TheSideBar = () => {
               </Box>
             )}
           </MenuItem>
-
-          {!isCollapsed && (
-            <Box mb="25px">
-              <Box textAlign="center">
-                <Typography
-                  variant="h2"
-                  color={colors.grey[100]}
-                  fontWeight="bold"
-                  sx={{ m: "10px 0 0 0" }}>
-                  {accName}
-                </Typography>
-                <Typography variant="h5" color={colors.greenAccent[500]}>
-                  {accRole}
-                </Typography>
-              </Box>
-            </Box>
-          )}
+          <UserProfileSection
+            isCollapsed={isCollapsed}
+            colors={colors}
+            name={userData.name}
+            role={userData.role}
+          />
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}>
-              Pages To Sales Agent
-            </Typography>
-            <Item
-              title="Dashboard"
-              to="/"
-              icon={<HomeOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}></Item>
-            <SubMenu
-              label="Kanban Board"
-              icon={<PeopleOutlinedIcon />}
-              open={activeSubMenu === "NewNewKanbanBoard"} // Open conditionally
-              onClick={() =>
-                handleSubMenuClick("NewNewKanbanBoard", "/NewNewKanbanBoard")
-              }>
-              <MenuItem
-                title="Done Deal"
-                icon={<ContactsOutlinedIcon />}
-                onClick={() => navigate("NewNewKanbanBoard/done_deal")}>
-                Done Deal
-              </MenuItem>
-              <MenuItem
-                title="archieved"
-                icon={<ContactsOutlinedIcon />}
-                onClick={() => navigate("NewNewKanbanBoard/archieved")}>
-                archieved
-              </MenuItem>
-              <MenuItem
-                title="Lost"
-                icon={<ContactsOutlinedIcon />}
-                onClick={() => navigate("NewNewKanbanBoard/lost")}>
-                Lost
-              </MenuItem>
-            </SubMenu>
-            <Item
-              title="Inventory"
-              // to="/projects"
-              icon={<MapOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="To-Do List
-"
-              to="/todolist"
-              icon={<ReceiptOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-
-            {/* Nested SubMenu for Sales Agent Pages */}
-
-            <Item
-              title="Calendar"
-              to="/calendar"
-              icon={<CalendarTodayOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            {/* <Item
-              title="Contact"
-              to="/contact"
-              icon={<ContactsOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            /> */}
-            <Item
-              title="Contacts Information"
-              to="/clients"
-              icon={<ContactsOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <SubMenu
-              label="Manage Team"
-              icon={<PeopleOutlinedIcon />}
-              // style={{ color: "#fff" }}
-              open={activeSubMenu === "team"} // Open conditionally
-              onClick={() => handleSubMenuClick("team", "/team")} // Toggle active and navigate
-            >
-              <Item
-                title="New Sales Account"
-                to="/CreateAccForm"
-                icon={<PersonOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
-              <Item
-                title="Input New Clients"
-                to="/getContacts"
-                icon={<PeopleOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
-              <Item
-                title="assign Clients"
-                to="/assignContacts"
-                icon={<PeopleOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
-            </SubMenu>
-            {/* <Item
-              title="Manage Team"
-              to="/team"
-              icon={<PeopleOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            /> */}
-
-            <Item
-              title="FAQ Page"
-              to="/faq"
-              icon={<HelpOutlineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
+            {sidebarItems.map((item) => {
+              if (item.type === "item") {
+                return (
+                  <MemoizedItem
+                    key={item.title}
+                    title={item.title}
+                    to={item.to}
+                    colors={colors}
+                    icon={iconComponents[item.icon]}
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                );
+              } else if (item.type === "submenu") {
+                return (
+                  <SubMenu
+                    key={item.key}
+                    label={item.label}
+                    icon={iconComponents[item.icon]} // And here
+                    open={activeSubMenu === item.key}
+                    onClick={() =>
+                      handleSubMenuClick(item.key, item.to || "#")
+                    }>
+                    {item.items.map((subItem) => (
+                      <MemoizedItem
+                        key={subItem.title}
+                        colors={colors}
+                        title={subItem.title}
+                        to={subItem.to}
+                        icon={iconComponents[subItem.icon]} // And here
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
+                    ))}
+                  </SubMenu>
+                );
+              }
+              return null;
+            })}
             <Box sx={{ display: "flex" }}>
               <Button
                 variant="outlined"
@@ -282,73 +240,6 @@ const TheSideBar = () => {
                 Logout
               </Button>
             </Box>
-
-            {/* <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              finance
-            </Typography>
-
-            <Item
-              title="Invoices Balances"
-              to="/invoices"
-              icon={<ReceiptOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Request Commission"
-              to="/requestCommission"
-              icon={<ReceiptOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            /> */}
-
-            {/*
-      <Typography
-       variant="h6"
-       color={colors.grey[300]}
-       sx={{ m: "15px 0 5px 20px" }}
-      >
-       Pages
-      </Typography>
-      <Typography
-       variant="h6"
-       color={colors.grey[300]}
-       sx={{ m: "15px 0 5px 20px" }}
-      >
-       Charts
-      </Typography>
-      <Item
-       title="Bar Chart"
-       to="/bar"
-       icon={<BarChartOutlinedIcon />}
-       selected={selected}
-       setSelected={setSelected}
-      />
-      <Item
-       title="Pie Chart"
-       to="/pie"
-       icon={<PieChartOutlineOutlinedIcon />}
-       selected={selected}
-       setSelected={setSelected}
-      />
-      <Item
-       title="Line Chart"
-       to="/line"
-       icon={<TimelineOutlinedIcon />}
-       selected={selected}
-       setSelected={setSelected}
-      />
-      <Item
-       title="Geography Chart"
-       to="/geography"
-       icon={<MapOutlinedIcon />}
-       selected={selected}
-       setSelected={setSelected}
-      /> */}
           </Box>
         </Menu>
       </Sidebar>

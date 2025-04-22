@@ -43,6 +43,14 @@ body,
 /* .go4109123758{ //toaster
   top:100px !important;
 } */
-.css-8atqhb{
+.css-8atqhb {
   min-width: 80% !important;
 }
+
+/* .MuiBox-root .css-zwiamn {
+  margin-right: 100px;
+
+  @media (max-width: 768px) {
+    margin-right: 150px;
+  }
+} */

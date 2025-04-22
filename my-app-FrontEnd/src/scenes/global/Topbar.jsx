@@ -21,19 +21,26 @@ import { toggleMode } from "../../themeSlice";
 import { themeSettings, tokens } from "../../theme";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
-import AjwadWhite from "../../assets/logoWihte.png";
 import AjwadBlack from "../../assets/logoBlack.png";
 import { isDesktop } from "../../hooks/useDeviceDetect";
+import { useCallback, useMemo } from "react";
 
 const Topbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const colorMode = useSelector((state) => state.theme.mode);
   const dispatch = useDispatch();
-  const theme = createTheme(themeSettings(colorMode));
+  const theme = useMemo(
+    () => createTheme(themeSettings(colorMode)),
+    [colorMode]
+  );
   const handleToggle = () => {
     dispatch(toggleMode());
   };
-  const colors = tokens(theme.palette.mode);
+  const colors = useMemo(
+    () => tokens(theme.palette.mode),
+    [theme.palette.mode]
+  );
 
   function editTitlePageInfo(path) {
     const normalizedPath = path.startsWith("/") ? path : `/${path}`;
@@ -86,8 +93,12 @@ const Topbar = () => {
       title: "Assign Contacts",
       subtitle: "Assign new contacts to team members",
     },
+    "/profile": {
+      title: "Profile Settings",
+      subtitle: "Manage your profile and settings",
+    },
   };
-
+  // const navigateToProfile = useCallback(() => navigate("/profile"), [navigate]);
   // Function to get page info
   const getPageInfo = (pathname) => {
     return (
@@ -98,39 +109,57 @@ const Topbar = () => {
     );
   };
 
-  const { title, subtitle } = getPageInfo(editTitlePageInfo(location.pathname));
+  const { title, subtitle } = useMemo(
+    () => getPageInfo(editTitlePageInfo(location.pathname)),
+    [location.pathname]
+  );
 
-  const navigate = useNavigate();
-  // const isDesktop = window.innerWidth > 960; // Check if screen width is less than 960px
+  const topbarStyles = useMemo(
+    () => ({
+      background: colors.NewNav[900],
+      width: "100%",
+      zIndex: 1000,
+      height: "95px",
+      left: 0,
+      right: 0,
+      boxShadow: 3,
+      paddingLeft: 3,
+      paddingRight: 3,
+      paddingTop: 2,
+      borderBottom: "0.1px solid",
+      borderColor: colors.NewNav[1000],
+    }),
+    [colors.NewNav]
+  );
 
-  // if (isMobileOrTablet) {
-  //   return null;
-  // }
   return (
     <Box
       display="flex"
       justifyContent="space-between"
       alignItems="center"
       p={1}
-      sx={{
-        background: colors.NewNav[900],
-        width: "100%",
-        zIndex: 1000,
-        height: "110px",
-        left: 0,
-        right: 0,
-        boxShadow: 3,
-        paddingLeft: 3,
-        paddingRight: 3,
-        paddingTop: 2,
-        borderBottom: "0.1px solid",
-        borderColor: colors.NewNav[1000],
-      }}>
+      sx={topbarStyles}>
+      {/* // sx={{
+      //   background: colors.NewNav[900],
+      //   width: "100%",
+      //   zIndex: 1000,
+      //   height: "110px",
+      //   left: 0,
+      //   right: 0,
+      //   boxShadow: 3,
+      //   paddingLeft: 3,
+      //   paddingRight: 3,
+      //   paddingTop: 2,
+      //   borderBottom: "0.1px solid",
+      //   borderColor: colors.NewNav[1000],
+      // }}> */}
       {isDesktop && (
         <img
           src={AjwadBlack}
           alt="Ajwad Black Logo"
-          style={{ width: "280px" }}
+          style={{
+            width: "220px",
+          }}
         />
       )}
       <Box sx={{ mt: 2 }}>
@@ -161,7 +190,6 @@ const Topbar = () => {
             <LightModeOutlinedIcon />
           )}
         </IconButton>
-
         <IconButton sx={{ color: "#FCFCFC" }}>
           <Box
             sx={{
@@ -182,13 +210,13 @@ const Topbar = () => {
           <NotificationsOutlinedIcon />
         </IconButton>
         <IconButton sx={{ color: "#FCFCFC" }}>
-          <SettingsOutlinedIcon />
-        </IconButton>
-        <IconButton sx={{ color: "#FCFCFC" }}>
           <PersonOutlinedIcon
-            onClick={() => {
-              navigate("/profile");
-            }}
+            onClick={
+              // navigateToProfile()
+              () => {
+                navigate("/profile");
+              }
+            }
           />
         </IconButton>
       </Box>
