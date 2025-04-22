@@ -20,6 +20,7 @@ export const sidebarItems = [
     label: "Kanban Board",
     icon: "PeopleOutlinedIcon",
     key: "NewNewKanbanBoard",
+    to: "NewNewKanbanBoard",
     items: [
       {
         title: "Done Deal",
@@ -66,6 +67,7 @@ export const sidebarItems = [
     label: "Manage Team",
     icon: "PeopleOutlinedIcon",
     key: "team",
+    to: "team",
     items: [
       {
         title: "New Sales Account",

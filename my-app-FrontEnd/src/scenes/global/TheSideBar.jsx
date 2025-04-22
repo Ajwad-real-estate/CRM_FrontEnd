@@ -73,7 +73,7 @@ const TheSideBar = () => {
   }));
 
   const logout = useLogout();
-  
+
   useEffect(() => {
     setIsCollapsed(!isDesktop);
   }, [isDesktop]);
@@ -83,16 +83,17 @@ const TheSideBar = () => {
   const handleSubMenuClick = useCallback(
     (subMenuId, to) => {
       setActiveSubMenu((prev) => (prev === subMenuId ? null : subMenuId));
-      console.log("Submenu clicked:", subMenuId);
-      // setActiveSubMenu(true);
-      // if (activeSubMenu === subMenuId) {
-      //   setActiveSubMenu(null);
-      // } else {
-      //   setActiveSubMenu(subMenuId);
-      // }
+      // console.log("Submenu clicked:", subMenuId);
+      setActiveSubMenu(true);
+      if (activeSubMenu === subMenuId) {
+        setActiveSubMenu(null);
+      } else {
+        setActiveSubMenu(subMenuId);
+      }
+      console.log("to" + to);
       navigate(to);
     },
-    [navigate]
+    [navigate, activeSubMenu]
   );
   return (
     // <Box
@@ -203,9 +204,7 @@ const TheSideBar = () => {
                     label={item.label}
                     icon={iconComponents[item.icon]} // And here
                     open={activeSubMenu === item.key}
-                    onClick={() =>
-                      handleSubMenuClick(item.key, item.to || "#")
-                    }>
+                    onClick={() => handleSubMenuClick(item.key, item.to)}>
                     {item.items.map((subItem) => (
                       <MemoizedItem
                         key={subItem.title}

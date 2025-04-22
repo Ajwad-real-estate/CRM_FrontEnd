@@ -70,12 +70,12 @@ function App() {
     }
 
     // Check for access token in cookies
-    const accessToken = Cookies.get("accessToken");
-    if (!accessToken) {
-      // Redirect to the sign-in page if no token is found
-      navigate("/signin");
-    }
-  }, [dispatch, navigate]);
+    // const accessToken = Cookies.get("accessToken");
+    // if (!accessToken) {
+    //   // Redirect to the sign-in page if no token is found
+    //   navigate("/signin");
+    // }
+  }, [dispatch]);
 
   const [isSidebar, setIsSidebar] = useState(true);
 
@@ -85,9 +85,6 @@ function App() {
   // Get the current location
   const location = useLocation();
 
-  // Check if the current route is "/signup" or "/signin"
-  const isAuthPage =
-    location.pathname === "/signin" || location.pathname === "/signup";
 
   return (
     <QueryClientProvider client={queryClients}>
@@ -104,11 +101,12 @@ function App() {
             style={{ maxWidth: "100%", overflowX: "hidden" }}
           >
             {/* Only render Topbar if not on the auth pages */}
-            {!isAuthPage && <Topbar setIsSidebar={setIsSidebar} />}
+            { <Topbar setIsSidebar={setIsSidebar} />}
 
             <Box sx={{ display: "flex", minHeight: "91%" }}>
               {/* Only render Sidebar if not on the auth pages */}
-              {!isAuthPage && <Sidebar isSidebar={isSidebar} />}
+              { <Sidebar isSidebar={isSidebar} />}
+              {/* {!isAuthPage && <Sidebar isSidebar={isSidebar} />} */}
               <Box sx={{ width: "100%" }}>
                 <Routes>
                   <Route path="/signin" element={<SignIn />} />

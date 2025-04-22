@@ -237,6 +237,7 @@ const Dashboard = () => {
 
       {/* CHARTS SECTION */}
       <Box
+        height="380px"
         display="grid"
         gridTemplateColumns={`repeat(${gridConfig.columns}, 1fr)`}
         gridAutoRows="minmax(300px, auto)"
