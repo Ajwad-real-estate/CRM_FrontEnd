@@ -1,0 +1,24 @@
+.contact-page {
+    padding: 20px;
+}
+
+.contact-card {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    /* background-color:; */
+}
+
+.contact-card h6 {
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+}
+
+.contact-card .MuiChip-root {
+    margin: 4px 4px 0 0;
+}
+
+.contact-card .MuiTypography-body2 {
+    margin-top: 8px;
+    color: #757575;
+}
