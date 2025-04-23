@@ -50,41 +50,15 @@ const Clients = () => {
     {
       field: "name",
       headerName: "Name",
-      flex: 1,
+      flex: 1.5,
       cellClassName: "name-column--cell",
-    },
-    {
-      field: "age",
-      headerName: "Age",
-      type: "number",
-      headerAlign: "left",
-      align: "left",
     },
     {
       field: "phone_numbers",
       headerName: "Phone Numbers",
-      flex: 1,
+      flex:1.5,
       renderCell: (params) => {
         return params.value ? params.value.join(", ") : "-";
-      },
-    },
-    {
-      field: "email",
-      headerName: "Email",
-      flex: 1,
-    },
-    {
-      field: "street",
-      headerName: "Street",
-      flex: 1,
-    },
-    {
-      field: "budget",
-      headerName: "Budget",
-      flex: 1,
-      type: "number",
-      renderCell: (params) => {
-        return params.value ? `$${params.value.toLocaleString()}` : "-";
       },
     },
     {
