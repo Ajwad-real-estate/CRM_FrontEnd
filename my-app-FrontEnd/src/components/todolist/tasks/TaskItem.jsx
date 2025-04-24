@@ -47,7 +47,7 @@ const BootstrapDialog = sty(Dialog)(({ theme }) => ({
   },
 }));
 
-const ToDoItem = ({ todo }) => {
+const ToDoItem = ({ todo, onDelete }) => {
   const theme = useTheme();
   const colors = useMemo(
     () => tokens(theme.palette.mode),
@@ -113,6 +113,12 @@ const ToDoItem = ({ todo }) => {
     setStatus_id(event.target.value);
   };
   //
+  const handleCheckboxDelete = () => {
+    // Optimistically remove the task from the UI
+    onDelete(todo.id); // This will trigger parent component to remove it
+    // Then send the delete request
+    deleteTaskById(todo.id);
+  };
   return (
     <Box
       p="10px"
@@ -126,7 +132,7 @@ const ToDoItem = ({ todo }) => {
 
         alignItems: "center",
         justifyContent: "center",
-        width: "90%",
+        width: "98%",
         backgroundColor: colors.grey[900],
         boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
       }}>
@@ -137,7 +143,8 @@ const ToDoItem = ({ todo }) => {
         justifyContent="space-between"
         width="100%">
         <Checkbox
-          onChange={() => deleteTaskById(todo.id)}
+          // onChange={() => deleteTaskById(todo.id)}
+          onChange={handleCheckboxDelete}
           sx={{
             color: colors.greenAccent[500],
             "&.Mui-checked": {
@@ -161,7 +168,7 @@ const ToDoItem = ({ todo }) => {
 
         <Box
           display="flex"
-          flex={1}
+          gap="20px"
           alignItems="center"
           justifyContent="space-between"
           padding="auto"
@@ -178,34 +185,21 @@ const ToDoItem = ({ todo }) => {
               color: colors.grey[100],
               marginLeft: "0",
               fontSize: "1rem",
+              display: { xs: "none", sm: "none", md: "none", lg: "flex" },
             }}>
-            End at: {todo.date}
+            {todo.date}, {todo.time.slice(0, 5)}
           </Typography>
-          <Typography
-            variant="body1"
-            sx={{
-              color: colors.grey[100],
-              flexGrow: 1,
-              marginLeft: "6px",
-              fontSize: "1rem",
-            }}>
-            {todo.time}
-          </Typography>
-
           <Box
             sx={{
+              display: { xs: "none", sm: "flex" }, // Hide on mobile and tablet
               cursor: "pointer",
-              height: "14px",
-              width: "14px",
-              borderRadius: "50%",
-              marginRight: "60px",
+              width: "20px",
             }}>
             {statuses.find((status) => status.id === todo.status_id)?.name}
           </Box>
 
           <EditIcon onClick={handleClickOpen} sx={{ cursor: "pointer" }} />
 
-          {/* Separate ---------------------------------------- */}
           <BootstrapDialog
             onClose={handleClose}
             aria-labelledby="customized-dialog-title"

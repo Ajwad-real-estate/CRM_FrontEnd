@@ -41,9 +41,11 @@ function ItemsList() {
   return (
     <div
       style={{
-        width: "90%",
+        width: "100%",
+        height: "80vh",
 
-        height: `${isPending ? "80vh" : "100%"}`,
+        display: "flex",
+        flexDirection: "column",
       }}>
       <Box
         sx={{
@@ -57,85 +59,111 @@ function ItemsList() {
           placeholder="search Task"
           variant="outlined"
           size="small"
-          sx={{ width: "60%", marginRight: "10px" }}
+          sx={{ width: "85%", marginRight: "10px" }}
         />
 
-        <Button variant="contained" color="primary" onClick={HandleNavigate}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={HandleNavigate}
+          sx={{ width: "10%", marginRight: "10px", minWidth: "110px" }}>
           Add New Task
         </Button>
       </Box>
       {data && !isPending && !isError && (
         <Box
           sx={{
-            width: "100%",
-            height: "80%",
+            flex: 1, // Take up remaining space
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "space-around",
-            gap: "30px",
+            overflowY: "auto", // Enable scrolling if content overflows
           }}>
-          <Typography
-            variant="h3"
-            sx={{ marginBottom: "10px", marginTop: "18px" }}>
-            All Tasks
-          </Typography>
           <Box
-            mt="20px "
-            sx={{ height: "400px", width: "100%", overflowY: "scroll" }}>
-            {All_TASKS.length > 0 ? (
-              All_TASKS.map((todo) => <ToDoItem key={todo.id} todo={todo} />)
-            ) : (
-              <Typography
-                variant="h2"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginTop: "60px",
-                }}>
-                Task List is Empty
-              </Typography>
-            )}
+            mt="20px"
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "space-around",
+            }}>
             <Typography
               variant="h3"
               sx={{ marginBottom: "10px", marginTop: "18px" }}>
-              All Actions
+              Tasks
             </Typography>
-            {All_ACTIONS.length > 0 ? (
-              All_ACTIONS.map((todo) => (
-                <ActionItem
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginTop: "60px",
-                    border: " 10px solid ",
-                  }}
-                  key={todo.id}
-                  todo={todo}
-                />
-              ))
-            ) : (
-              <Typography
-                variant="h2"
+          </Box>
+          {All_TASKS.length > 0 ? (
+            All_TASKS.map((todo) => (
+              <ToDoItem
+                key={todo.id}
+                todo={todo}
+                onDelete={(taskId) => {
+                  // Optimistically update local state
+                  All_TASKS = All_TASKS.filter((task) => task.id !== taskId);
+                }}
+              />
+            ))
+          ) : (
+            <Typography
+              variant="h2"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: "60px",
+              }}>
+              Task List is Empty
+            </Typography>
+          )}
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "space-around",
+            }}>
+            <Typography
+              variant="h3"
+              sx={{ marginBottom: "10px", marginTop: "18px" }}>
+              Actions
+            </Typography>
+          </Box>
+          {All_ACTIONS.length > 0 ? (
+            All_ACTIONS.map((todo) => (
+              <ActionItem
                 sx={{
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   marginTop: "60px",
-                }}>
-                Action List is Empty
-              </Typography>
-            )}
-          </Box>
+                  border: "10px solid",
+                }}
+                key={todo.id}
+                todo={todo}
+              />
+            ))
+          ) : (
+            <Typography
+              variant="h2"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: "60px",
+              }}>
+              Action List is Empty
+            </Typography>
+          )}
         </Box>
       )}
       {isError && (
         <Box
           sx={{
-            width: "100%",
-            height: "100%",
+            flex: 1,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -146,8 +174,7 @@ function ItemsList() {
       {isPending && (
         <Box
           sx={{
-            width: "100%",
-            height: "100%",
+            flex: 1,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",

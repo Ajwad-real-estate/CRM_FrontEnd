@@ -51,7 +51,7 @@ const ActionItem = ({ todo }) => {
         borderLeft: "10px solid red",
         alignItems: "center",
         justifyContent: "center",
-        width: "90%",
+        width: "98%",
         backgroundColor: colors.grey[900],
         boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
       }}>
@@ -78,9 +78,15 @@ const ActionItem = ({ todo }) => {
           alignItems="center"
           justifyContent="space-between"
           padding="10px">
-          <Typography sx={{ color: colors.grey[100], marginRight: "20px" }}>
-            {new Date(formData.date).toLocaleDateString()} {formData.time}
-          </Typography>
+          <Box
+            sx={{
+              display: { xs: "none", sm: "none", md: "none", lg: "flex" },
+            }}>
+            <Typography sx={{ color: colors.grey[100], marginRight: "20px" }}>
+              {new Date(formData.date).toLocaleDateString()}{" "}
+              {formData.time.slice(0, 5)}
+            </Typography>
+          </Box>
           <Box
             sx={{
               height: "14px",

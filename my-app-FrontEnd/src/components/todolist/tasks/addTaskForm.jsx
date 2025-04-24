@@ -104,6 +104,8 @@ const AddToDo = () => {
 
       setTaskDetails("");
       setPriority(2);
+     handleBack();
+
     } else {
       setErrorField(true);
       toast.error("Task Cannot be added");
