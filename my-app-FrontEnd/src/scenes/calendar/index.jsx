@@ -16,8 +16,8 @@ import {
   Tab,
 } from "@mui/material";
 import { tokens } from "../../theme";
-import { useTasks } from "../../components/todolist/useTasks";
-import formatTaskDates from "../../components/todolist/date-visualization";
+import { useTasks } from "../../components/todolist/tasks/taskQueries";
+import formatTaskDates from "../../components/todolist/utils/date-visualization";
 import ProgressCircle from "../../components/ProgressCircle";
 import EditDialogue from "./EditDialogue";
 
@@ -38,22 +38,27 @@ const Calendar = () => {
 
     const formatEvents = (items, type) =>
       items.map((item, i) => ({
-      id: item?.id || `${type}-${i}`,
-        title: item?.title || item?.ClientName ||"Action" ,
-      status: item?.status || "pending",
-      priority_level: item?.priority_level || 1,
-      date: item?.date?.split(" ")[0] || new Date().toISOString(),
-      time: item?.time || "",
-      detail: item?.detail || "No Description",
-      start: type === 'action' ? null : item?.created_at?.split(" ")[0] || item?.date || new Date().toISOString(),
-      end: item?.date?.split(" ")[0] || new Date().toISOString(),
-      allDay: item?.allDay || false,
-      type: type, // Add type to distinguish between tasks and actions
+        id: item?.id || `${type}-${i}`,
+        title: item?.title || item?.ClientName || "Action",
+        status: item?.status || "pending",
+        priority_level: item?.priority_level || 1,
+        date: item?.date?.split(" ")[0] || new Date().toISOString(),
+        time: item?.time || "",
+        detail: item?.detail || "No Description",
+        start:
+          type === "action"
+            ? null
+            : item?.created_at?.split(" ")[0] ||
+              item?.date ||
+              new Date().toISOString(),
+        end: item?.date?.split(" ")[0] || new Date().toISOString(),
+        allDay: item?.allDay || false,
+        type: type, // Add type to distinguish between tasks and actions
       }));
 
     return {
-      formattedTasks: formatEvents(tasks, 'task'),
-      formattedActions: formatEvents(actions, 'action'),
+      formattedTasks: formatEvents(tasks, "task"),
+      formattedActions: formatEvents(actions, "action"),
     };
   }, [data, isPending]);
 
@@ -77,14 +82,17 @@ const Calendar = () => {
 
   // Event color handling
   const eventContent = (eventInfo) => {
-    const isAction = eventInfo.event.extendedProps.type === 'action';
+    const isAction = eventInfo.event.extendedProps.type === "action";
     return (
       <div
         style={{
-          backgroundColor: isAction ? colors.blueAccent[500] : colors.greenAccent[500],
-          borderColor: isAction ? colors.blueAccent[700] : colors.greenAccent[700],
-        }}
-      >
+          backgroundColor: isAction
+            ? colors.blueAccent[500]
+            : colors.greenAccent[500],
+          borderColor: isAction
+            ? colors.blueAccent[700]
+            : colors.greenAccent[700],
+        }}>
         {eventInfo.event.title}
       </div>
     );
@@ -92,7 +100,13 @@ const Calendar = () => {
 
   if (isPending) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "75vh" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "75vh",
+        }}>
         <ProgressCircle rotate />
       </Box>
     );
@@ -100,14 +114,17 @@ const Calendar = () => {
 
   if (isError) {
     return (
-      <Box sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "75vh",
-        color: colors.redAccent[600]
-      }}>
-        <Typography variant="h3">Error occurred when fetching Calendar data!</Typography>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "75vh",
+          color: colors.redAccent[600],
+        }}>
+        <Typography variant="h3">
+          Error occurred when fetching Calendar data!
+        </Typography>
       </Box>
     );
   }
@@ -120,15 +137,12 @@ const Calendar = () => {
           flex="1 1 20%"
           backgroundColor={colors.primary[400]}
           p="15px"
-          borderRadius="4px"
-        >
-          <Typography variant="h5" mb={2}>Events</Typography>
+          borderRadius="4px">
+          <Typography variant="h5" mb={2}>
+            Events
+          </Typography>
 
-          <Tabs
-            value={activeTab}
-            onChange={handleTabChange}
-            sx={{ mb: 2 }}
-          >
+          <Tabs value={activeTab} onChange={handleTabChange} sx={{ mb: 2 }}>
             <Tab label="All" />
             <Tab label="Tasks" />
             <Tab label="Actions" />
@@ -139,13 +153,13 @@ const Calendar = () => {
               <ListItem
                 key={event.id}
                 sx={{
-                  backgroundColor: event.type === 'action'
-                    ? colors.blueAccent[500]
-                    : colors.greenAccent[500],
+                  backgroundColor:
+                    event.type === "action"
+                      ? colors.blueAccent[500]
+                      : colors.greenAccent[500],
                   margin: "10px 0",
                   borderRadius: "2px",
-                }}
-              >
+                }}>
                 <ListItemText
                   primary={
                     <Typography variant="body1" fontWeight="bold">
@@ -153,8 +167,7 @@ const Calendar = () => {
                       <Typography
                         component="span"
                         variant="caption"
-                        sx={{ ml: 1 }}
-                      >
+                        sx={{ ml: 1 }}>
                         ({event.type})
                       </Typography>
                     </Typography>
@@ -169,7 +182,7 @@ const Calendar = () => {
                     </Typography>
                   }
                 />
-                {event.type !== 'action' && <EditDialogue todo={event} />}
+                {event.type !== "action" && <EditDialogue todo={event} />}
               </ListItem>
             ))}
           </List>

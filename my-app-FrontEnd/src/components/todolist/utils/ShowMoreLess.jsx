@@ -1,6 +1,6 @@
 import { Button } from "bootstrap";
 import { useState } from "react";
-import { tokens } from "../../theme";
+import { tokens } from "../../../theme";
 import { Typography, useTheme } from "@mui/material";
 
 export default function ShowMoreLess({ text }) {
@@ -19,8 +19,7 @@ export default function ShowMoreLess({ text }) {
     <>
       <Typography
         sx={{ width: "80%", alignSelf: "center", color: colors.grey[500] }}
-        variant="p"
-      >
+        variant="p">
         {
           isExpanded
             ? text // Show full text
@@ -31,8 +30,7 @@ export default function ShowMoreLess({ text }) {
       {words.length > MAX_WORDS && (
         <Button
           sx={{ color: colors.greenAccent[500] }}
-          onClick={toggleShowMore}
-        >
+          onClick={toggleShowMore}>
           {isExpanded ? "Show Less" : "Show More"}
         </Button>
       )}

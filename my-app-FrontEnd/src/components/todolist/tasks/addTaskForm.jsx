@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Box, TextField, Button, Slider, Tooltip } from "@mui/material";
-import FormRow from "../../ui/FormRow";
-import Form from "../../ui/Form";
+import FormRow from "../../../ui/FormRow";
+import Form from "../../../ui/Form";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
-import add from "./../../assets/add.mp3";
-import { useAddTasks } from "./useTasks";
+import add from "./../../../assets/add.mp3";
+import { useAddTasks } from "./taskQueries";
 import toast from "react-hot-toast";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -133,8 +133,7 @@ const AddToDo = () => {
           left: "-5px",
           color: "#fff",
           zIndex: "100",
-        }}
-      >
+        }}>
         <ArrowBackIcon />
       </Button>
       <Box display="flex" alignItems="center" justifyContent="center" mb="20px">
@@ -216,8 +215,7 @@ const AddToDo = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-around",
-              }}
-            >
+              }}>
               <Slider
                 value={priority}
                 onChange={handleChange}
@@ -282,8 +280,7 @@ const AddToDo = () => {
                       padding: "8px 16px", // Add padding around the content
                     },
                   },
-                }}
-              >
+                }}>
                 <Box
                   sx={{
                     background: `${
@@ -297,8 +294,7 @@ const AddToDo = () => {
                     height: "14px",
                     width: "14px",
                     borderRadius: "50%",
-                  }}
-                ></Box>
+                  }}></Box>
               </Tooltip>
             </Box>
           </FormRow>

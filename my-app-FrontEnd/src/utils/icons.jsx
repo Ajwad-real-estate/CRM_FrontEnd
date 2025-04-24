@@ -6,6 +6,7 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import CloseIcon from "@mui/icons-material/Close";
 
 export const iconComponents = {
   HomeOutlinedIcon: <HomeOutlinedIcon />,
@@ -16,4 +17,5 @@ export const iconComponents = {
   CalendarTodayOutlinedIcon: <CalendarTodayOutlinedIcon />,
   HelpOutlineOutlinedIcon: <HelpOutlineOutlinedIcon />,
   MapOutlinedIcon: <MapOutlinedIcon />,
+  CloseIcon: <CloseIcon />,
 };

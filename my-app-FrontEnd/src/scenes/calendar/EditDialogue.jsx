@@ -23,9 +23,10 @@ import add from "../../assets/add.mp3";
 import FormRow from "../../ui/FormRow";
 
 import styled from "styled-components";
-import { useUpdateTask } from "../../components/todolist/useUpdate";
+// import { useUpdateTask } from "../../components/todolist/tasks/useUpdate";
 import toast from "react-hot-toast";
 import { Pending } from "@mui/icons-material";
+import { useUpdateTask } from "../../components/todolist/tasks/taskQueries";
 //import { useDeleteTask } from "./useDeleteTask";
 
 const Form = styled.form`
@@ -129,8 +130,7 @@ const EditDialogue = ({ todo }) => {
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
-        open={open}
-      >
+        open={open}>
         <IconButton
           aria-label="close"
           onClick={handleClose}
@@ -139,8 +139,7 @@ const EditDialogue = ({ todo }) => {
             right: 8,
             top: 8,
             color: theme.palette.grey[500],
-          })}
-        >
+          })}>
           <CloseIcon />
         </IconButton>
         <Form>
@@ -184,8 +183,7 @@ const EditDialogue = ({ todo }) => {
               value={status}
               onChange={handleChangeStatus}
               fullWidth
-              variant="outlined"
-            >
+              variant="outlined">
               {options.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
@@ -199,8 +197,7 @@ const EditDialogue = ({ todo }) => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-around",
-              }}
-            >
+              }}>
               <Slider
                 value={priority}
                 onChange={handleChange}
@@ -271,8 +268,7 @@ const EditDialogue = ({ todo }) => {
                       padding: "8px 16px", // Add padding around the content
                     },
                   },
-                }}
-              >
+                }}>
                 <Box
                   sx={{
                     background: `${
@@ -286,8 +282,7 @@ const EditDialogue = ({ todo }) => {
                     height: "14px",
                     width: "14px",
                     borderRadius: "50%",
-                  }}
-                ></Box>
+                  }}></Box>
               </Tooltip>
             </Box>
           </FormRow>
