@@ -1,11 +1,12 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import ToDoItem from "./ToDoItem";
+import ToDoItem from "./tasks/TaskItem";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useTasks } from "./useTasks";
-import formatTaskDates from "./date-visualization";
+import { useTasks } from "./tasks/taskQueries";
+import formatTaskDates from "./utils/date-visualization";
 import ProgressCircle from "../ProgressCircle";
-import ActionItem from "./ActionItem";
+import ActionItem from "./actions/ActionItem";
+// import ActionItem from "./actions/addActionForm";
 
 function ItemsList() {
   const [searchQuery, setSearchQuery] = useState();
@@ -43,15 +44,13 @@ function ItemsList() {
         width: "90%",
 
         height: `${isPending ? "80vh" : "100%"}`,
-      }}
-    >
+      }}>
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-        }}
-      >
+        }}>
         <TextField
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -75,18 +74,15 @@ function ItemsList() {
             alignItems: "center",
             justifyContent: "space-around",
             gap: "30px",
-          }}
-        >
+          }}>
           <Typography
             variant="h3"
-            sx={{ marginBottom: "10px", marginTop: "18px" }}
-          >
+            sx={{ marginBottom: "10px", marginTop: "18px" }}>
             All Tasks
           </Typography>
           <Box
             mt="20px "
-            sx={{ height: "400px", width: "100%", overflowY: "scroll" }}
-          >
+            sx={{ height: "400px", width: "100%", overflowY: "scroll" }}>
             {All_TASKS.length > 0 ? (
               All_TASKS.map((todo) => <ToDoItem key={todo.id} todo={todo} />)
             ) : (
@@ -97,15 +93,13 @@ function ItemsList() {
                   alignItems: "center",
                   justifyContent: "center",
                   marginTop: "60px",
-                }}
-              >
+                }}>
                 Task List is Empty
               </Typography>
             )}
             <Typography
               variant="h3"
-              sx={{ marginBottom: "10px", marginTop: "18px" }}
-            >
+              sx={{ marginBottom: "10px", marginTop: "18px" }}>
               All Actions
             </Typography>
             {All_ACTIONS.length > 0 ? (
@@ -130,8 +124,7 @@ function ItemsList() {
                   alignItems: "center",
                   justifyContent: "center",
                   marginTop: "60px",
-                }}
-              >
+                }}>
                 Action List is Empty
               </Typography>
             )}
@@ -146,8 +139,7 @@ function ItemsList() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-          }}
-        >
+          }}>
           {error}
         </Box>
       )}
@@ -159,8 +151,7 @@ function ItemsList() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-          }}
-        >
+          }}>
           <ProgressCircle rotate />
         </Box>
       )}

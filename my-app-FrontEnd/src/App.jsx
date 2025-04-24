@@ -35,11 +35,11 @@ import Geography from "./scenes/geography";
 import InventoryPage from "./components/inventory/InventoryPage";
 import ProjectDetails from "./components/inventory/ProjectDetails";
 import CommissionPage from "./components/TransactionForFinace/CommissionPage";
-import ToDoListPage from "./components/todolist/ToDoListPage";
+import ToDoListPage from "./components/todolist/MainPage";
 import ContactDetailForNewKanbanBoard from "./components/newKanbanBoard/contactDetailForNewKanbanBoard/ContactDetailForNewKanbanBoard";
 import SalesProcessPage from "./components/salesProcessPage/SalesProcessPage";
-import AddToDo from "./components/todolist/AddToDo";
-import ItemsList from "./components/todolist/ItemsList";
+import AddToDo from "./components/todolist/tasks/addTaskForm";
+import ItemsList from "./components/todolist/MainPageLayout";
 import { Toaster } from "react-hot-toast";
 
 import SignIn from "./components/SignIn";
@@ -85,7 +85,6 @@ function App() {
   // Get the current location
   const location = useLocation();
 
-
   return (
     <QueryClientProvider client={queryClients}>
       <ReactQueryDevtools initialIsOpen={false} />
@@ -94,18 +93,16 @@ function App() {
         <CssBaseline />
         <div
           className="app"
-          style={{ fontSize: isSmallScreen ? "10px" : "inherit" }}
-        >
+          style={{ fontSize: isSmallScreen ? "10px" : "inherit" }}>
           <main
             className="content"
-            style={{ maxWidth: "100%", overflowX: "hidden" }}
-          >
+            style={{ maxWidth: "100%", overflowX: "hidden" }}>
             {/* Only render Topbar if not on the auth pages */}
-            { <Topbar setIsSidebar={setIsSidebar} />}
+            {<Topbar setIsSidebar={setIsSidebar} />}
 
             <Box sx={{ display: "flex", minHeight: "91%" }}>
               {/* Only render Sidebar if not on the auth pages */}
-              { <Sidebar isSidebar={isSidebar} />}
+              {<Sidebar isSidebar={isSidebar} />}
               {/* {!isAuthPage && <Sidebar isSidebar={isSidebar} />} */}
               <Box sx={{ width: "100%" }}>
                 <Routes>

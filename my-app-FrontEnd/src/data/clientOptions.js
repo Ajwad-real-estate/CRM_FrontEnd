@@ -34,3 +34,8 @@ export const cityOptions = [
   { id: 9, value: "Hurghada" },
   { id: 10, value: "Fayoum" },
 ];
+export const actionOptions = [
+  { id: 1, value: "Follow Up" },
+  { id: 2, value: "Meeting" },
+  { id: 3, value: "Follow Up After Meeting" },
+];

@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 //pop Imports
 import { styled as sty } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 
 import CloseIcon from "@mui/icons-material/Close";
-
-//
 import {
   Box,
   Typography,
@@ -19,21 +17,16 @@ import {
   InputLabel,
   Select,
 } from "@mui/material";
-import { tokens } from "../../theme";
+import { tokens } from "../../../theme";
 import { useTheme } from "@emotion/react";
 import EditIcon from "@mui/icons-material/Edit";
-import { useDispatch } from "react-redux";
-import { deleteTask, handleEditTask } from "../../GlobalState/todolistSlice";
-import delet from "../../assets/delet.mp3";
-import FormRow from "../../ui/FormRow";
-
+import FormRow from "../../../ui/FormRow";
 import styled from "styled-components";
-import ShowMoreLess from "./ShowMoreLess";
-import { useDeleteTask } from "./useDeleteTask";
-import { useUpdateTask } from "./useUpdate";
+import ShowMoreLess from "../utils/ShowMoreLess";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useDeleteTask, useUpdateTask } from "./taskQueries";
 
 const Form = styled.form`
   display: flex;
@@ -54,15 +47,12 @@ const BootstrapDialog = sty(Dialog)(({ theme }) => ({
   },
 }));
 
-const options = [
-  { value: "pending", label: "pending" },
-  { value: "trying", label: "trying" },
-  { value: "done", label: "done" },
-];
 const ToDoItem = ({ todo }) => {
   const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-  const [dltSound, setDltSound] = useState(false);
+  const colors = useMemo(
+    () => tokens(theme.palette.mode),
+    [theme.palette.mode]
+  );
   const [title, setTitle] = useState(todo.title);
   const [date, setDate] = useState(todo.date);
   const [time, setTime] = useState(todo.time);
@@ -70,34 +60,7 @@ const ToDoItem = ({ todo }) => {
   const [detail, setDetails] = useState(todo.detail);
   const [priority_id, setPriority_id] = useState(todo.priority_id);
   const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
-  // const [isLoading, setIsLoading] = useState(true);
 
-  const [error, setError] = useState("");
-
-  // const [statuses, setStatuses] = useState([]);
-
-  //  useEffect(() => {
-  //   const fetchData = async () => {
-  //    try {
-  //     const [statusesResponse] = await Promise.all([
-
-  //      axios.get(`${apiUrl}/api/task-statuses`, {
-  //       headers: {
-  //        Authorization: `Bearer ${Cookies.get("accessToken")}`,
-  //       },
-  //      }),
-  //     ]);
-
-  //     setStatuses(statusesResponse.data.statuses);
-  //    } catch (err) {
-  //     setError("Failed to fetch data. Please try again.");
-  //    }
-  //   };
-
-  //   fetchData();
-  //  }, [apiUrl]);
-  // Fetch statuses using React Query
-  // Fetch statuses using React Query
   const { data: statuses = [], isLoading } = useQuery({
     queryKey: ["taskStatuses"],
     queryFn: async () => {
@@ -108,59 +71,12 @@ const ToDoItem = ({ todo }) => {
       });
       return response.data.statuses;
     },
-    refetchInterval: 60000, // Refetch every 60 seconds
+    // refetchInterval: 60000, // Refetch every 60 seconds
   });
 
-  // Update mutation
-  const updateMutation = useMutation({
-    mutationFn: async ({ taskId, taskData }) => {
-      const response = await axios.put(
-        `${apiUrl}/api/tasks/${taskId}`,
-        taskData,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          },
-        }
-      );
-      return response.data;
-    },
-    onSuccess: () => {
-      // Invalidate and refetch relevant queries
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
-      queryClient.invalidateQueries({ queryKey: ["taskStatuses"] });
-      handleClose();
-    },
-  });
-
-  // Delete mutation
-  const deleteMutation = useMutation({
-    mutationFn: async (taskId) => {
-      const response = await axios.delete(
-        `${apiUrl}/api/tasks/${taskId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          },
-        }
-      );
-      return response.data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
-    },
-  });
-  //////////////////////////////////////
-  //Deleteing stuff
   const { deleteTaskById, isDeleting } = useDeleteTask();
-  //Updating Stuff
   const { updateTaskById, isUpdating } = useUpdateTask();
-  ////////////////////////////////////////
-  //Edit Functions Stuff
-  //Pop up stuff
-
   const [open, setOpen] = useState(false);
-
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -213,15 +129,13 @@ const ToDoItem = ({ todo }) => {
         width: "90%",
         backgroundColor: colors.grey[900],
         boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-      }}
-    >
+      }}>
       <Box
         display="flex"
         alignItems="center"
         marginInline="auto"
         justifyContent="space-between"
-        width="100%"
-      >
+        width="100%">
         <Checkbox
           onChange={() => deleteTaskById(todo.id)}
           sx={{
@@ -241,33 +155,9 @@ const ToDoItem = ({ todo }) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "start",
-          }}
-        >
+          }}>
           {todo.title}
         </Typography>
-        {/* <Box
-     display="flex"
-     flex={1}
-     alignItems="center"
-     justifyContent="center"
-     padding="auto"
-     marginInline="auto"
-     borderRadius="4px"
-    >
-     {/* <Typography
-      variant="body1"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      sx={{
-       color: colors.grey[100],
-       marginLeft: "0",
-       fontSize: "1rem",
-      }}
-     >
-      Created at: {todo.created_at}
-     </Typography> 
-    </Box> */}
 
         <Box
           display="flex"
@@ -277,7 +167,7 @@ const ToDoItem = ({ todo }) => {
           padding="auto"
           marginInline="auto"
           borderRadius="4px"
-        // width="50%"
+          // width="50%"
         >
           <Typography
             variant="body1"
@@ -288,8 +178,7 @@ const ToDoItem = ({ todo }) => {
               color: colors.grey[100],
               marginLeft: "0",
               fontSize: "1rem",
-            }}
-          >
+            }}>
             End at: {todo.date}
           </Typography>
           <Typography
@@ -299,8 +188,7 @@ const ToDoItem = ({ todo }) => {
               flexGrow: 1,
               marginLeft: "6px",
               fontSize: "1rem",
-            }}
-          >
+            }}>
             {todo.time}
           </Typography>
 
@@ -311,9 +199,8 @@ const ToDoItem = ({ todo }) => {
               width: "14px",
               borderRadius: "50%",
               marginRight: "60px",
-            }}
-          >
-            {statuses.find(status => status.id === todo.status_id)?.name}
+            }}>
+            {statuses.find((status) => status.id === todo.status_id)?.name}
           </Box>
 
           <EditIcon onClick={handleClickOpen} sx={{ cursor: "pointer" }} />
@@ -322,8 +209,7 @@ const ToDoItem = ({ todo }) => {
           <BootstrapDialog
             onClose={handleClose}
             aria-labelledby="customized-dialog-title"
-            open={open}
-          >
+            open={open}>
             <IconButton
               aria-label="close"
               onClick={handleClose}
@@ -332,8 +218,7 @@ const ToDoItem = ({ todo }) => {
                 right: 8,
                 top: 8,
                 color: theme.palette.grey[500],
-              })}
-            >
+              })}>
               <CloseIcon />
             </IconButton>
             <Form>
@@ -383,29 +268,14 @@ const ToDoItem = ({ todo }) => {
                   </MenuItem>
                 ))}
               </Select>
-              {/* <FormRow label={"Status"}>
-        <TextField
-         select // Indicates this is a dropdown select
-         value={status_id}
-         onChange={handleChangeStatus}
-         fullWidth
-         variant="outlined"
-        >
-         {options.map((option) => (
-          <MenuItem key={option.value} value={option.value}>
-           {option.label}
-          </MenuItem>
-         ))}
-        </TextField>
-       </FormRow> */}
+
               <FormRow label={"Priority Level"}>
                 <Box
                   sx={{
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-around",
-                  }}
-                >
+                  }}>
                   <Slider
                     value={priority_id}
                     onChange={handleChange}
@@ -450,12 +320,13 @@ const ToDoItem = ({ todo }) => {
                     }}
                   />
                   <Tooltip
-                    title={`${priority_id === 1
-                      ? "Follow Up"
-                      : priority_id === 2
-                        ? "Routine"
-                        : "Urgent"
-                      }`}
+                    title={`${
+                      priority_id === 1
+                        ? "Follow Up"
+                        : priority_id === 2
+                          ? "Routine"
+                          : "Urgent"
+                    }`}
                     arrow
                     placement="top"
                     PopperProps={{
@@ -475,22 +346,21 @@ const ToDoItem = ({ todo }) => {
                           padding: "8px 16px", // Add padding around the content
                         },
                       },
-                    }}
-                  >
+                    }}>
                     <Box
                       sx={{
-                        background: `${priority_id === 1
-                          ? "grey"
-                          : priority_id === 2
-                            ? "#1976d2"
-                            : "red"
-                          }`,
+                        background: `${
+                          priority_id === 1
+                            ? "grey"
+                            : priority_id === 2
+                              ? "#1976d2"
+                              : "red"
+                        }`,
                         cursor: "pointer",
                         height: "14px",
                         width: "14px",
                         borderRadius: "50%",
-                      }}
-                    ></Box>
+                      }}></Box>
                   </Tooltip>
                 </Box>
               </FormRow>
