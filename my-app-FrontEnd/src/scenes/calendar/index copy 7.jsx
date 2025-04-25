@@ -65,7 +65,6 @@ const Calendar = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
-
   const [activeTab, setActiveTab] = useState(0);
   const { isPending, data, isError } = useTasks();
   const { deleteTaskById } = useDeleteTask();
@@ -75,6 +74,7 @@ const Calendar = () => {
     data?.allActions?.map((action) => formatTaskDates(action)) || [];
 
   const { data: clientData } = useClient(actions?.[0]?.client_id || null);
+
   const clientIds = useMemo(
     () => [
       ...new Set(actions.map((action) => action.client_id).filter(Boolean)),
@@ -136,91 +136,39 @@ const Calendar = () => {
     setOpenActionForm(true);
   };
 
-  // const { formattedTasks, formattedActions } = useMemo(() => {
-  //   if (!data || isPending) {
-  //     return { formattedTasks: [], formattedActions: [] };
-  //   }
-  //   setSelectedEvent(tasks);
-
-  //   const formatEvents = (items, type) =>
-  //     items.map((item) => ({
-  //       id: item?.id,
-  //       client_id: item.client_id,
-  //       // title: item?.title || clientData?.name || "Action",
-  //       title: item?.title || clientsMap.get(item.client_id)?.name || "Action",
-  //       status: item?.status || "pending",
-  //       priority_level: item?.priority_level || 1,
-  //       date: item?.date?.split(" ")[0] || new Date().toISOString(),
-  //       time: item?.time || "",
-  //       detail: item?.detail || "No Description",
-  //       status_id: item?.status_id || "",
-  //       // comment: item?.comment || "",
-  //       // location: item?.location || "",
-  //       // action_id: item?.action_id || "",
-  //       // project_id: item?.project_id || "",
-  //       // unit_id: item?.unit_id || "",
-  //       type_id: item?.type_id || "",
-  //       end: item?.date?.split(" ")[0] || new Date().toISOString(),
-  //       // allDay: item?.allDay || false,
-  //       type: type,
-  //     }));
-  //   return {
-  //     formattedTasks: formatEvents(tasks, "task"),
-  //     formattedActions: formatEvents(actions, "action"),
-  //   };
-  // }, [data, isPending]);
-  // Move state management to useEffect
-  useEffect(() => {
-    if (tasks) {
-      setSelectedEvent(tasks);
-    }
-  }, [tasks]); // Only update when tasks change
-
-  // Memoized formatting
   const { formattedTasks, formattedActions } = useMemo(() => {
     if (!data || isPending) {
       return { formattedTasks: [], formattedActions: [] };
     }
+    setSelectedEvent(tasks);
 
-    // Formatting function for tasks
-    const formatTask = (task) => ({
-      id: task?.id,
-      client_id: task.client_id,
-      title: task?.title || "Task",
-      status: task?.status || "pending",
-      priority_level: task?.priority_level || 1,
-      date: task?.date?.split(" ")[0] || new Date().toISOString(),
-      time: task?.time || "",
-      detail: task?.detail || "No Description",
-      status_id: task?.status_id || "",
-      type_id: task?.type_id || "",
-      end: task?.date?.split(" ")[0] || new Date().toISOString(),
-      type: "task",
-    });
-
-    // Formatting function for actions
-    const formatAction = (action) => ({
-      id: action?.id,
-      client_id: action.client_id,
-      title:
-        action?.title || clientsMap.get(action.client_id)?.name || "Action",
-      status: action?.status || "pending",
-      priority_level: action?.priority_level || 1,
-      date: action?.date?.split(" ")[0] || new Date().toISOString(),
-      time: action?.time || "",
-      detail: action?.detail || "No Description",
-      status_id: action?.status_id || "",
-      type_id: action?.type_id || "",
-      end: action?.date?.split(" ")[0] || new Date().toISOString(),
-      type: "action",
-    });
-
+    const formatEvents = (items, type) =>
+      items.map((item) => ({
+        id: item?.id,
+        client_id: item.client_id,
+        // title: item?.title || clientData?.name || "Action",
+        title: item?.title || clientsMap.get(item.client_id)?.name || "Action",
+        status: item?.status || "pending",
+        priority_level: item?.priority_level || 1,
+        date: item?.date?.split(" ")[0] || new Date().toISOString(),
+        time: item?.time || "",
+        detail: item?.detail || "No Description",
+        status_id: item?.status_id || "",
+        // comment: item?.comment || "",
+        // location: item?.location || "",
+        // action_id: item?.action_id || "",
+        // project_id: item?.project_id || "",
+        // unit_id: item?.unit_id || "",
+        type_id: item?.type_id || "",
+        end: item?.date?.split(" ")[0] || new Date().toISOString(),
+        // allDay: item?.allDay || false,
+        type: type,
+      }));
     return {
-      formattedTasks: tasks.map(formatTask),
-      formattedActions: actions.map(formatAction),
+      formattedTasks: formatEvents(tasks, "task"),
+      formattedActions: formatEvents(actions, "action"),
     };
-  }, [data, isPending, tasks, actions, clientsMap]);
-
+  }, [data, isPending]);
   const activeEvents = useMemo(() => {
     switch (activeTab) {
       case 0: // All
