@@ -38,7 +38,7 @@ import CommissionPage from "./components/TransactionForFinace/CommissionPage";
 import ToDoListPage from "./components/todolist/MainPage";
 import ContactDetailForNewKanbanBoard from "./components/newKanbanBoard/contactDetailForNewKanbanBoard/ContactDetailForNewKanbanBoard";
 import SalesProcessPage from "./components/salesProcessPage/SalesProcessPage";
-import AddToDo from "./components/todolist/tasks/addTaskForm";
+// import AddToDo from "./components/todolist/tasks/addTaskForm";
 import ItemsList from "./components/todolist/MainPageLayout";
 import { Toaster } from "react-hot-toast";
 
@@ -165,7 +165,7 @@ function App() {
                   />
                   <Route path="/commission" element={<CommissionPage />} />
                   <Route path="/todolist" element={<ToDoListPage />}>
-                    <Route path="addtask" element={<AddToDo />} />
+                    {/* <Route path="addtask" element={<AddToDo />} /> */}
                     <Route index element={<ItemsList />} />
                   </Route>
                   <Route

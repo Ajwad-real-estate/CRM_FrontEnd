@@ -4,7 +4,26 @@ import { addTask, updateTask, deleteTask } from "./taskQueriesApis";
 import toast from "react-hot-toast";
 // import { updateTask } from "./taskQueriesApis";
 // import { deleteTask } from "./taskQueriesApis";
+import Cookies from "js-cookie";
+import axios from "axios";
 
+export const useTaskStatuses = () => {
+  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+  return useQuery({
+    queryKey: ["taskStatuses"],
+    queryFn: async () => {
+      const response = await axios.get(`${apiUrl}/api/task-statuses`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("accessToken")}`,
+        },
+      });
+      return response.data.statuses;
+    },
+    // You can add staleTime if needed
+    // staleTime: 60 * 1000 // 1 minute
+  });
+};
 export function useDeleteTask() {
   const queryClient = useQueryClient();
 

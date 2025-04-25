@@ -20,7 +20,6 @@ import { tokens } from "../../theme";
 import {
   useDeleteTask,
   useTasks,
-  useTaskStatuses,
 } from "../../components/todolist/tasks/taskQueries";
 import formatTaskDates from "../../components/todolist/utils/date-visualization";
 import ProgressCircle from "../../components/ProgressCircle";
@@ -36,8 +35,6 @@ const Calendar = () => {
   const [activeTab, setActiveTab] = useState(0);
   const { isPending, data, isError } = useTasks();
   const { deleteTaskById } = useDeleteTask(); // Add delete function
-  const [selectedEvent, setSelectedEvent] = useState(null);
-  const { data: statuses = [] } = useTaskStatuses();
 
   // Process tasks and actions data
   const { formattedTasks, formattedActions } = useMemo(() => {
@@ -47,7 +44,7 @@ const Calendar = () => {
 
     const tasks = data.allTasks.map((task) => formatTaskDates(task));
     const actions = data.allActions.map((action) => formatTaskDates(action));
-    setSelectedEvent(tasks);
+
     const formatEvents = (items, type) =>
       items.map((item, i) => ({
         id: item?.id || `${type}-${i}`,
@@ -211,15 +208,13 @@ const Calendar = () => {
                   // }
                 />
                 {/* {event.type !== "action" && <EditDialogue todo={event} />} */}
-                {event.type !== "action" && (
-                  <AddTaskForm
-                    todo={event}
-                    statuses={statuses}
-                    // onClose={() => setSelectedEvent(null)}
-
-                    // todo={event}
-                  />
-                )}
+                {event.type !== "action" && <AddTaskForm
+                     todo={selectedEvent}
+                     statuses={statuses}
+                     onClose={() => setSelectedEvent(null)}
+         
+                // todo={event} 
+                />}
               </ListItem>
             ))}
           </List>

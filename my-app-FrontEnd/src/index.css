@@ -54,3 +54,21 @@ body,
     margin-right: 150px;
   }
 } */
+/* Target all event elements with these classes */
+.fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end.fc-event-past.fc-daygrid-event.fc-daygrid-dot-event,
+.fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end.fc-event-future.fc-daygrid-event.fc-daygrid-dot-event {
+  width: 100%;
+  color: black;
+}
+
+/* Target the inner div of these events */
+.fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end.fc-event-past.fc-daygrid-event.fc-daygrid-dot-event
+  div,
+.fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end.fc-event-future.fc-daygrid-event.fc-daygrid-dot-event
+  div {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px;
+}
