@@ -78,3 +78,9 @@ body,
 .MuiDialog-container {
   transition: none !important;
 }
+.MuiModal-root.MuiDialog-root {
+  background-color: transparent !important;
+}
+.css-yiavyu-MuiBackdrop-root-MuiDialog-backdrop {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+}

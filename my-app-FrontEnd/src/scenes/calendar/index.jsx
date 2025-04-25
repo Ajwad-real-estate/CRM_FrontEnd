@@ -383,6 +383,7 @@ const Calendar = () => {
                   open={openActionForm}
                   onClose={() => setOpenActionForm(false)}
                   todo={formData}
+                 
                 />
                 {/* Add the dialog component */}
                 <Dialog
@@ -391,7 +392,7 @@ const Calendar = () => {
                   fullWidth
                   sx={{
                     "& .MuiBackdrop-root": {
-                      backgroundColor: "rgba(0, 0, 0, 0.3)", // Lighter or transparent
+                      backgroundColor: "rgba(0, 0, 0, 0.25)", // Lighter or transparent
                     },
                   }}
                   maxWidth="md">
