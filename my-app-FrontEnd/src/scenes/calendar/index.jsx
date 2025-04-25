@@ -4,10 +4,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
-import { formatDate } from "@fullcalendar/core";
 import CloseIcon from "@mui/icons-material/Close";
-import { styled as sty } from "@mui/material/styles";
-import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import Dialog from "@mui/material/Dialog";
 import {
@@ -34,12 +31,10 @@ import AddTaskForm from "../../components/todolist/tasks/addTaskForm";
 import { useClient } from "../../components/newNewKanbanBoard/actions/useKanban";
 import ActionForm from "../../components/todolist/actions/addActionForm";
 import { actionOptions } from "../../data/clientOptions";
+import { useQueries } from "@tanstack/react-query";
+import { getClient } from "../../components/newNewKanbanBoard/actions/apiKanbanStuff";
 
 const Calendar = () => {
-  const theme = useTheme();
-  // const [open, setOpen] = useState(false);
-  const [openActionForm, setOpenActionForm] = useState(false);
-  const [selectedAction, setSelectedAction] = useState(null);
   const [formData, setFormData] = useState({
     comment: "",
     date: "",
@@ -60,22 +55,47 @@ const Calendar = () => {
     project_id: "",
     unit_id: "",
   });
-  const colors = tokens(theme.palette.mode);
+  const theme = useTheme();
+  const colors = useMemo(
+    () => tokens(theme.palette.mode),
+    [theme.palette.mode]
+  );
+  const [openActionForm, setOpenActionForm] = useState(false);
+  const [selectedAction, setSelectedAction] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const { isPending, data, isError } = useTasks();
-  const { deleteTaskById } = useDeleteTask(); // Add delete function
-  const [selectedEvent, setSelectedEvent] = useState(null);
-  const { data: statuses = [] } = useTaskStatuses();
-  console.log("data", JSON.stringify(data, null, 2));
+  const { deleteTaskById } = useDeleteTask();
+
   const tasks = data?.allTasks?.map((task) => formatTaskDates(task)) || [];
   const actions =
     data?.allActions?.map((action) => formatTaskDates(action)) || [];
-  const matchedOption = actionOptions.find((opt) => opt.id === actions.type_id);
 
-  // const { data: clientData } = useClient(actions?.[0]?.client_id || null);
-  const { data: clientData } = useClient(actions?.client_id || null);
-  console.log("clientData", clientData);
-  console.log("actions actions", actions);
+  const { data: clientData } = useClient(actions?.[0]?.client_id || null);
+
+  const clientIds = useMemo(
+    () => [
+      ...new Set(actions.map((action) => action.client_id).filter(Boolean)),
+    ],
+    [actions]
+  );
+  const clientQueries = useQueries({
+    queries: clientIds.map((clientId) => ({
+      queryKey: ["client", clientId],
+      queryFn: () => getClient(clientId),
+      staleTime: Infinity,
+    })),
+  });
+
+  const clientsMap = useMemo(() => {
+    const map = new Map();
+    clientQueries.forEach((query) => {
+      if (query.data) map.set(query.data.id, query.data);
+    });
+    return map;
+  }, [clientQueries]);
 
   useEffect(() => {
     if (selectedAction && clientData) {
@@ -85,7 +105,6 @@ const Calendar = () => {
       );
 
       setFormData({
-        // Action-specific data
         id: selectedAction.id,
         client_id: selectedAction.client_id,
         date: selectedAction.date || "",
@@ -93,22 +112,15 @@ const Calendar = () => {
         type_id: selectedAction.type_id || "",
         comment: selectedAction.comment || "",
         location: selectedAction.location || "",
-
-        // Client data
         name: clientData.name || "",
         email: clientData.email || "",
         phone_numbers: clientData.phone_numbers?.[0] || "",
         status_id: clientData.status_id || "",
-
-        // Derived values
         action_type: matchedOption?.value || "",
-
-        // Other fields
         ...(clientData.additionalFields || {}), // Include any other client fields you need
       });
     }
   }, [selectedAction, clientData]);
-  console.log("FormData FormData", formData);
   const handleOpenActionForm = (action) => {
     setSelectedAction(action);
     setOpenActionForm(true);
@@ -118,26 +130,14 @@ const Calendar = () => {
     if (!data || isPending) {
       return { formattedTasks: [], formattedActions: [] };
     }
-
-    console.log(
-      "Actions Details:",
-      actions.map((action) => ({
-        id: action.id,
-        clientId: action.client_id,
-        title: action.title,
-        date: action.date,
-        detail: action.detail,
-      }))
-    );
-    // const matchedOption = actionName.find((opt) => opt.id === todo.type_id);
-
     setSelectedEvent(tasks);
 
     const formatEvents = (items, type) =>
       items.map((item) => ({
         id: item?.id,
         client_id: item.client_id,
-        title: item?.title || null,
+        // title: item?.title || clientData?.name || "Action",
+        title: item?.title || clientsMap.get(item.client_id)?.name || "Action",
         status: item?.status || "pending",
         priority_level: item?.priority_level || 1,
         date: item?.date?.split(" ")[0] || new Date().toISOString(),
@@ -154,13 +154,11 @@ const Calendar = () => {
         allDay: item?.allDay || false,
         type: type,
       }));
-    console.log("actions" + actions);
     return {
       formattedTasks: formatEvents(tasks, "task"),
       formattedActions: formatEvents(actions, "action"),
     };
   }, [data, isPending]);
-
   const activeEvents = useMemo(() => {
     switch (activeTab) {
       case 0: // All
@@ -178,37 +176,35 @@ const Calendar = () => {
     setActiveTab(newValue);
   };
 
-  // Event color handling
-  const eventContent = (eventInfo) => {
-    const isAction = eventInfo.event.extendedProps.type === "action";
+  const eventContent = ({ event }) => {
+    const isAction = event.extendedProps.type === "action";
+    const client = isAction
+      ? clientsMap.get(event.extendedProps.client_id)
+      : null;
+
     return (
       <div
         style={{
           backgroundColor: isAction
             ? colors.blueAccent[500]
             : colors.greenAccent[500],
-          borderColor: isAction
-            ? colors.blueAccent[700]
-            : colors.greenAccent[700],
+          padding: "2px 5px",
+          borderRadius: "3px",
+          color: colors.grey[100],
         }}>
-        {eventInfo.event.title}
+        {isAction ? (
+          client ? (
+            client.name
+          ) : (
+            //<CircularProgress size={12} color="inherit" />
+            <></>
+          )
+        ) : (
+          event.title
+        )}
       </div>
     );
   };
-  const handleClose = () => {
-    // if (selectedEvent) {
-    //   setTitle(selectedEvent.title || "");
-    //   setTime(selectedEvent.time || "");
-    //   setDate(selectedEvent.date || "");
-    //   setPriority_id(selectedEvent.priority_level || 1);
-    //   setStatus_id(selectedEvent.status || "pending");
-    //   setDetails(selectedEvent.detail || "No Description");
-    // }
-    // setOpen(false);
-  };
-
-  const [openDialog, setOpenDialog] = useState(false);
-  const [selectedTask, setSelectedTask] = useState(null);
 
   // Dialog handlers
   const handleOpenDialog = (task = null) => {
@@ -292,7 +288,6 @@ const Calendar = () => {
                     }}
                   />
                 )}
-
                 <ListItemText
                   primary={
                     <Typography
@@ -309,19 +304,6 @@ const Calendar = () => {
                     </Typography>
                   }
                 />
-                {/* {event.type !== "action" && (
-                  <IconButton
-                    onClick={() => handleOpenDialog(event)}
-                    sx={{ color: colors.grey[100] }}>
-                    <EditIcon />
-                  </IconButton>
-                )}
-                {event.type === "action" && (
-                  <EditIcon
-                    onClick={() => setOpen(true)}
-                    sx={{ cursor: "pointer" }}
-                  />
-                )} */}
                 {event.type !== "action" ? (
                   <IconButton
                     onClick={() => handleOpenDialog(event)}
@@ -340,12 +322,6 @@ const Calendar = () => {
                   onClose={() => setOpenActionForm(false)}
                   todo={formData}
                 />
-                {/* <ActionForm
-                  open={open}
-                  onClose={() => setOpen(false)}
-                  todo={formData}
-                /> */}
-
                 {/* Add the dialog component */}
                 <Dialog
                   open={openDialog}
@@ -410,29 +386,3 @@ const Calendar = () => {
 };
 
 export default Calendar;
-
-//   const handleDateClick = (selected) => {
-//     const title = prompt("Please enter a new title for your event");
-//     const calendarApi = selected.view.calendar;
-//     console.log(title);
-//     calendarApi.unselect();
-//     if (title) {
-//       calendarApi.addEvent({
-//         id: `${selected.dateStr}-${title}`,
-//         title,
-//         start: selected.startStr,
-//         end: selected.endStr,
-//         allDay: selected.allDay,
-//       });
-//     }
-//   };
-
-//   const handleEventClick = (selected) => {
-//     if (
-//       window.confirm(
-//         `Are you sure you want to delete the event '${selected.event.title}'`
-//       )
-//     ) {
-//       selected.event.remove();
-//     }
-//   };
