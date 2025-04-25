@@ -1,173 +1,407 @@
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
-
 import { formatDate } from "@fullcalendar/core";
+import CloseIcon from "@mui/icons-material/Close";
+import { styled as sty } from "@mui/material/styles";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import Dialog from "@mui/material/Dialog";
 import {
- Box,
- List,
- ListItem,
- ListItemText,
- Typography,
- useTheme,
+  Box,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+  useTheme,
+  Tabs,
+  Tab,
+  Checkbox,
 } from "@mui/material";
 import { tokens } from "../../theme";
-import { useSelector } from "react-redux";
-import { useTasks } from "../../components/todolist/useTasks";
-import formatTaskDates from "../../components/todolist/date-visualization";
+import {
+  useDeleteTask,
+  useTasks,
+  useTaskStatuses,
+} from "../../components/todolist/tasks/taskQueries";
+import formatTaskDates from "../../components/todolist/utils/date-visualization";
 import ProgressCircle from "../../components/ProgressCircle";
-import EditDialogue from "./EditDialogue";
-import { format, parseISO } from "date-fns";
+import AddTaskForm from "../../components/todolist/tasks/addTaskForm";
+import { useClient } from "../../components/newNewKanbanBoard/actions/useKanban";
+import ActionForm from "../../components/todolist/actions/addActionForm";
+import { actionOptions } from "../../data/clientOptions";
 
 const Calendar = () => {
- const theme = useTheme();
- const colors = tokens(theme.palette.mode);
+  const theme = useTheme();
+  const [open, setOpen] = useState(false);
+  const [openActionForm, setOpenActionForm] = useState(false);
+  const [selectedAction, setSelectedAction] = useState(null);
+  const [formData, setFormData] = useState({
+    comment: "",
+    date: "",
+    time: "",
+    status_id: "",
+    location: "",
+    name: "",
+    email: "",
+    age: "",
+    phone_numbers: "",
+    nat_id: "",
+    street: "",
+    city_id: "",
+    channel_id: "",
+    type_id: "",
+    budget: "",
+    action_id: "",
+    project_id: "",
+    unit_id: "",
+  });
+  const colors = tokens(theme.palette.mode);
+  const [activeTab, setActiveTab] = useState(0);
+  const { isPending, data, isError } = useTasks();
+  const { deleteTaskById } = useDeleteTask(); // Add delete function
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const { data: statuses = [] } = useTaskStatuses();
 
-  //const tasks = useSelector((state) => state.todolist.todos);
-  //  Task Date
-  const { isPending, data, error, isError } = useTasks();
-  console.log(data)
-  let All_TASKS = [];
-  if (!isPending) {
-    All_TASKS = data.allTasks;
+  const tasks = data?.allTasks?.map((task) => formatTaskDates(task)) || [];
+  const actions =
+    data?.allActions?.map((action) => formatTaskDates(action)) || [];
+  const matchedOption = actionOptions.find((opt) => opt.id === actions.type_id);
 
-    All_TASKS = All_TASKS.map((task) => formatTaskDates(task));
-    console.log(All_TASKS);
-    All_ACTIONS = data.allActions;
+  const { data: clientData } = useClient(actions?.[0]?.client_id || null);
+  console.log("clientData", clientData);
+  console.log("actions actions", actions);
+  useEffect(() => {
+    if (actions && clientData) {
+      setFormData({
+        comment: actions.comment || "",
+        date: actions.date
+          ? new Date(actions.date).toISOString().split("T")[0]
+          : "",
+        time: actions.time || "",
+        status_id: clientData?.status_id || "",
+        location: actions.location || "",
+        name: clientData.name || "",
+        email: clientData.email || "",
+        age: clientData.age || "",
+        phone_numbers: clientData.phone_numbers?.[0] || "",
+        nat_id: clientData.nat_id || "",
+        street: clientData.street || "",
+        city_id: clientData.city_id || "",
+        channel_id: clientData.channel_id || "",
+        type_id: clientData.type_id || "",
+        budget: clientData.budget || "",
+        action_id: actions.action_id || "",
+        project_id: actions.project_id || "",
+        unit_id: actions.unit_id || "",
+        action_type: actions.type_id || "",
+      });
+    }
+  }, [selectedAction, clientData]);
+  console.log("FormData FormData", formData);
+  const handleOpenActionForm = (action) => {
+    setSelectedAction(action);
+    setOpenActionForm(true);
+  };
 
-    All_ACTIONS = All_ACTIONS.map((action) => formatTaskDates(action));
-    console.log(All_TASKS);
-  }
-  const allTasks = All_TASKS;
-  const allActions = All_TASKS;
-console.log(allTasks)
- //
+  const { formattedTasks, formattedActions } = useMemo(() => {
+    if (!data || isPending) {
+      return { formattedTasks: [], formattedActions: [] };
+    }
 
- //const [currentEvents, setCurrentEvents] = useState([]);
- let formattedEvents = [];
- if (data && !isPending) {
-  formattedEvents = allTasks.map((task, i) => ({
-   id: task?.id || i,
-   title: task?.title || "Untitled Task",
-   status: task?.status || "trying",
-   priority_level: task?.priority_level || 1,
-   date: task?.date?.split(" ")[0] || new Date().toISOString(),
-   time: task?.time || "",
-   detail: task?.detail || "No Description",
+    console.log(
+      "Actions Details:",
+      actions.map((action) => ({
+        id: action.id,
+        clientId: action.client_id,
+        title: action.title,
+        date: action.date,
+        detail: action.detail,
+      }))
+    );
+    // const matchedOption = actionName.find((opt) => opt.id === todo.type_id);
 
-   start:
-    task?.created_at?.split(" ")[0] ||
-    task?.date ||
-    new Date().toISOString(),
-   end: task?.date || new Date().toISOString(),
-   allDay: task?.allDay || false,
-  }));
- }
- return (
-  <>
-   {formatTaskDates && !isPending && (
-    <Box m="20px">
-     <Box display="flex" justifyContent="space-between">
-      {/* CALENDAR SIDEBAR */}
+    setSelectedEvent(tasks);
+
+    const formatEvents = (items, type) =>
+      items.map((item, i) => ({
+        id: item?.id || `${type}-${i}`,
+        client_id: item.client_id,
+        title: item?.title || clientData?.name || "Action",
+        status: item?.status || "pending",
+        priority_level: item?.priority_level || 1,
+        date: item?.date?.split(" ")[0] || new Date().toISOString(),
+        time: item?.time || "",
+        detail: item?.detail || "No Description",
+        status_id: clientData?.status_id || "",
+        agent_id: "",
+
+        // name: clientData.name || "",
+        action_type: matchedOption?.value || "",
+        // clientName:
+        //   clientData?.find((opt) => opt.clientName === item.client_id)
+        //     ?.clientName || "Unknown Client",
+        end: item?.date?.split(" ")[0] || new Date().toISOString(),
+        allDay: item?.allDay || false,
+        type: type,
+      }));
+    console.log("actions" + actions);
+    return {
+      formattedTasks: formatEvents(tasks, "task"),
+      formattedActions: formatEvents(actions, "action"),
+    };
+  }, [data, isPending]);
+
+  const activeEvents = useMemo(() => {
+    switch (activeTab) {
+      case 0: // All
+        return [...formattedTasks, ...formattedActions];
+      case 1: // Tasks
+        return formattedTasks;
+      case 2: // Actions
+        return formattedActions;
+      default:
+        return [];
+    }
+  }, [activeTab, formattedTasks, formattedActions]);
+
+  const handleTabChange = (_, newValue) => {
+    setActiveTab(newValue);
+  };
+
+  // Event color handling
+  const eventContent = (eventInfo) => {
+    const isAction = eventInfo.event.extendedProps.type === "action";
+    return (
+      <div
+        style={{
+          backgroundColor: isAction
+            ? colors.blueAccent[500]
+            : colors.greenAccent[500],
+          borderColor: isAction
+            ? colors.blueAccent[700]
+            : colors.greenAccent[700],
+        }}>
+        {eventInfo.event.title}
+      </div>
+    );
+  };
+  const handleClose = () => {
+    // if (selectedEvent) {
+    //   setTitle(selectedEvent.title || "");
+    //   setTime(selectedEvent.time || "");
+    //   setDate(selectedEvent.date || "");
+    //   setPriority_id(selectedEvent.priority_level || 1);
+    //   setStatus_id(selectedEvent.status || "pending");
+    //   setDetails(selectedEvent.detail || "No Description");
+    // }
+    // setOpen(false);
+  };
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
+
+  // Dialog handlers
+  const handleOpenDialog = (task = null) => {
+    setSelectedTask(task);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedTask(null);
+  };
+
+  if (isPending) {
+    return (
       <Box
-       flex="1 1 20%"
-       backgroundColor={colors.primary[400]}
-       p="15px"
-       borderRadius="4px"
-      >
-       <Typography variant="h5">Events</Typography>
-       <List>
-        {formattedEvents.map((event) => (
-         <ListItem
-          key={event.id}
-          taskId={event.id}
-          sx={{
-           backgroundColor: colors.greenAccent[500],
-           margin: "10px 0",
-           borderRadius: "2px",
-          }}
-         >
-          <ListItemText
-           primary={event.title}
-           secondary={
-            <Typography>
-             {formatDate(event.start, {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-             })}
-            </Typography>
-           }
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "75vh",
+        }}>
+        <ProgressCircle rotate />
+      </Box>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "75vh",
+          color: colors.redAccent[600],
+        }}>
+        <Typography variant="h3">
+          Error occurred when fetching Calendar data!
+        </Typography>
+      </Box>
+    );
+  }
+
+  return (
+    <Box m="20px">
+      <Box display="flex" justifyContent="space-between">
+        {/* SIDEBAR */}
+        <Box
+          flex="1 1 20%"
+          backgroundColor={colors.primary[400]}
+          p="15px"
+          borderRadius="4px">
+          <Typography variant="h5" mb={2}>
+            Events
+          </Typography>
+
+          <Tabs value={activeTab} onChange={handleTabChange} sx={{ mb: 2 }}>
+            <Tab label="All" />
+            <Tab label="Tasks" />
+            <Tab label="Actions" />
+          </Tabs>
+
+          <List>
+            {activeEvents.map((event) => (
+              <ListItem
+                key={event.id}
+                sx={{
+                  backgroundColor:
+                    event.type === "action"
+                      ? colors.blueAccent[500]
+                      : colors.greenAccent[600],
+                  margin: "10px 0",
+                  borderRadius: "2px",
+                }}>
+                {/* Add Checkbox for tasks */}
+                {event.type !== "action" && (
+                  <Checkbox
+                    onChange={() => deleteTaskById(event.id)}
+                    sx={{
+                      marginRight: 1,
+                    }}
+                  />
+                )}
+
+                <ListItemText
+                  primary={
+                    <Typography
+                      variant="body1"
+                      fontWeight="bold"
+                      sx={{ color: "#0a031e" }}>
+                      {event.title}
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        sx={{ ml: 1 }}>
+                        ({event.type})
+                      </Typography>
+                    </Typography>
+                  }
+                />
+                {/* {event.type !== "action" && (
+                  <IconButton
+                    onClick={() => handleOpenDialog(event)}
+                    sx={{ color: colors.grey[100] }}>
+                    <EditIcon />
+                  </IconButton>
+                )}
+                {event.type === "action" && (
+                  <EditIcon
+                    onClick={() => setOpen(true)}
+                    sx={{ cursor: "pointer" }}
+                  />
+                )} */}
+                {event.type !== "action" ? (
+                  <IconButton
+                    onClick={() => handleOpenDialog(event)}
+                    sx={{ color: colors.grey[100] }}>
+                    <EditIcon />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    onClick={() => handleOpenActionForm(event)}
+                    sx={{ color: colors.grey[100] }}>
+                    <EditIcon />
+                  </IconButton>
+                )}
+                <ActionForm
+                  open={openActionForm}
+                  onClose={() => setOpenActionForm(false)}
+                  todo={formData}
+                />
+                {/* <ActionForm
+                  open={open}
+                  onClose={() => setOpen(false)}
+                  todo={formData}
+                /> */}
+
+                {/* Add the dialog component */}
+                <Dialog
+                  open={openDialog}
+                  onClose={handleCloseDialog}
+                  fullWidth
+                  sx={{
+                    "& .MuiBackdrop-root": {
+                      backgroundColor: "rgba(0, 0, 0, 0.3)", // Lighter or transparent
+                    },
+                  }}
+                  maxWidth="md">
+                  <Box sx={{ p: 4, position: "relative" }}>
+                    <IconButton
+                      aria-label="close"
+                      onClick={handleCloseDialog}
+                      sx={{
+                        position: "absolute",
+                        right: 8,
+                        top: 8,
+                        color: theme.palette.grey[500],
+                      }}>
+                      <CloseIcon />
+                    </IconButton>
+                    <AddTaskForm
+                      todo={selectedTask}
+                      onClose={handleCloseDialog}
+                    />
+                  </Box>
+                </Dialog>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+
+        {/* CALENDAR */}
+        <Box flex="1 1 100%" ml="15px">
+          <FullCalendar
+            height="75vh"
+            plugins={[
+              dayGridPlugin,
+              timeGridPlugin,
+              interactionPlugin,
+              listPlugin,
+            ]}
+            headerToolbar={{
+              left: "prev,next today",
+              center: "title",
+              right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
+            }}
+            initialView="dayGridMonth"
+            editable={true}
+            selectable={true}
+            selectMirror={true}
+            dayMaxEvents={false}
+            events={activeEvents}
+            eventContent={eventContent}
           />
-          <EditDialogue todo={event} />
-         </ListItem>
-        ))}
-       </List>
+        </Box>
       </Box>
-      {/* CALENDAR */}
-      <Box flex="1 1 100%" ml="15px">
-       <FullCalendar
-        height="75vh"
-        plugins={[
-         dayGridPlugin,
-         timeGridPlugin,
-         interactionPlugin,
-         listPlugin,
-        ]}
-        headerToolbar={{
-         left: "prev,next today",
-         center: "title",
-         right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
-        }}
-        initialView="dayGridMonth"
-        editable={true}
-        selectable={true}
-        selectMirror={true}
-        dayMaxEvents={false}
-        //select={handleDateClick}
-        // eventClick={handleEventClick}
-        // eventsSet={(events) => setCurrentEvents(events)}
-        events={formattedEvents}
-       />
-      </Box>
-     </Box>
     </Box>
-   )}
-   {isPending && (
-    <Box
-     sx={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      width: "100%",
-      height: "100%",
-     }}
-    >
-     <ProgressCircle rotate />
-    </Box>
-   )}
-   {isError && (
-    <Box
-     sx={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      width: "100%",
-      height: "100%",
-      color: colors.redAccent[600],
-     }}
-    >
-     <Typography variant="h3">
-      {" "}
-      Error occurd when fetching Calender !
-     </Typography>
-    </Box>
-   )}
-  </>
- );
+  );
 };
 
 export default Calendar;

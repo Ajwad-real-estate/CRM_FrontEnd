@@ -29,3 +29,35 @@ export default function formatTaskDates(task) {
     time: formattedTime,
   };
 }
+export function formatActionDates(action) {
+  if (!action) {
+    throw new Error("Action object is required");
+  }
+
+  // Format timestamps
+  const formattedCreatedAt = action.created_at
+    ? format(parseISO(action.created_at), "yyyy-MM-dd HH:mm:ss")
+    : "";
+
+  const formattedUpdatedAt = action.updated_at
+    ? format(parseISO(action.updated_at), "yyyy-MM-dd HH:mm:ss")
+    : "";
+
+  // Format action date
+  const formattedDate = action.date
+    ? format(parseISO(action.date), "yyyy-MM-dd")
+    : "";
+
+  // Clean up time format (remove seconds if needed)
+  const formattedTime = action.time
+    ? action.time.split(":").slice(0, 2).join(":") // Converts "02:45:01" to "02:45"
+    : "";
+
+  return {
+    ...action,
+    created_at: formattedCreatedAt,
+    updated_at: formattedUpdatedAt,
+    date: formattedDate,
+    time: formattedTime,
+  };
+}

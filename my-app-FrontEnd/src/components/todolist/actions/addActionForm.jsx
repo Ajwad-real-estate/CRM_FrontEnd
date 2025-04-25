@@ -208,9 +208,6 @@
 //   //     console.error("Please fill in all required fields.");
 //   //     return;
 
-
-
-
 //   //   }
 //   //   const actionData = {
 //   //     comment: formData.comment,
@@ -725,6 +722,8 @@ const actionOptions = [
 ];
 
 const ActionForm = ({ open, onClose, todo }) => {
+  console.log("ActionForm:", todo);
+
   console.log("addAction");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const theme = useTheme();
@@ -785,7 +784,7 @@ const ActionForm = ({ open, onClose, todo }) => {
       });
     }
   }, [clientData, todo]);
-
+  console.log("formData:", formData);
   const handleToggleExpand = () => {
     setIsExpanded((prev) => !prev);
   };

@@ -1,12 +1,18 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import { formatDate } from "@fullcalendar/core";
+import CloseIcon from "@mui/icons-material/Close";
+import { styled as sty } from "@mui/material/styles";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import Dialog from "@mui/material/Dialog";
 import {
   Box,
+  IconButton,
   List,
   ListItem,
   ListItemText,
@@ -24,50 +30,131 @@ import {
 } from "../../components/todolist/tasks/taskQueries";
 import formatTaskDates from "../../components/todolist/utils/date-visualization";
 import ProgressCircle from "../../components/ProgressCircle";
-import EditDialogue from "./EditDialogue";
 import AddTaskForm from "../../components/todolist/tasks/addTaskForm";
-// import AddToDo from "../../components/todolist/tasks/addTaskForm";
-// import addTaskForm from "../../components/todolist/tasks/addTaskForm";
+import { useClient } from "../../components/newNewKanbanBoard/actions/useKanban";
+import ActionForm from "../../components/todolist/actions/addActionForm";
+import { actionOptions } from "../../data/clientOptions";
 
 const Calendar = () => {
   const theme = useTheme();
-
+  // const [open, setOpen] = useState(false);
+  const [openActionForm, setOpenActionForm] = useState(false);
+  const [selectedAction, setSelectedAction] = useState(null);
+  const [formData, setFormData] = useState({
+    comment: "",
+    date: "",
+    time: "",
+    status_id: "",
+    location: "",
+    name: "",
+    email: "",
+    age: "",
+    phone_numbers: "",
+    nat_id: "",
+    street: "",
+    city_id: "",
+    channel_id: "",
+    type_id: "",
+    budget: "",
+    action_id: "",
+    project_id: "",
+    unit_id: "",
+  });
   const colors = tokens(theme.palette.mode);
   const [activeTab, setActiveTab] = useState(0);
   const { isPending, data, isError } = useTasks();
   const { deleteTaskById } = useDeleteTask(); // Add delete function
   const [selectedEvent, setSelectedEvent] = useState(null);
   const { data: statuses = [] } = useTaskStatuses();
+  console.log("data", JSON.stringify(data, null, 2));
+  const tasks = data?.allTasks?.map((task) => formatTaskDates(task)) || [];
+  const actions =
+    data?.allActions?.map((action) => formatTaskDates(action)) || [];
+  const matchedOption = actionOptions.find((opt) => opt.id === actions.type_id);
 
-  // Process tasks and actions data
+  // const { data: clientData } = useClient(actions?.[0]?.client_id || null);
+  const { data: clientData } = useClient(actions?.client_id || null);
+  console.log("clientData", clientData);
+  console.log("actions actions", actions);
+
+  useEffect(() => {
+    if (selectedAction && clientData) {
+      // Find the matched action type using the selected action's type_id
+      const matchedOption = actionOptions.find(
+        (opt) => opt.id === selectedAction.type_id
+      );
+
+      setFormData({
+        // Action-specific data
+        id: selectedAction.id,
+        client_id: selectedAction.client_id,
+        date: selectedAction.date || "",
+        time: selectedAction.time || "",
+        type_id: selectedAction.type_id || "",
+        comment: selectedAction.comment || "",
+        location: selectedAction.location || "",
+
+        // Client data
+        name: clientData.name || "",
+        email: clientData.email || "",
+        phone_numbers: clientData.phone_numbers?.[0] || "",
+        status_id: clientData.status_id || "",
+
+        // Derived values
+        action_type: matchedOption?.value || "",
+
+        // Other fields
+        ...(clientData.additionalFields || {}), // Include any other client fields you need
+      });
+    }
+  }, [selectedAction, clientData]);
+  console.log("FormData FormData", formData);
+  const handleOpenActionForm = (action) => {
+    setSelectedAction(action);
+    setOpenActionForm(true);
+  };
+
   const { formattedTasks, formattedActions } = useMemo(() => {
     if (!data || isPending) {
       return { formattedTasks: [], formattedActions: [] };
     }
 
-    const tasks = data.allTasks.map((task) => formatTaskDates(task));
-    const actions = data.allActions.map((action) => formatTaskDates(action));
+    console.log(
+      "Actions Details:",
+      actions.map((action) => ({
+        id: action.id,
+        clientId: action.client_id,
+        title: action.title,
+        date: action.date,
+        detail: action.detail,
+      }))
+    );
+    // const matchedOption = actionName.find((opt) => opt.id === todo.type_id);
+
     setSelectedEvent(tasks);
+
     const formatEvents = (items, type) =>
-      items.map((item, i) => ({
-        id: item?.id || `${type}-${i}`,
-        title: item?.title || item?.ClientName || "Action",
+      items.map((item) => ({
+        id: item?.id,
+        client_id: item.client_id,
+        title: item?.title || null,
         status: item?.status || "pending",
         priority_level: item?.priority_level || 1,
         date: item?.date?.split(" ")[0] || new Date().toISOString(),
         time: item?.time || "",
         detail: item?.detail || "No Description",
-        // start:
-        //   type === "action"
-        //     ? null
-        //     : item?.created_at?.split(" ")[0] ||
-        //       item?.date ||
-        //       new Date().toISOString(),
+        status_id: item?.status_id || "",
+        comment: item?.comment || "",
+        location: item?.location || "",
+        action_id: item?.action_id || "",
+        project_id: item?.project_id || "",
+        unit_id: item?.unit_id || "",
+        type_id: item?.type_id || "",
         end: item?.date?.split(" ")[0] || new Date().toISOString(),
         allDay: item?.allDay || false,
         type: type,
       }));
-
+    console.log("actions" + actions);
     return {
       formattedTasks: formatEvents(tasks, "task"),
       formattedActions: formatEvents(actions, "action"),
@@ -107,6 +194,31 @@ const Calendar = () => {
         {eventInfo.event.title}
       </div>
     );
+  };
+  const handleClose = () => {
+    // if (selectedEvent) {
+    //   setTitle(selectedEvent.title || "");
+    //   setTime(selectedEvent.time || "");
+    //   setDate(selectedEvent.date || "");
+    //   setPriority_id(selectedEvent.priority_level || 1);
+    //   setStatus_id(selectedEvent.status || "pending");
+    //   setDetails(selectedEvent.detail || "No Description");
+    // }
+    // setOpen(false);
+  };
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
+
+  // Dialog handlers
+  const handleOpenDialog = (task = null) => {
+    setSelectedTask(task);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedTask(null);
   };
 
   if (isPending) {
@@ -176,10 +288,6 @@ const Calendar = () => {
                   <Checkbox
                     onChange={() => deleteTaskById(event.id)}
                     sx={{
-                      // color: colors.greenAccent[100],
-                      // "&.Mui-checked": {
-                      //   color: colors.greenAccent[300],
-                      // },
                       marginRight: 1,
                     }}
                   />
@@ -200,26 +308,73 @@ const Calendar = () => {
                       </Typography>
                     </Typography>
                   }
-                  // secondary={
-                  //   <Typography variant="body2">
-                  //     {formatDate(event.start, {
-                  //       year: "numeric",
-                  //       month: "short",
-                  //       day: "numeric",
-                  //     })}
-                  //   </Typography>
-                  // }
                 />
-                {/* {event.type !== "action" && <EditDialogue todo={event} />} */}
-                {event.type !== "action" && (
-                  <AddTaskForm
-                    todo={event}
-                    statuses={statuses}
-                    // onClose={() => setSelectedEvent(null)}
-
-                    // todo={event}
-                  />
+                {/* {event.type !== "action" && (
+                  <IconButton
+                    onClick={() => handleOpenDialog(event)}
+                    sx={{ color: colors.grey[100] }}>
+                    <EditIcon />
+                  </IconButton>
                 )}
+                {event.type === "action" && (
+                  <EditIcon
+                    onClick={() => setOpen(true)}
+                    sx={{ cursor: "pointer" }}
+                  />
+                )} */}
+                {event.type !== "action" ? (
+                  <IconButton
+                    onClick={() => handleOpenDialog(event)}
+                    sx={{ color: colors.grey[100] }}>
+                    <EditIcon />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    onClick={() => handleOpenActionForm(event)}
+                    sx={{ color: colors.grey[100] }}>
+                    <EditIcon />
+                  </IconButton>
+                )}
+                <ActionForm
+                  open={openActionForm}
+                  onClose={() => setOpenActionForm(false)}
+                  todo={formData}
+                />
+                {/* <ActionForm
+                  open={open}
+                  onClose={() => setOpen(false)}
+                  todo={formData}
+                /> */}
+
+                {/* Add the dialog component */}
+                <Dialog
+                  open={openDialog}
+                  onClose={handleCloseDialog}
+                  fullWidth
+                  sx={{
+                    "& .MuiBackdrop-root": {
+                      backgroundColor: "rgba(0, 0, 0, 0.3)", // Lighter or transparent
+                    },
+                  }}
+                  maxWidth="md">
+                  <Box sx={{ p: 4, position: "relative" }}>
+                    <IconButton
+                      aria-label="close"
+                      onClick={handleCloseDialog}
+                      sx={{
+                        position: "absolute",
+                        right: 8,
+                        top: 8,
+                        color: theme.palette.grey[500],
+                      }}>
+                      <CloseIcon />
+                    </IconButton>
+                    <AddTaskForm
+                      todo={selectedTask}
+                      onClose={handleCloseDialog}
+                    />
+                  </Box>
+                </Dialog>
               </ListItem>
             ))}
           </List>

@@ -55,6 +55,7 @@ body,
   }
 } */
 /* Target all event elements with these classes */
+.fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end.fc-event-today.fc-daygrid-event.fc-daygrid-dot-event,
 .fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end.fc-event-past.fc-daygrid-event.fc-daygrid-dot-event,
 .fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end.fc-event-future.fc-daygrid-event.fc-daygrid-dot-event {
   width: 100%;
@@ -62,6 +63,8 @@ body,
 }
 
 /* Target the inner div of these events */
+.fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end.fc-event-today.fc-daygrid-event.fc-daygrid-dot-event
+  div,
 .fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end.fc-event-past.fc-daygrid-event.fc-daygrid-dot-event
   div,
 .fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end.fc-event-future.fc-daygrid-event.fc-daygrid-dot-event
@@ -71,4 +74,7 @@ body,
   flex-direction: column;
   align-items: center;
   font-size: 14px;
+}
+.MuiDialog-container {
+  transition: none !important;
 }

@@ -9,8 +9,8 @@ import { useClient } from "../../newNewKanbanBoard/actions/useKanban";
 import { actionOptions } from "../../../data/clientOptions";
 
 const ActionItem = ({ todo }) => {
-  console.log("todo", todo.date);
   console.log("todo============");
+  console.log("todo", todo);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [open, setOpen] = useState(false);
@@ -38,8 +38,6 @@ const ActionItem = ({ todo }) => {
     }
   }, [clientData, todo]);
 
-  console.log("clientData");
-  console.log(clientData);
   return (
     <Box
       p="10px"

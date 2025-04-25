@@ -11,7 +11,7 @@ import {
   Button,
   Tooltip,
 } from "@mui/material";
-import { useUpdateTask } from "./taskQueries";
+import { useAddTasks, useUpdateTask } from "./taskQueries";
 import styled from "styled-components";
 import FormRow from "../../../ui/FormRow";
 // import { useDeleteTask, useTaskStatuses } from "./taskQueries";
@@ -29,14 +29,15 @@ const Form = styled.form`
 const AddTaskForm = ({ todo, onClose }) => {
   const { data: statuses = [] } = useTaskStatuses();
 
-  const [title, setTitle] = useState(todo.title);
-  const [date, setDate] = useState(todo.date);
-  const [time, setTime] = useState(todo.time);
-  const [status_id, setStatus_id] = useState(todo.status_id);
-  const [detail, setDetails] = useState(todo.detail);
-  const [priority_id, setPriority_id] = useState(todo.priority_id);
+  const [title, setTitle] = useState(todo?.title || "");
+  const [date, setDate] = useState(todo?.date || "");
+  const [time, setTime] = useState(todo?.time || "");
+  const [status_id, setStatus_id] = useState(todo?.status_id || "");
+  const [detail, setDetails] = useState(todo?.detail || "");
+  const [priority_id, setPriority_id] = useState(todo?.priority_id || 2);
 
   const { updateTaskById, isUpdating } = useUpdateTask();
+  const { addTaskTod, isCreating } = useAddTasks();
 
   const handleChange = (event, newValue) => {
     setPriority_id(newValue);
@@ -59,9 +60,7 @@ const AddTaskForm = ({ todo, onClose }) => {
 
     updateTaskById(
       { taskId: todo.id, taskData },
-      {
-        onSuccess: () => onClose(),
-      }
+      { onSuccess: () => onClose?.() }
     );
   };
 
