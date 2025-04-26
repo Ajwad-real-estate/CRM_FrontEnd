@@ -6,11 +6,18 @@ import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import { Box, Typography, useTheme, Tabs, Tab } from "@mui/material";
 import { tokens } from "../../theme";
-import { useTasks } from "../../components/todolist/tasks/taskQueries";
+import {
+  useTasks,
+  useUpdateTask,
+} from "../../components/todolist/tasks/taskQueries";
 import formatTaskDates from "../../components/todolist/utils/date-visualization";
 import { useActionClients } from "../../components/newNewKanbanBoard/actions/useKanban";
 import Loading from "../../utils/loading";
 import ItemsList from "../../components/todolist/MainPageLayout";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useUpdateAction } from "../../components/todolist/actions/actionQueries";
 
 const Calendar = () => {
   const theme = useTheme();
@@ -136,6 +143,7 @@ const Calendar = () => {
       },
     [colors]
   );
+
   if (tasksPending || clientsLoading) {
     return <Loading />;
   }
@@ -192,8 +200,8 @@ const Calendar = () => {
               right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
             }}
             initialView="dayGridMonth"
-            editable={true}
-            selectable={true}
+            editable={false}
+            selectable={false}
             selectMirror={true}
             dayMaxEvents={false}
             events={activeEvents}

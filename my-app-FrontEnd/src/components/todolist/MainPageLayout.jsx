@@ -113,7 +113,13 @@ function ItemsList({ optionValue = 0 }) {
           sx={{ width: "85%", marginRight: "10px" }}
         />
         <>
-          <Button onClick={() => setIsModalOpen(true)}>Open Modal</Button>
+          <Button
+            sx={{ width: "10%", marginRight: "10px", minWidth: "110px" }}
+            variant="contained"
+            color="primary"
+            onClick={() => setIsModalOpen(true)}>
+            Add New Task
+          </Button>
           <AddToDo open={isModalOpen} onClose={() => setIsModalOpen(false)} />
         </>
         {/* <Button
