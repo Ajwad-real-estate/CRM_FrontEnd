@@ -54,6 +54,8 @@ import Sales from "./scenes/team/sales";
 import Profile from "./components/myProfile/Profile";
 import ClientDetails from "./scenes/contacts/ClientDetails";
 import AssignContacts from "./components/assignContacts/AssignContacts";
+import AddToDo from "./components/todolist/tasks/AddToDo";
+// import CalendarMain from "./scenes/calendar/calendarMain";
 
 function App() {
   const dispatch = useDispatch();
@@ -115,7 +117,7 @@ function App() {
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/team" element={<Team />} />
                   <Route path="/CreateAccForm" element={<CreateAccForm />} />
-                  <Route path="/calendar" element={<Calendar />} />
+
                   <Route path="/faq" element={<FAQ />} />
                   <Route path="/bar" element={<Bar />} />
                   <Route path="/pie" element={<Pie />} />
@@ -165,7 +167,11 @@ function App() {
                   />
                   <Route path="/commission" element={<CommissionPage />} />
                   <Route path="/todolist" element={<ToDoListPage />}>
-                    {/* <Route path="addtask" element={<AddToDo />} /> */}
+                    <Route path="addtask" element={<AddToDo />} />
+                    <Route index element={<ItemsList />} />
+                  </Route>
+                  <Route path="/calendar" element={<Calendar />}>
+                    <Route path="addtask" element={<AddToDo />} />
                     <Route index element={<ItemsList />} />
                   </Route>
                   <Route

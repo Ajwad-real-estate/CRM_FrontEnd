@@ -84,3 +84,29 @@ body,
 .css-yiavyu-MuiBackdrop-root-MuiDialog-backdrop {
   background-color: rgba(0, 0, 0, 0.1) !important;
 }
+/* action form animation */
+.MuiBackdrop-root {
+  transition: none !important;
+}
+.MuiBox-root .css-gg4vpm .css-ylpzmd-MuiTypography-root,
+.MuiBox-root .css-gg4vpm .MuiBox-root .css-lg2rnc,
+.MuiBox-root .css-gg4vpm .css-woiddn-MuiFormControl-root-MuiTextField-root,
+.MuiBox-root .css-gg4vpm .MuiBox-root .css-1fp7j22,
+.MuiBox-root .css-gg4vpm .MuiBox-root .css-1f10z0q,
+.MuiBox-root .css-gg4vpm .items-list-container,
+.MuiBox-root
+  .css-gg4vpm
+  .MuiTabs-scroller
+  .MuiTabs-fixed
+  .css-jpln7h-MuiTabs-scroller,
+.MuiBox-root
+  .css-gg4vpm
+  .MuiTypography-root
+  .MuiTypography-body1
+  .css-ebemm7-MuiTypography-root {
+  display: none !important;
+}
+
+.MuiBox-root .css-gg4vpm .css-1lekzkb {
+  flex-direction: column;
+}

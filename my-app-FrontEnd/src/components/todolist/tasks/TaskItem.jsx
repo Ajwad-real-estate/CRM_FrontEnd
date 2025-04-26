@@ -54,6 +54,8 @@ const ToDoItem = ({ todo, onDelete }) => {
     () => tokens(theme.palette.mode),
     [theme.palette.mode]
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [title, setTitle] = useState(todo.title);
   const [date, setDate] = useState(todo.date);
   const [time, setTime] = useState(todo.time);

@@ -1,7 +1,6 @@
-import { Button } from "bootstrap";
 import { useState } from "react";
 import { tokens } from "../../../theme";
-import { Typography, useTheme } from "@mui/material";
+import { Button, Typography, useTheme } from "@mui/material";
 
 export default function ShowMoreLess({ text }) {
   const theme = useTheme();
