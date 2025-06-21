@@ -87,8 +87,14 @@ body,
 /* action form animation */
 .MuiBackdrop-root {
   transition: none !important;
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -ms-transition: none !important;
+  -o-transition: none !important;
 }
 .MuiBox-root .css-gg4vpm .css-ylpzmd-MuiTypography-root,
+.MuiBox-root .css-gg4vpm MuiTypography-root MuiTypography-h3 css-1smox2v-MuiTypography-root,
+.MuiBox-root .css-gg4vpm h3.MuiTypography-root.MuiTypography-h3.css-1smox2v-MuiTypography-root,
 .MuiBox-root .css-gg4vpm .MuiBox-root .css-lg2rnc,
 .MuiBox-root .css-gg4vpm .css-woiddn-MuiFormControl-root-MuiTextField-root,
 .MuiBox-root .css-gg4vpm .MuiBox-root .css-1fp7j22,
