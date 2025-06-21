@@ -14,7 +14,7 @@ import { tokens } from "../../theme";
 import { useLocation } from "react-router-dom";
 import Action from "./actions/Action";
 import { LeadOptionsProvider } from "./actions/LeadContext";
-import ProgressCircle from "../ProgressCircle";
+// import ProgressCircle from "../ProgressCircle";
 import { useQueryClient } from "@tanstack/react-query";
 import useClients from "./useMainKanbanData";
 
@@ -114,12 +114,12 @@ const KanbanBoard = () => {
   const theme = useTheme();
   const queryClient = useQueryClient();
   let currentSublink = location.pathname;
-  if (currentSublink.includes("/NewNewKanbanBoard/")) {
-    currentSublink = currentSublink.replace("/NewNewKanbanBoard/", "");
+  if (currentSublink.includes("/KanbanBoard/")) {
+    currentSublink = currentSublink.replace("/KanbanBoard/", "");
     queryClient.invalidateQueries({ queryKey: ["clientsList"] });
   }
-  if (currentSublink.includes("/NewNewKanbanBoard")) {
-    currentSublink = currentSublink.replace("/NewNewKanbanBoard", "");
+  if (currentSublink.includes("/KanbanBoard")) {
+    currentSublink = currentSublink.replace("/KanbanBoard", "");
     queryClient.invalidateQueries({ queryKey: ["clientsList"] });
   }
   console.log(currentSublink);
@@ -195,8 +195,7 @@ const KanbanBoard = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-          }}
-        >
+          }}>
           <ProgressCircle size="80" rotate />
         </Box>
         <Typography variant="h4" color={colors.primary[100]}>
@@ -301,16 +300,14 @@ const KanbanBoard = () => {
           padding: "20px",
           borderRadius: "8px",
           boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-        }}
-      >
+        }}>
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
             mb: 2,
             justifyContent: "space-between",
-          }}
-        >
+          }}>
           <TextField
             variant="outlined"
             label="Search Leads"
@@ -339,8 +336,7 @@ const KanbanBoard = () => {
                 background: colors.columns[900],
                 boxShadow: 9,
               },
-            }}
-          >
+            }}>
             {isListView ? "Switch to Kanban View" : "Switch to List View"}
           </Button>
         </Box>
@@ -369,8 +365,7 @@ const KanbanBoard = () => {
                   display: "flex",
                   justifyContent: "space-around",
                   alignItems: "flex-start",
-                }}
-              >
+                }}>
                 <PipelineColumn title={column.title}>
                   {filteredLeads
                     .filter((lead) =>
@@ -383,8 +378,7 @@ const KanbanBoard = () => {
                           marginBottom: "8px",
                           borderRadius: "4px",
                         }}
-                        onDoubleClick={() => handleDoubleClick(lead)}
-                      >
+                        onDoubleClick={() => handleDoubleClick(lead)}>
                         <LeadCard lead={lead} />
                       </div>
                     ))}
@@ -403,8 +397,7 @@ const KanbanBoard = () => {
                     marginBottom: "8px",
                     borderRadius: "4px",
                   }}
-                  onDoubleClick={() => handleDoubleClick(lead)}
-                >
+                  onDoubleClick={() => handleDoubleClick(lead)}>
                   <LeadCard lead={lead} />
                 </div>
               ))}

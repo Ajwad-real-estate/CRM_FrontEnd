@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTasks } from "./tasks/taskQueries";
 import formatTaskDates from "./utils/date-visualization";
-import ProgressCircle from "../ProgressCircle";
+import ProgressCircle from "../dashboard Charts/ProgressCircle";
 import ActionItem from "./actions/ActionItem";
 import AddToDo from "./tasks/AddToDo";
 // import ActionItem from "./actions/addActionForm";

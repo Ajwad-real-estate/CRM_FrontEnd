@@ -13,7 +13,7 @@ export const useTaskStatuses = () => {
   return useQuery({
     queryKey: ["taskStatuses"],
     queryFn: async () => {
-      const response = await axios.get(`${apiUrl}/api/task-statuses`, {
+      const response = await axios.get(`${apiUrl}/api/things/task-statuses`, {
         headers: {
           Authorization: `Bearer ${Cookies.get("accessToken")}`,
         },

@@ -1,13 +1,3 @@
-// src/config/sidebarConfig.js
-// import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-// import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-// import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-// import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-// import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-// import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-// import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-// import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
-
 export const sidebarItems = [
   {
     type: "item",
@@ -19,22 +9,22 @@ export const sidebarItems = [
     type: "submenu",
     label: "Kanban Board",
     icon: "PeopleOutlinedIcon",
-    key: "NewNewKanbanBoard",
-    to: "NewNewKanbanBoard",
+    key: "KanbanBoard",
+    to: "KanbanBoard",
     items: [
       {
         title: "Done Deal",
-        to: "NewNewKanbanBoard/done_deal",
+        to: "KanbanBoard/done_deal",
         icon: "ContactsOutlinedIcon",
       },
       {
         title: "archieved",
-        to: "NewNewKanbanBoard/archieved",
+        to: "KanbanBoard/archieved",
         icon: "ContactsOutlinedIcon",
       },
       {
         title: "Lost",
-        to: "NewNewKanbanBoard/lost",
+        to: "KanbanBoard/lost",
         icon: "ContactsOutlinedIcon",
       },
     ],

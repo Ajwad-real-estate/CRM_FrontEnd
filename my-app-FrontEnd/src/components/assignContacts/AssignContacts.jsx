@@ -60,11 +60,14 @@ const AssignContacts = () => {
   const fetchClients = async () => {
     setLoading(true);
     try {
-      const response = await fetch(apiUrl + "/api/clients?assigned=false", {
-        headers: {
-          Authorization: `Bearer ${Cookies.get("accessToken")}`,
-        },
-      });
+      const response = await fetch(
+        apiUrl + "/api/clients/getClient?assigned=false",
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("accessToken")}`,
+          },
+        }
+      );
       if (!response.ok) throw new Error("Failed to fetch clients");
       const data = await response.json();
       setClients(data);
@@ -243,8 +246,7 @@ const AssignContacts = () => {
                         variant="outlined"
                         color="primary"
                         onClick={handleSelectAllClients}
-                        disabled={clients.length === selectedClients.length}
-                      >
+                        disabled={clients.length === selectedClients.length}>
                         Select All Clients
                       </Button>
                       <Box
@@ -279,8 +281,7 @@ const AssignContacts = () => {
                           "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
                             color: `${colors.grey[100]} !important`,
                           },
-                        }}
-                      >
+                        }}>
                         <DataGrid
                           // checkboxSelection
                           rows={clients}
@@ -338,8 +339,7 @@ const AssignContacts = () => {
                                         submitting ||
                                         selectedClients.length === 0
                                       }
-                                      className="w-full"
-                                    >
+                                      className="w-full">
                                       {submitting
                                         ? "Assigning..."
                                         : "Assign Clients"}

@@ -5,7 +5,7 @@ import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettin
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import { tokens } from "../../theme";
-import ProgressCircle from "../../components/ProgressCircle";
+import ProgressCircle from "../../components/dashboard Charts/ProgressCircle";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import { useTeam } from "./useTeam";
 import { useNavigate } from "react-router-dom";
@@ -42,8 +42,7 @@ const Team = () => {
         <Typography
           color={
             value === "online" ? colors.greenAccent[400] : colors.grey[500]
-          }
-        >
+          }>
           {value || "N/A"}
         </Typography>
       ),
@@ -64,8 +63,7 @@ const Team = () => {
                 ? colors.greenAccent[600]
                 : colors.greenAccent[700]
             }
-            borderRadius="4px"
-          >
+            borderRadius="4px">
             {access === "admin" && (
               <AdminPanelSettingsOutlinedIcon fontSize="small" />
             )}
@@ -105,8 +103,7 @@ const Team = () => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-            }}
-          >
+            }}>
             <ProgressCircle size="80" rotate />
           </Box>
           <Typography variant="h4" color={colors.primary[100]}>
@@ -141,9 +138,7 @@ const Team = () => {
             "& .MuiCheckbox-root": {
               color: `${colors.greenAccent[200]} !important`,
             },
-          }}
-        >
-
+          }}>
           <DataGrid
             checkboxSelection
             rows={data.agents}
@@ -162,12 +157,10 @@ const Team = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-          }}
-        >
+          }}>
           <Typography
             variant="h2"
-            sx={{ fontWeight: 600, color: colors.redAccent[500] }}
-          >
+            sx={{ fontWeight: 600, color: colors.redAccent[500] }}>
             Error Occurd Call IT Department
           </Typography>
           <WarningAmberIcon

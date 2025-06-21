@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 export async function getTasks() {
   const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
   try {
-    const response = await fetch(apiUrl + "/api/tasks", {
+    const response = await fetch(apiUrl + "/api/tasks/", {
       headers: {
         Authorization: `Bearer ${Cookies.get("accessToken")}`,
       },

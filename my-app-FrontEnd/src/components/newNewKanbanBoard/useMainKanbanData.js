@@ -3,11 +3,14 @@ import Cookies from "js-cookie"; // Import Cookies
 
 const fetchClients = async (sublink) => {
   const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
-  const response = await fetch(`${apiUrl}/api/clients?status=${sublink}`, {
-    headers: {
-      Authorization: `Bearer ${Cookies.get("accessToken")}`,
-    },
-  });
+  const response = await fetch(
+    `${apiUrl}/api/clients/getClient?status=${sublink}`,
+    {
+      headers: {
+        Authorization: `Bearer ${Cookies.get("accessToken")}`,
+      },
+    }
+  );
 
   if (!response.ok) {
     throw new Error("Failed to fetch clients");

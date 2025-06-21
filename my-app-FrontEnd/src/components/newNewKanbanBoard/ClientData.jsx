@@ -104,42 +104,42 @@ import toast from "react-hot-toast";
 const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 const fetchClients = async () => {
-    try {
-        const response = await axios.get(`${apiUrl}/api/clients`, {
-            headers: {
-                Authorization: `Bearer ${Cookies.get("accessToken")}`,
-            },
-        });
+  try {
+    const response = await axios.get(`${apiUrl}/api/clients/getClient`, {
+      headers: {
+        Authorization: `Bearer ${Cookies.get("accessToken")}`,
+      },
+    });
 
-        toast.success("Clients loaded successfully");
-        return response.data;
-    } catch (err) {
-        toast.error(err.message || "Failed to fetch clients");
-        throw new Error(err.response?.data?.message || "Failed to fetch clients");
-    }
+    toast.success("Clients loaded successfully");
+    return response.data;
+  } catch (err) {
+    toast.error(err.message || "Failed to fetch clients");
+    throw new Error(err.response?.data?.message || "Failed to fetch clients");
+  }
 };
 
 export const useFetchClients = () => {
-    const {
-        data: clients,
-        error,
-        isLoading,
-        isError,
-        refetch,
-    } = useQuery(["clients"], fetchClients, {
-        onError: (error) => {
-            toast.error(error.message);
-        },
-        refetchOnWindowFocus: true, // You can configure this to refetch the data when the window is focused
-        refetchInterval: 60000, // Optional: Refetch every minute for real-time updates
-        retry: 1, // Retry once on failure
-    });
+  const {
+    data: clients,
+    error,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery(["clients"], fetchClients, {
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    refetchOnWindowFocus: true, // You can configure this to refetch the data when the window is focused
+    refetchInterval: 60000, // Optional: Refetch every minute for real-time updates
+    retry: 1, // Retry once on failure
+  });
 
-    return {
-        clients,
-        error,
-        isLoading,
-        isError,
-        refetch, // If you want to manually trigger refetching
-    };
+  return {
+    clients,
+    error,
+    isLoading,
+    isError,
+    refetch, // If you want to manually trigger refetching
+  };
 };

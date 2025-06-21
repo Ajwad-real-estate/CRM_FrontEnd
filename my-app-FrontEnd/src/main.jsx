@@ -4,11 +4,10 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { store } from "./store";
 import { Provider } from "react-redux";
 import App from "./App";
-import SignIn from "./components/SignIn";
-import SignUp from "./components/signUp/signUp";
+import SignIn from "./pages/sign/SignIn";
 import Cookies from "js-cookie";
 import "./index.css";
-import "./scenes/global/Topbar.css";
+import "./components/topBar/Topbar.css";
 
 const AuthWrapper = ({ children }) => {
   const isAuthenticated = !!Cookies.get("accessToken");
@@ -25,7 +24,6 @@ const Main = () => {
     <Routes>
       {/* Public routes */}
       <Route path="/signin" element={<SignIn />} />
-      <Route path="/signup" element={<SignUp />} />
 
       {/* Protected routes */}
       <Route
