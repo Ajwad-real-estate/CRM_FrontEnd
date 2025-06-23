@@ -15,8 +15,8 @@ import { themeSettings, tokens } from "./helpers/redux/theme";
 import Topbar from "./components/topBar/Topbar";
 import Sidebar from "./components/sideBar/TheSideBar";
 import Dashboard from "./pages/dashboard/index";
-import Team from "./scenes/team";
-import CreateAccForm from "./scenes/form";
+// import Team from "./pages/manageTeam/team";
+import CreateAccForm from "./pages/manageTeam/createAccForm";
 import Calendar from "./pages/calendar";
 import Contacts from "./pages/clients";
 
@@ -32,11 +32,12 @@ import NewNewKanbanBoard from "./components/newNewKanbanBoard/NewKanbanBoard";
 import GetContacts from "./components/getContacts/GetContacts";
 import { Box } from "@mui/material";
 import NetworkStatus from "./helpers/NetworkStatus";
-import Sales from "./scenes/team/sales";
+import Sales from "./pages/manageTeam/team/salesPage";
 import Profile from "./components/myProfile/Profile";
 import ClientDetails from "./pages/clients/ClientDetails";
 import AssignContacts from "./pages/manageTeam/assignContacts/AssignContacts";
 import AddToDo from "./components/todolist/tasks/AddToDo";
+import Team from "./pages/manageTeam";
 
 function App() {
   const dispatch = useDispatch();

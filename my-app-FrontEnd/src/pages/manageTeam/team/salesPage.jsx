@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Typography,
   TextField,
   Button,
   CircularProgress,
-  MenuItem,
   Select,
   InputLabel,
   FormControl,
@@ -15,9 +14,8 @@ import {
   Collapse,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
-import axios from "axios";
-import { tokens } from "../../helpers/redux/theme";
-import { useTeam } from "./useTeam";
+import { tokens } from "../../../helpers/redux/theme";
+import { useTeam } from "../useTeam";
 
 const Sales = () => {
   const { id } = useParams();
@@ -25,8 +23,6 @@ const Sales = () => {
   const colors = tokens(theme.palette.mode);
   const {
     useAgentDetails,
-    // roles,
-    // statuses,
     updateAgentDetails,
     updateAgentEmail,
     updateAgentPassword,
@@ -41,14 +37,15 @@ const Sales = () => {
     role_id: "",
   });
   const { data: agentData, isLoading } = useAgentDetails(id);
-
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [initialData, setInitialData] = useState(null);
+  const [msg, setMsg] = useState("");
+  // const [isUpdating, setIsUpdating] = useState(false);
   const [error, setError] = useState("");
+  const [isUpdating, setIsUpdating] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
-  // const [roles, setRoles] = useState([]);
-  // const [statuses, setStatuses] = useState([]);
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [changedFields, setChangedFields] = useState({});
 
   const [emailForm, setEmailForm] = useState({
     newEmail: "",
@@ -58,18 +55,31 @@ const Sales = () => {
     newPassword: "",
     confirmPassword: "",
   });
-
   useEffect(() => {
     if (agentData) {
-      setFormData({
+      const initial = {
         name: agentData.name || "",
         street: agentData.street || "",
         status_id: agentData.status_id || "",
         target: agentData.target || "",
         role_id: agentData.role_id || "",
-      });
+      };
+      setFormData(initial);
+      setInitialData(initial);
     }
   }, [agentData]);
+
+  const hasDataChanged = () => {
+    if (!initialData) return false;
+
+    return (
+      formData.name !== initialData.name ||
+      formData.street !== initialData.street ||
+      formData.status_id !== initialData.status_id ||
+      formData.target !== initialData.target ||
+      formData.role_id !== initialData.role_id
+    );
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -81,6 +91,11 @@ const Sales = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    if (!hasDataChanged()) {
+      setError("No changes detected to update");
+      setTimeout(() => setError(""), 3000);
+      return;
+    }
     const payload = {
       name: formData.name,
       street: formData.street,
@@ -88,17 +103,42 @@ const Sales = () => {
       target: parseInt(formData.target),
       role_id: parseInt(formData.role_id),
     };
-    updateAgentDetails.mutate({ id, payload });
+    updateAgentDetails.mutate(
+      { id, payload },
+      {
+        onSuccess: () => {
+          setSuccessMessage("Agent details updated successfully!");
+          setTimeout(() => setSuccessMessage(""), 3000);
+        },
+        onError: (error) => {
+          setError(
+            error.response?.data?.message || "Failed to update agent details"
+          );
+          setTimeout(() => setError(""), 3000);
+        },
+      }
+    );
   };
 
   const handleEmailUpdate = async (e) => {
     e.preventDefault();
-    updateAgentEmail.mutate({ id, newEmail: emailForm.newEmail });
-    setEmailForm({ newEmail: "" });
-    setShowEmailForm(false);
-    setSuccessMessage("Email updated successfully!");
-  };
+    updateAgentEmail.mutate(
+      { id, newEmail: emailForm.newEmail },
+      {
+        onSuccess: () => {
+          setEmailForm({ newEmail: "" });
+          setShowEmailForm(false);
+          setSuccessMessage("Email updated successfully!");
+          setTimeout(() => setSuccessMessage(""), 3000);
+        },
+        onError: (error) => {
+          setError(error.message || "Failed to update email");
 
+          setTimeout(() => setError(""), 3000);
+        },
+      }
+    );
+  };
   const handlePasswordUpdate = async (e) => {
     e.preventDefault();
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
@@ -112,11 +152,23 @@ const Sales = () => {
       setTimeout(() => setError(""), 3000);
       return;
     }
-    updateAgentPassword.mutate({ id, newPassword: passwordForm.newPassword });
-    setPasswordForm({ newPassword: "", confirmPassword: "" });
-    setShowPasswordForm(false);
-  };
 
+    updateAgentPassword.mutate(
+      { id, newPassword: passwordForm.newPassword },
+      {
+        onSuccess: () => {
+          setPasswordForm({ newPassword: "", confirmPassword: "" });
+          setShowPasswordForm(false);
+          setSuccessMessage("Password updated successfully!");
+          setTimeout(() => setSuccessMessage(""), 3000);
+        },
+        onError: (error) => {
+          setError(error.message || "Failed to update password");
+          setTimeout(() => setError(""), 3000);
+        },
+      }
+    );
+  };
   if (isLoading) {
     return (
       <Box
@@ -342,9 +394,11 @@ const Sales = () => {
                 type="submit"
                 variant="contained"
                 color="primary"
-                disabled={isUpdating}
+                // disabled={isUpdating}
+                disabled={updateAgentDetails.isLoading}
                 sx={{ mt: 2 }}>
-                {isUpdating ? "Updating..." : "Update Password"}
+                {/*  {isUpdating ? "Updating..." : "Update Password"}*/}
+                {updateAgentDetails.isLoading ? "Updating..." : "Update"}
               </Button>
             </form>
           </Box>

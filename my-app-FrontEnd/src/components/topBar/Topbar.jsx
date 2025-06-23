@@ -21,7 +21,7 @@ import { toggleMode } from "../../helpers/redux/themeSlice";
 import { themeSettings, tokens } from "../../helpers/redux/theme";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "./Header";
-import AjwadBlack from "../../../public/assets/logoBlack.png";
+import AjwadBlack from "/assets/logoBlack.png";
 import { isDesktop } from "../../helpers/useDeviceDetect";
 import { useCallback, useMemo } from "react";
 

@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   TextField,
-  MenuItem,
   Select,
   InputLabel,
   FormControl,
@@ -10,14 +9,13 @@ import {
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import Header from "../../components/topBar/Header";
-// import Header from "../../../components/topBar/Header";
 import toast from "react-hot-toast";
-import add from "../../../public/assets/add.mp3";
-import delet from "../../../public/assets/delet.mp3";
+import add from "/assets/add.mp3"; // Adjust the path as necessary
+import delet from "/assets/delet.mp3";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import axios from "axios";
+import Header from "../../../components/topBar/Header";
+import teamOfSalesApi from "../../../api/teamOfSalesApis";
 
 // Phone number regex pattern
 const phoneRegExp =
@@ -45,16 +43,14 @@ const checkoutSchema = yup.object().shape({
     .string()
     .email("Invalid email format")
     .required("Email is required"),
-  roleId: yup.string().required("Role is required"),
-  cityId: yup.string().required("City is required"), // Add city validation
+  roleId: yup.string(),
+  cityId: yup.string(), // Add city validation
   street: yup.string().required("Street is required"), // Add street validation
   phoneNumbers: yup
     .array()
     .of(yup.string().matches(phoneRegExp, "Phone number is not valid"))
     .required("At least one phone number is required"),
 });
-
-const apiUrl = import.meta.env.VITE_API_URL;
 
 const CreateAccForm = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -66,71 +62,6 @@ const CreateAccForm = () => {
   const [roles, setRoles] = useState([]); // To hold roles from API
   const [cities, setCities] = useState([]);
   // Fetch roles from the server on component mount
-  useEffect(() => {
-    // fetchCities
-    const fetchCities = async () => {
-      try {
-        const response = await axios.get(`${apiUrl}/api/city`, {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          },
-        });
-        const { data } = response;
-
-        if (data && data.cities && data.cities.length > 0) {
-          const fetchedCities = data.cities.map((city) => city.name);
-
-          // Merge fetched cities with fallback cities, avoiding duplicates
-          // const mergedCities = Array.from(new Set([...fetchedCities, ...cityOptions]));
-
-          // Sort the cities alphabetically
-          // mergedCities.sort((a, b) => a.localeCompare(b));
-
-          setCities(fetchedCities);
-        }
-      } catch (err) {
-        console.error("Error fetching cities:", err.message);
-        // setError("Failed to fetch cities. Using fallback options.");
-
-        // Use fallback cities in case of error
-        // setCities(cityOptions);
-      } finally {
-        // setIsLoading(false);
-      }
-    };
-
-    fetchCities();
-    const fetchRoles = async () => {
-      const accessToken = Cookies.get("accessToken");
-      try {
-        const response = await fetch(`${apiUrl}/api/roles`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`, // Send access token for authorization
-          },
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          setRoles(result.roles); // Set roles if the request is successful
-        } else {
-          toast.error("Failed to load roles.", {
-            position: "top-center",
-            autoClose: 5000,
-          });
-        }
-      } catch (error) {
-        toast.error("An error occurred while fetching roles.", {
-          position: "top-center",
-          autoClose: 5000,
-        });
-      }
-    };
-
-    fetchRoles();
-  }, []);
-
   // Play sound effect when addSound or dltSound is triggered
   useEffect(() => {
     const playSound = () => {
@@ -151,58 +82,32 @@ const CreateAccForm = () => {
     console.log("Form values:", values); // Log values to check if they're correct
 
     const userData = {
-      username: values.name,
+      username: values.username,
       name: values.name,
       email: values.email,
       password: values.password,
       //    manager_id: va,
-      roleId: values.roleId, // Send roleId
-      cityId: values.cityId, // Send cityId
+      roleId: values.roleId || null, // Handle empty selection
+      cityId: values.cityId || null,
       street: values.street, // Send street
-      phoneNumbers: values.phoneNumbers, // Send phone numbers as an array
+      phoneNumbers: values.phoneNumbers.filter((num) => num.trim() !== ""), // Remove empty strings
     };
-    setLoading(true); // Set loading to true while waiting for response
-
-    const accessToken = Cookies.get("accessToken");
-
+    setLoading(true);
     try {
-      const response = await fetch(`${apiUrl}/api/create-sales-account`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`, // Add the token for authorization
-        },
-        body: JSON.stringify(userData),
+      await teamOfSalesApi.createSalesAccount(userData);
+
+      toast.success("Account created successfully!", {
+        position: "top-center",
+        autoClose: 5000,
       });
-
-      if (response.status === 401) {
-        toast.error("Unauthorized. Please logout and login again.", {
-          position: "top-center",
-          autoClose: 5000,
-        });
-        setDltSound(true); // Play error sound
-        setLoading(false); // Set loading to true while waiting for response
-
-        return;
-      }
-
-      const result = await response.json();
-
-      if (response.ok) {
-        toast.success("Account created successfully!", {
-          position: "top-center",
-          autoClose: 5000,
-        });
-        setAddSound(true); // Play success sound
-      } else {
-        toast.error(`Error: ${result.message}`, {
-          position: "top-center",
-          autoClose: 5000,
-        });
-        setDltSound(true); // Play error sound
-      }
+      setAddSound(true);
     } catch (error) {
-      toast.error("An unexpected error occurred. Please try again.", {
+      const errorMessage =
+        error.response?.status === 401
+          ? "Unauthorized. Please logout and login again."
+          : error.response?.data?.message || "An unexpected error occurred";
+
+      toast.error(errorMessage, {
         position: "top-center",
         autoClose: 5000,
       });
@@ -348,11 +253,11 @@ const CreateAccForm = () => {
                     onChange={handleChange}
                     label="Role ID"
                     name="roleId">
-                    {roles.map((role) => (
+                    {/* {roles.map((role) => (
                       <MenuItem key={role.id} value={role.id}>
                         {role.title}
                       </MenuItem>
-                    ))}
+                    ))} */}
                   </Select>
                 </FormControl>
                 {/* city Selection */}
@@ -369,11 +274,11 @@ const CreateAccForm = () => {
             {cities.title}
            </MenuItem>
           ))} */}
-                    {cities.map((city, index) => (
+                    {/* {cities.map((city, index) => (
                       <MenuItem key={city} value={index}>
                         {city}
                       </MenuItem>
-                    ))}
+                    ))} */}
                   </Select>
                 </FormControl>
               </Box>

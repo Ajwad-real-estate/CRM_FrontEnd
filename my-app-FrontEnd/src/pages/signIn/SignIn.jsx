@@ -14,9 +14,8 @@ import {
 } from "@mui/material";
 import { tokens } from "../../helpers/redux/theme";
 const apiUrl = import.meta.env.VITE_API_URL;
-import logoBlack from "../../../public/assets/logoBlack.png";
-// import logoWhite from "../../../public/assets/logoWhite.png";
-import logoWhite from "../../../public/assets/logoWihte.png";
+import logoBlack from "/assets/logoBlack.png";
+import logoWhite from "/assets/logoWihte.png";
 
 const SignIn = () => {
   const theme = useTheme();
