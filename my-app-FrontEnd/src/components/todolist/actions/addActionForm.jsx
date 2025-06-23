@@ -12,14 +12,14 @@ import {
   MenuItem,
   Collapse,
 } from "@mui/material";
-import { tokens } from "../../../theme";
+import { tokens } from "../../../helpers/redux/theme";
 import { useTheme } from "@emotion/react";
-import FormRow from "../../../ui/FormRow";
+import FormRow from "../../../helpers/ui/FormRow";
 import { useUpdateAction } from "./actionQueries";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import { useClient } from "../../newNewKanbanBoard/actions/useKanban";
 import { useUpdateClient } from "../../newNewKanbanBoard/actions/useUpdateClient";
-import Loading from "../../../utils/loading";
+import Loading from "../../../helpers/loading";
 
 const Form = styled("form")(({ theme }) => ({
   display: "flex",

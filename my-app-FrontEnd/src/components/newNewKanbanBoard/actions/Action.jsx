@@ -6,7 +6,7 @@ import { useLeadOpt } from "./LeadContext";
 import CloseIcon from "@mui/icons-material/Close";
 import { Button, Typography, useMediaQuery, useTheme } from "@mui/material";
 import ActionContent from "./contents/ActionContent";
-import { tokens } from "../../../theme";
+import { tokens } from "../../../helpers/redux/theme";
 import EditClient from "./EditClient";
 import LeadPreview from "./LeadPrev";
 import { useClient } from "./useKanban";
@@ -36,8 +36,7 @@ const Action = ({ open, onClose, onOpen, lead, onUpdate }) => {
         height: "100vw",
         background: colors.primary[400],
       }}
-      role="presentation"
-    >
+      role="presentation">
       <Box
         sx={{
           marginTop: "20px",
@@ -45,12 +44,10 @@ const Action = ({ open, onClose, onOpen, lead, onUpdate }) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-        }}
-      >
+        }}>
         <Button
           onClick={onClose}
-          sx={{ position: "absolute", top: "5px", right: "5px" }}
-        >
+          sx={{ position: "absolute", top: "5px", right: "5px" }}>
           <CloseIcon sx={{ color: colors.primary[200] }} />
         </Button>
         <Box sx={{ width: `"230px"` }}>
@@ -75,8 +72,7 @@ const Action = ({ open, onClose, onOpen, lead, onUpdate }) => {
           flexDirection: "column",
           height: "100%",
           gap: "10px",
-        }}
-      >
+        }}>
         {TabValue === 0 && lead && (
           <LeadPreview
             lead={lead}
@@ -101,8 +97,7 @@ const Action = ({ open, onClose, onOpen, lead, onUpdate }) => {
       open={open}
       onClose={onClose}
       onOpen={onOpen}
-      lead={lead}
-    >
+      lead={lead}>
       {drawerContent}
     </SwipeableDrawer>
   );

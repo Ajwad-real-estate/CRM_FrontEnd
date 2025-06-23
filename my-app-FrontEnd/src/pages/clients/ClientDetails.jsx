@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { tokens } from "../../theme";
+import { tokens } from "../../helpers/redux/theme";
 import Cookies from "js-cookie";
 import {
   cityOptions,

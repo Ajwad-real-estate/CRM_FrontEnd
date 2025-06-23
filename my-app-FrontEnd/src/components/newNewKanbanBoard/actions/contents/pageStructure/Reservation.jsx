@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import styled from "styled-components";
-import { tokens } from "../../../../../theme";
+import { tokens } from "../../../../../helpers/redux/theme";
 
 const RowForm = styled.div`
   display: flex;
@@ -51,8 +51,7 @@ function Reservation() {
                   native: true,
                 },
               }}
-              sx={{ flex: 1, width: "100%" }}
-            >
+              sx={{ flex: 1, width: "100%" }}>
               {PaymentOptions.map((option, index) => (
                 <MenuItem
                   key={index}
@@ -66,8 +65,7 @@ function Reservation() {
                     "&:hover": {
                       backgroundColor: colors.primary[700],
                     },
-                  }}
-                >
+                  }}>
                   {option}
                 </MenuItem>
               ))}
@@ -89,8 +87,7 @@ function Reservation() {
                   native: true,
                 },
               }}
-              sx={{ flex: 1, width: "100%" }}
-            >
+              sx={{ flex: 1, width: "100%" }}>
               {ProjectOptions.map((option, index) => (
                 <MenuItem
                   key={index}
@@ -104,8 +101,7 @@ function Reservation() {
                     "&:hover": {
                       backgroundColor: colors.primary[700],
                     },
-                  }}
-                >
+                  }}>
                   {option}
                 </MenuItem>
               ))}
@@ -138,8 +134,7 @@ function Reservation() {
                   native: true,
                 },
               }}
-              sx={{ flex: 1, width: "100%" }}
-            >
+              sx={{ flex: 1, width: "100%" }}>
               <InputLabel id="demo-multiple-name-label">
                 select Category
               </InputLabel>
@@ -155,8 +150,7 @@ function Reservation() {
                     "&:hover": {
                       backgroundColor: colors.primary[700],
                     },
-                  }}
-                >
+                  }}>
                   {option}
                 </MenuItem>
               ))}

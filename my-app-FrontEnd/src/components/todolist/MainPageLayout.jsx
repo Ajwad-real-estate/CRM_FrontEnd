@@ -24,16 +24,17 @@ function ItemsList({ optionValue = 0 }) {
   let All_TASKS = [];
   let All_ACTIONS = [];
 
-  if (!isPending) {
-    console.log(data);
-  }
+  console.log("MainPageLayout", data);
   // console.log(data.allTasks);
   // console.log(data.allActions);
   if (!isPending) {
+    // All_TASKS = [];
+    // All_TASKS = data;
     All_TASKS = data.allTasks;
     All_TASKS = All_TASKS.map((task) => formatTaskDates(task));
     All_TASKS = All_TASKS.sort((a, b) => b.priority_level - a.priority_level);
 
+    // All_ACTIONS = [];
     All_ACTIONS = data.allActions;
     All_ACTIONS = All_ACTIONS.map((task) => formatTaskDates(task));
     All_ACTIONS = All_ACTIONS.sort(

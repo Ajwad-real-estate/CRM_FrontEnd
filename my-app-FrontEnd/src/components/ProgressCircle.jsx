@@ -1,5 +1,5 @@
 import { Box, useTheme } from "@mui/material";
-import { tokens } from "../theme";
+import { tokens } from "../helpers/redux/theme";
 
 const ProgressCircle = ({ progress = "0.75", size = "40", rotate = false }) => {
   const theme = useTheme();
@@ -22,8 +22,7 @@ const ProgressCircle = ({ progress = "0.75", size = "40", rotate = false }) => {
             "100%": { transform: "rotate(360deg)" },
           },
         }),
-      }}
-    ></Box>
+      }}></Box>
   );
 };
 

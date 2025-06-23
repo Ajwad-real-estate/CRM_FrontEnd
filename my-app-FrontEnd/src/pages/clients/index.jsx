@@ -1,10 +1,9 @@
 import { Box, useTheme, useMediaQuery } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { tokens } from "../../theme";
+import { tokens } from "../../helpers/redux/theme";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
-const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+import clientsApi from "../../api/clientsApis";
 
 const Clients = () => {
   const [clients, setClients] = useState([]);
@@ -15,21 +14,35 @@ const Clients = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
+  // useEffect(() => {
+  //   const fetchClients = async () => {
+  //     try {
+  //       const response = await fetch(`${apiUrl}/api/clients`, {
+  //         headers: {
+  //           Authorization: `Bearer ${Cookies.get("accessToken")}`,
+  //         },
+  //       });
+
+  //       const data = await response.json();
+  //       console.log("Fetched clients:", data);
+  //       if (!response.ok) {
+  //         throw new Error("Failed to fetch clients");
+  //       }
+  //       // Check if the response is empty
+  //       setClients(data);
+  //     } catch (error) {
+  //       console.error("Error fetching clients:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchClients();
+  // }, []);
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const response = await fetch(`${apiUrl}/api/clients`, {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          },
-        });
-
-        const data = await response.json();
-        console.log("Fetched clients:", data);
-        if (!response.ok) {
-          throw new Error("Failed to fetch clients");
-        }
-        // Check if the response is empty
+        const data = await clientsApi.getAllClients();
         setClients(data);
       } catch (error) {
         console.error("Error fetching clients:", error);
@@ -56,7 +69,7 @@ const Clients = () => {
     {
       field: "phone_numbers",
       headerName: "Phone Numbers",
-      flex:1.5,
+      flex: 1.5,
       renderCell: (params) => {
         return params.value ? params.value.join(", ") : "-";
       },

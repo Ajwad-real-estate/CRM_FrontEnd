@@ -8,7 +8,7 @@ async function getNonCompletedAction(clientID) {
 
   try {
     const response = await axios.get(
-      `${apiUrl}/api/actionsNotcompletedOfClient/${clientID}`, // Fixed URL with trailing slash
+      `${apiUrl}/api/actions/actionsNotcompletedOfClient/${clientID}`, // Fixed URL with trailing slash
       {
         headers: {
           Authorization: `Bearer ${Cookies.get("accessToken")}`,

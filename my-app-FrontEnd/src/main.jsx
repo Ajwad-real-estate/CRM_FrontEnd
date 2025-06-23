@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { store } from "./store";
+import { store } from "./helpers/redux/store";
 import { Provider } from "react-redux";
 import App from "./App";
-import SignIn from "./pages/sign/SignIn";
+import SignIn from "./pages/signIn/SignIn";
 import Cookies from "js-cookie";
 import "./index.css";
 import "./components/topBar/Topbar.css";

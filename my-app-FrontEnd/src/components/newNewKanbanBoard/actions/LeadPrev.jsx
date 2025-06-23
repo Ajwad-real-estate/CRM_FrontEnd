@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Box, Grid, Typography } from "@mui/material";
-import { tokens } from "../../../theme";
+import { tokens } from "../../../helpers/redux/theme";
 import { useTheme } from "@emotion/react";
 import ProgressCircle from "../../ProgressCircle";
 
@@ -51,15 +51,13 @@ const LeadPreview = ({ data, isPending, isError }) => {
         flexDirection: "column",
         justifyContent: "center",
         marginTop: "30px",
-      }}
-    >
+      }}>
       <Grid
         container
         spacing={3}
         sx={{
           width: "100%",
-        }}
-      >
+        }}>
         {rows.map((row, index) => (
           <Grid
             item
@@ -70,8 +68,7 @@ const LeadPreview = ({ data, isPending, isError }) => {
                 index % 2 === 0 ? colors.blueAccent[900] : "inherit", // Alternating grey shades
               padding: "10px",
               width: "100%",
-            }}
-          >
+            }}>
             <Grid container alignItems="center" sx={{ width: "100%" }}>
               <Grid item xs={4}>
                 <Typography variant="body1" color="textSecondary">

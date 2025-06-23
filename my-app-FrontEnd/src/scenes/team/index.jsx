@@ -4,7 +4,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
-import { tokens } from "../../theme";
+import { tokens } from "../../helpers/redux/theme";
 import ProgressCircle from "../../components/dashboard Charts/ProgressCircle";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import { useTeam } from "./useTeam";
@@ -14,12 +14,12 @@ const Team = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const { isPending, data, error, isError } = useTeam();
+  const { isPending, agents, error, isError } = useTeam();
   const navigate = useNavigate(); // Use navigate at the top level
 
   // Fetch data in useEffect
   console.log(isPending);
-  console.log(data);
+  // console.log(data);
   console.log(isError);
   // Define columns for DataGrid (excluding `id`)
   const columns = [
@@ -79,6 +79,7 @@ const Team = () => {
       },
     },
   ];
+  
   const handleCellClick = (params) => {
     const salesColumns = ["name", "title", "status"]; // Define the columns for Sales ID page
 
@@ -112,7 +113,7 @@ const Team = () => {
         </Box>
       )}
 
-      {data && (
+      {agents && (
         <Box
           m="40px 0 0 0"
           height="75vh"
@@ -141,7 +142,7 @@ const Team = () => {
           }}>
           <DataGrid
             checkboxSelection
-            rows={data.agents}
+            rows={agents || []}
             columns={columns}
             pageSize={isNonMobile ? 10 : 5}
             getRowId={(row) => row.id} // Use `id` internally for unique row identification

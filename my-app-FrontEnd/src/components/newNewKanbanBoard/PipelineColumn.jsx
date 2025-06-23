@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles"; // Import the useTheme hook
-import { tokens } from "../../theme";
+import { tokens } from "../../helpers/redux/theme";
 
 const PipelineColumn = ({ title, children, onAdd }) => {
   const theme = useTheme(); // Access the theme using useTheme hook
@@ -17,15 +17,13 @@ const PipelineColumn = ({ title, children, onAdd }) => {
         boxShadow: 6,
         border: "0.01px solid ",
         borderColor: colors.columns[100],
-      }}
-    >
+      }}>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Typography
           variant="h6"
           align="center"
           gutterBottom
-          sx={{ mb: 3, mt: 2, fontSize: "17px" }}
-        >
+          sx={{ mb: 3, mt: 2, fontSize: "17px" }}>
           {title}
         </Typography>
       </Box>

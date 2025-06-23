@@ -11,7 +11,7 @@ import {
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { tokens } from "../../theme";
+import { tokens } from "../../../helpers/redux/theme";
 import {
   Table,
   TableBody,
@@ -21,22 +21,28 @@ import {
   TableRow,
   TableFooter,
 } from "@mui/material";
-
-const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+import clientsApi from "../../../api/clientsApis";
+import { useAssignContacts } from "./useAssignContacts";
 
 const AssignContacts = () => {
-  const [clients, setClients] = useState([]);
-  const [agents, setAgents] = useState([]);
+  const {
+    clients,
+    agents,
+    loading,
+    fetchUnassignedClients,
+    fetchSalesAgents,
+    assignClientsToAgents,
+    setAgents,
+  } = useAssignContacts();
   const [selectedClients, setSelectedClients] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   useEffect(() => {
-    fetchClients();
-    fetchAgents();
+    fetchUnassignedClients();
+    fetchSalesAgents();
   }, []);
 
   // Update agent quantities whenever selected clients change
@@ -50,53 +56,11 @@ const AssignContacts = () => {
       setAgents((prev) =>
         prev.map((agent, index) => ({
           ...agent,
-          // Add one extra to the first 'remainder' agents if there's uneven distribution
           quantity: clientsPerAgent + (index < remainder ? 1 : 0),
         }))
       );
     }
   }, [selectedClients.length, agents, setAgents]);
-
-  const fetchClients = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(
-        apiUrl + "/api/clients/getClient?assigned=false",
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          },
-        }
-      );
-      if (!response.ok) throw new Error("Failed to fetch clients");
-      const data = await response.json();
-      setClients(data);
-    } catch (error) {
-      console.error("Error fetching clients:", error);
-    }
-    setLoading(false);
-  };
-
-  const fetchAgents = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(apiUrl + "/api/get-sales-agents-details", {
-        headers: {
-          Authorization: `Bearer ${Cookies.get("accessToken")}`,
-        },
-      });
-      const data = await response.json();
-      const formattedAgents = data.agents.map((agent) => ({
-        id: agent.id,
-        name: agent.name,
-        quantity: 0,
-      }));
-      setAgents(formattedAgents);
-    } catch (error) {
-      console.error("Error fetching agents:", error);
-    }
-    setLoading(false);
-  };
 
   const handleClientToggle = (clientId) => {
     setSelectedClients((prev) =>
@@ -136,20 +100,12 @@ const AssignContacts = () => {
         agents: agents.map(({ id, quantity }) => ({ id, quantity })),
         clients: selectedClients,
       };
+      const success = await assignClientsToAgents(payload);
 
-      const response = await fetch(apiUrl + "/api/clients/assign", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${Cookies.get("accessToken")}`,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
+      if (success) {
         setSelectedClients([]);
         setAgents((prev) => prev.map((agent) => ({ ...agent, quantity: 0 })));
-        await fetchClients();
+        await fetchUnassignedClients();
       } else {
         console.error("Failed to assign clients");
       }
@@ -198,35 +154,6 @@ const AssignContacts = () => {
       headerName: "Email",
       flex: 1,
     },
-    // {
-    //  field: "street",
-    //  headerName: "Street",
-    //  flex: 1,
-    // },
-    // {
-    //  field: "budget",
-    //  headerName: "Budget",
-    //  flex: 1,
-    //  type: "number",
-    //  renderCell: (params) => {
-    //   return params.value ? `$${params.value.toLocaleString()}` : "-";
-    //  }
-    // },
-    // {
-    //  field: "status",
-    //  headerName: "Status",
-    //  flex: 1,
-    // },
-    // {
-    //  field: "type",
-    //  headerName: "Type",
-    //  flex: 1,
-    // },
-    // {
-    //  field: "channel",
-    //  headerName: "Channel",
-    //  flex: 1,
-    // }
   ];
 
   return (

@@ -17,12 +17,12 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleMode } from "../../themeSlice";
-import { themeSettings, tokens } from "../../theme";
+import { toggleMode } from "../../helpers/redux/themeSlice";
+import { themeSettings, tokens } from "../../helpers/redux/theme";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "./Header";
 import AjwadBlack from "../../../public/assets/logoBlack.png";
-import { isDesktop } from "../../hooks/useDeviceDetect";
+import { isDesktop } from "../../helpers/useDeviceDetect";
 import { useCallback, useMemo } from "react";
 
 const Topbar = () => {

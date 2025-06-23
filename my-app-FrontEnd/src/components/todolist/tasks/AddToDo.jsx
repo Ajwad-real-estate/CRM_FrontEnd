@@ -365,7 +365,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { useAddTasks, useTaskStatuses } from "./taskQueries";
 import styled from "styled-components";
-import FormRow from "../../../ui/FormRow";
+import FormRow from "../../../helpers/ui/FormRow";
 
 const Form = styled.form`
   display: flex;

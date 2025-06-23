@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
-import { setMode } from "./themeSlice";
+import { setMode } from "./helpers/redux/themeSlice";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./index.css";
@@ -11,14 +11,14 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { Routes, Route, useLocation } from "react-router-dom";
-import { themeSettings, tokens } from "./theme";
+import { themeSettings, tokens } from "./helpers/redux/theme";
 import Topbar from "./components/topBar/Topbar";
 import Sidebar from "./components/sideBar/TheSideBar";
 import Dashboard from "./pages/dashboard/index";
 import Team from "./scenes/team";
 import CreateAccForm from "./scenes/form";
-import Calendar from "./scenes/calendar";
-import Contacts from "./scenes/contacts";
+import Calendar from "./pages/calendar";
+import Contacts from "./pages/clients";
 
 import FAQ from "./pages/faq";
 import InventoryPage from "./components/inventory/InventoryPage";
@@ -27,15 +27,15 @@ import ToDoListPage from "./components/todolist/MainPage";
 import ItemsList from "./components/todolist/MainPageLayout";
 import { Toaster } from "react-hot-toast";
 
-import SignIn from "./pages/sign/SignIn";
+import SignIn from "./pages/signIn/SignIn";
 import NewNewKanbanBoard from "./components/newNewKanbanBoard/NewKanbanBoard";
 import GetContacts from "./components/getContacts/GetContacts";
 import { Box } from "@mui/material";
-import NetworkStatus from "./NetworkStatus";
+import NetworkStatus from "./helpers/NetworkStatus";
 import Sales from "./scenes/team/sales";
 import Profile from "./components/myProfile/Profile";
-import ClientDetails from "./scenes/contacts/ClientDetails";
-import AssignContacts from "./components/assignContacts/AssignContacts";
+import ClientDetails from "./pages/clients/ClientDetails";
+import AssignContacts from "./pages/manageTeam/assignContacts/AssignContacts";
 import AddToDo from "./components/todolist/tasks/AddToDo";
 
 function App() {

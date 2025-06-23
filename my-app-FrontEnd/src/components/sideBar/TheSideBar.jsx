@@ -3,12 +3,12 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { tokens } from "../../theme";
+import { tokens } from "../../helpers/redux/theme";
 import Cookies from "js-cookie";
 import useLogout from "./Logout";
-import { isDesktop } from "../../hooks/useDeviceDetect";
+import { isDesktop } from "../../helpers/useDeviceDetect";
 import { sidebarItems } from "../../data/sidebarConfig";
-import { iconComponents } from "../../utils/icons";
+import { iconComponents } from "../../helpers/icons";
 import "./style.css";
 import { minutesInHour } from "date-fns/constants";
 

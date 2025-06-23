@@ -17,10 +17,10 @@ import {
   InputLabel,
   Select,
 } from "@mui/material";
-import { tokens } from "../../../theme";
+import { tokens } from "../../../helpers/redux/theme";
 import { useTheme } from "@emotion/react";
 import EditIcon from "@mui/icons-material/Edit";
-import FormRow from "../../../ui/FormRow";
+import FormRow from "../../../helpers/ui/FormRow";
 import styled from "styled-components";
 import ShowMoreLess from "../utils/ShowMoreLess";
 import axios from "axios";

@@ -1,6 +1,6 @@
 import { ResponsiveLine } from "@nivo/line";
 import { useTheme } from "@mui/material";
-import { tokens } from "../../theme";
+import { tokens } from "../../helpers/redux/theme";
 import PropTypes from "prop-types";
 import { useMemo } from "react";
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Tabs, Tab, Box, useTheme } from "@mui/material";
-import { tokens } from "../../../../theme";
+import { tokens } from "../../../../helpers/redux/theme";
 
 const Classification = ({ activeTab, setActiveTab, handleTabChange }) => {
   const theme = useTheme();
@@ -16,8 +16,7 @@ const Classification = ({ activeTab, setActiveTab, handleTabChange }) => {
           gap: "2px",
           justifyItems: "center",
           width: "100%",
-        }}
-      >
+        }}>
         {/* Custom Tabs Rendering */}
         {["New", "Qualified", "Reserved", "Done Deal", "Archived", "Lost"].map(
           (label, index) => (

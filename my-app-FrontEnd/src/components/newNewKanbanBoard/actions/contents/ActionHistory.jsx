@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Grid, Typography, useTheme } from "@mui/material";
-import { tokens } from "../../../../theme";
+import { tokens } from "../../../../helpers/redux/theme";
 import { useClientActions } from "../useGetClientActions";
 import ProgressCircle from "../../../ProgressCircle";
 
@@ -47,8 +47,7 @@ export default function ActionHistory({ lead }) {
         height: "100%",
         marginTop: "30px",
         padding: "3px",
-      }}
-    >
+      }}>
       {!isError && data && !isPending && (
         <>
           <Box
@@ -59,45 +58,38 @@ export default function ActionHistory({ lead }) {
               padding: "10px",
               borderRadius: "8px 8px 0 0",
               width: "100%",
-            }}
-          >
+            }}>
             <Typography variant="subtitle1" sx={{ flex: 2, textAlign: "left" }}>
               Comment
             </Typography>
             <Typography
               variant="subtitle1"
-              sx={{ flex: 1, textAlign: "center" }}
-            >
+              sx={{ flex: 1, textAlign: "center" }}>
               Date
             </Typography>
             <Typography
               variant="subtitle1"
-              sx={{ flex: 1, textAlign: "center" }}
-            >
+              sx={{ flex: 1, textAlign: "center" }}>
               Time
             </Typography>
             <Typography
               variant="subtitle1"
-              sx={{ flex: 1, textAlign: "center" }}
-            >
+              sx={{ flex: 1, textAlign: "center" }}>
               Action
             </Typography>
             <Typography
               variant="subtitle1"
-              sx={{ flex: 1, textAlign: "center" }}
-            >
+              sx={{ flex: 1, textAlign: "center" }}>
               Status
             </Typography>
             <Typography
               variant="subtitle1"
-              sx={{ flex: 1, textAlign: "center" }}
-            >
+              sx={{ flex: 1, textAlign: "center" }}>
               Completed
             </Typography>
             <Typography
               variant="subtitle1"
-              sx={{ flex: 1, textAlign: "center" }}
-            >
+              sx={{ flex: 1, textAlign: "center" }}>
               Answered
             </Typography>
           </Box>
@@ -112,12 +104,10 @@ export default function ActionHistory({ lead }) {
                 backgroundColor:
                   index % 2 === 0 ? colors.blueAccent[900] : "inherit",
                 padding: "10px 15px",
-              }}
-            >
+              }}>
               <Typography
                 variant="body2"
-                sx={{ flex: 2, textAlign: "left", wordBreak: "break-word" }}
-              >
+                sx={{ flex: 2, textAlign: "left", wordBreak: "break-word" }}>
                 {row.comment}
               </Typography>
               <Typography variant="body2" sx={{ flex: 1, textAlign: "center" }}>
@@ -146,8 +136,7 @@ export default function ActionHistory({ lead }) {
 
       {isError && (
         <Typography
-          sx={{ color: "#ff0808", fontSize: "1.4rem", textAlign: "center" }}
-        >
+          sx={{ color: "#ff0808", fontSize: "1.4rem", textAlign: "center" }}>
           {error.message}
         </Typography>
       )}

@@ -13,7 +13,7 @@ import AddPhoneNumber from "./AddPhoneNumber";
 import { useClient } from "./useKanban";
 import ProgressCircle from "../../ProgressCircle";
 import { useTheme } from "@emotion/react";
-import { tokens } from "../../../theme";
+import { tokens } from "../../../helpers/redux/theme";
 import { useUpdateClient } from "./useEditCient";
 import { useQueryClient } from "@tanstack/react-query";
 // import ClientData from "../ClientData";
@@ -112,8 +112,7 @@ function EditClient({ lead }) {
         justifyContent: ` ${isLoading || isError ? "center" : "space-around"}`,
         alignItems: `${isLoading || isError ? "center" : ""}`,
         gap: "20px",
-      }}
-    >
+      }}>
       {data && (
         <>
           <Box
@@ -122,8 +121,7 @@ function EditClient({ lead }) {
               alignItems: "center",
               justifyContent: "space-between",
               gap: "30px",
-            }}
-          >
+            }}>
             <Box
               sx={{
                 display: "flex",
@@ -131,8 +129,7 @@ function EditClient({ lead }) {
                 justifyContent: "space-around",
                 width: "50%",
                 gap: "12px",
-              }}
-            >
+              }}>
               <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
                 Name
               </Typography>
@@ -150,8 +147,7 @@ function EditClient({ lead }) {
                 justifyContent: "flex-start",
                 width: "50%",
                 gap: "12px",
-              }}
-            >
+              }}>
               <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
                 Age
               </Typography>
@@ -170,8 +166,7 @@ function EditClient({ lead }) {
               alignItems: "center",
               justifyContent: "space-between",
               gap: "30px",
-            }}
-          >
+            }}>
             <Box
               sx={{
                 display: "flex",
@@ -179,8 +174,7 @@ function EditClient({ lead }) {
                 justifyContent: "space-around",
                 width: "65%",
                 gap: "12px",
-              }}
-            >
+              }}>
               <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
                 Email
               </Typography>
@@ -198,8 +192,7 @@ function EditClient({ lead }) {
               alignItems: "center",
               justifyContent: "space-between",
               gap: "30px",
-            }}
-          >
+            }}>
             <Box
               sx={{
                 display: "flex",
@@ -207,8 +200,7 @@ function EditClient({ lead }) {
                 justifyContent: "space-around",
                 width: "65%",
                 gap: "12px",
-              }}
-            >
+              }}>
               <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
                 National ID
               </Typography>
@@ -226,8 +218,7 @@ function EditClient({ lead }) {
               alignItems: "center",
               justifyContent: "space-between",
               gap: "30px",
-            }}
-          >
+            }}>
             <Box
               sx={{
                 display: "flex",
@@ -235,8 +226,7 @@ function EditClient({ lead }) {
                 justifyContent: "space-around",
                 width: "50%",
                 gap: "12px",
-              }}
-            >
+              }}>
               <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
                 Street
               </Typography>
@@ -254,8 +244,7 @@ function EditClient({ lead }) {
                 justifyContent: "flex-start",
                 width: "50%",
                 gap: "12px",
-              }}
-            >
+              }}>
               <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
                 Channel
               </Typography>
@@ -273,8 +262,7 @@ function EditClient({ lead }) {
               alignItems: "center",
               justifyContent: "space-between",
               gap: "30px",
-            }}
-          >
+            }}>
             <Box
               sx={{
                 display: "flex",
@@ -282,16 +270,14 @@ function EditClient({ lead }) {
                 justifyContent: "space-around",
                 width: "50%",
                 gap: "12px",
-              }}
-            >
+              }}>
               <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
                 Status
               </Typography>
               <FormControl fullWidth sx={{ width: "100%" }}>
                 <Select
                   value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                >
+                  onChange={(e) => setStatus(e.target.value)}>
                   {StatusState.map((option, i) => (
                     <MenuItem value={i} key={i}>
                       {option}
@@ -307,8 +293,7 @@ function EditClient({ lead }) {
                 justifyContent: "flex-start",
                 width: "50%",
                 gap: "12px",
-              }}
-            >
+              }}>
               <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
                 Type
               </Typography>
@@ -329,8 +314,7 @@ function EditClient({ lead }) {
               alignItems: "center",
               justifyContent: "space-between",
               gap: "30px",
-            }}
-          >
+            }}>
             <Box
               sx={{
                 display: "flex",
@@ -338,8 +322,7 @@ function EditClient({ lead }) {
                 justifyContent: "space-around",
                 width: "50%",
                 gap: "12px",
-              }}
-            >
+              }}>
               <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>
                 Budget
               </Typography>
@@ -378,8 +361,7 @@ function EditClient({ lead }) {
           alignSelf: "center",
         }}
         onClick={handleEdit}
-        disabled={isUpdating}
-      >
+        disabled={isUpdating}>
         {!isUpdating ? (
           "Submit Changes"
         ) : (

@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import PhoneIcon from "@mui/icons-material/Phone";
 import TagIcon from "@mui/icons-material/Label";
-import { tokens } from "../../theme";
+import { tokens } from "../../helpers/redux/theme";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 
 const LeadCard = ({ lead }) => {
@@ -26,8 +26,7 @@ const LeadCard = ({ lead }) => {
         borderRadius: 2,
         boxShadow: 10,
         background: colors.columns[100],
-      }}
-    >
+      }}>
       <CardContent>
         <Typography variant="h5" sx={{ fontWeight: "bold" }}>
           {lead.title}
@@ -72,8 +71,7 @@ const LeadCard = ({ lead }) => {
               flexWrap: "wrap", // Allow wrapping to the next line if space is insufficient
               alignItems: "center", // Vertically align items
               gap: 0.5, // Space between tags and icons
-            }}
-          >
+            }}>
             <Box
               sx={{
                 mb: "10px",
@@ -81,8 +79,7 @@ const LeadCard = ({ lead }) => {
                 flexDirection: "column",
                 flexWrap: "nowrap",
                 gap: "10px",
-              }}
-            >
+              }}>
               {lead.tags && lead.tags.length > 0 ? (
                 lead.tags.map((tag, index) => (
                   <Chip
@@ -100,8 +97,7 @@ const LeadCard = ({ lead }) => {
                 <Typography
                   variant="body2"
                   color="text.secondary"
-                  sx={{ marginBottom: 1 }}
-                >
+                  sx={{ marginBottom: 1 }}>
                   No tags
                 </Typography>
               )}
@@ -116,8 +112,7 @@ const LeadCard = ({ lead }) => {
                 gap: 1, // Space between icons
                 marginTop: lead.tags && lead.tags.length > 0 ? 0 : 1, // Add margin-top if there are no tags
                 marginBottom: lead.tags && lead.tags.length > 1 ? -5 : 0, // Add margin-top if there are no tags
-              }}
-            >
+              }}>
               {/* Phone Icon */}
               <IconButton
                 sx={{
@@ -141,8 +136,7 @@ const LeadCard = ({ lead }) => {
                 }}
                 href={`https://wa.me/${lead.phoneNumber}`} // WhatsApp API link
                 target="_blank"
-                rel="noopener noreferrer"
-              >
+                rel="noopener noreferrer">
                 <WhatsAppIcon />
               </IconButton>
             </Box>

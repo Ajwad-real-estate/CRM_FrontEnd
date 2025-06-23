@@ -6,7 +6,7 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import { tokens } from "../../theme";
+import { tokens } from "../../helpers/redux/theme";
 import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";

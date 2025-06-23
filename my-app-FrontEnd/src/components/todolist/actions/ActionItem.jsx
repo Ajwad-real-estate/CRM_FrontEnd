@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Box, Typography, IconButton } from "@mui/material";
 import { useTheme } from "@emotion/react";
-import { tokens } from "../../../theme";
+import { tokens } from "../../../helpers/redux/theme";
 import EditIcon from "@mui/icons-material/Edit";
 import ActionForm from "./addActionForm";
 import { useClient } from "../../newNewKanbanBoard/actions/useKanban";

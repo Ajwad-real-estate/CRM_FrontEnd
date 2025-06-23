@@ -5,14 +5,14 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import { Box, Typography, useTheme, Tabs, Tab } from "@mui/material";
-import { tokens } from "../../theme";
+import { tokens } from "../../helpers/redux/theme";
 import {
   useTasks,
   useUpdateTask,
 } from "../../components/todolist/tasks/taskQueries";
 import formatTaskDates from "../../components/todolist/utils/date-visualization";
 import { useActionClients } from "../../components/newNewKanbanBoard/actions/useKanban";
-import Loading from "../../utils/loading";
+import Loading from "../../helpers/loading";
 import ItemsList from "../../components/todolist/MainPageLayout";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";

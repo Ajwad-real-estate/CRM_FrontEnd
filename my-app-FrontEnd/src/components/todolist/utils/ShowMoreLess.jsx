@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { tokens } from "../../../theme";
+import { tokens } from "../../../helpers/redux/theme";
 import { Button, Typography, useTheme } from "@mui/material";
 
 export default function ShowMoreLess({ text }) {

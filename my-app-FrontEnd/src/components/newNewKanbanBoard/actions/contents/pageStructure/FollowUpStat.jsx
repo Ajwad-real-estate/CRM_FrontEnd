@@ -11,7 +11,7 @@ import MenuList from "@mui/material/MenuList";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { colors } from "@mui/material";
 import { useTheme } from "@emotion/react";
-import { tokens } from "../../../../../theme";
+import { tokens } from "../../../../../helpers/redux/theme";
 
 const FollowUpStat = ({ selectedIndex, setSelectedIndex }) => {
   // Custom theme with color variable
@@ -53,15 +53,13 @@ const FollowUpStat = ({ selectedIndex, setSelectedIndex }) => {
           width: "100%",
           height: "60%",
           display: "flex",
-        }}
-      >
+        }}>
         <Button
           onClick={handleClick}
           sx={{
             flexGrow: 1,
             height: "100%",
-          }}
-        >
+          }}>
           {options[selectedIndex]}
         </Button>
         <Button
@@ -74,8 +72,7 @@ const FollowUpStat = ({ selectedIndex, setSelectedIndex }) => {
           sx={{
             flexGrow: 0,
             height: "100%",
-          }}
-        >
+          }}>
           <ArrowDropDownIcon />
         </Button>
       </ButtonGroup>
@@ -88,16 +85,14 @@ const FollowUpStat = ({ selectedIndex, setSelectedIndex }) => {
         anchorEl={anchorRef.current}
         role={undefined}
         transition
-        disablePortal
-      >
+        disablePortal>
         {({ TransitionProps, placement }) => (
           <Grow
             {...TransitionProps}
             style={{
               transformOrigin:
                 placement === "bottom" ? "center top" : "center bottom",
-            }}
-          >
+            }}>
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList
@@ -105,8 +100,7 @@ const FollowUpStat = ({ selectedIndex, setSelectedIndex }) => {
                   autoFocusItem
                   sx={{
                     padding: 0,
-                  }}
-                >
+                  }}>
                   {options.map((option, index) => (
                     <MenuItem
                       key={option}
@@ -121,8 +115,7 @@ const FollowUpStat = ({ selectedIndex, setSelectedIndex }) => {
                             ? colors.blueAccent[500]
                             : colors.grey[400],
                         color: index === selectedIndex ? "#777777" : "inherit",
-                      }}
-                    >
+                      }}>
                       {option}
                     </MenuItem>
                   ))}

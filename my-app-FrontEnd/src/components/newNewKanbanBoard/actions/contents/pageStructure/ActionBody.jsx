@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import FollowUpStat from "./FollowUpStat";
 import { useEffect, useState } from "react";
-import { tokens } from "../../../../../theme";
+import { tokens } from "../../../../../helpers/redux/theme";
 import CallGroup from "./CallGroup";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import VerifiedIcon from "@mui/icons-material/Verified";
@@ -213,8 +213,7 @@ function ActionBody({ lead }) {
         gridTemplateColumns: "1fr 1.15fr",
         gridTemplateRows: "150px auto auto auto",
         gap: "11px",
-      }}
-    >
+      }}>
       <Box
         sx={{
           gridArea: "input",
@@ -224,14 +223,12 @@ function ActionBody({ lead }) {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-        }}
-      >
+        }}>
         <Box>
           <Typography
             variant="body1"
             component="label"
-            htmlFor="custom-textfield"
-          >
+            htmlFor="custom-textfield">
             Next Action
           </Typography>
 
@@ -246,8 +243,7 @@ function ActionBody({ lead }) {
                   native: true,
                 },
               }}
-              sx={{ flex: 1 }}
-            >
+              sx={{ flex: 1 }}>
               {actionOptions.map((option, index) => (
                 <MenuItem
                   key={index}
@@ -261,8 +257,7 @@ function ActionBody({ lead }) {
                     "&:hover": {
                       backgroundColor: colors.primary[700],
                     },
-                  }}
-                >
+                  }}>
                   {option}
                 </MenuItem>
               ))}
@@ -290,8 +285,7 @@ function ActionBody({ lead }) {
               <Typography
                 variant="body1"
                 component="label"
-                htmlFor="custom-textfield"
-              >
+                htmlFor="custom-textfield">
                 Cancel Reason
               </Typography>
               <TextField
@@ -302,8 +296,7 @@ function ActionBody({ lead }) {
                     native: true,
                   },
                 }}
-                sx={{ width: "100%" }}
-              >
+                sx={{ width: "100%" }}>
                 {cancelOptions.map((option, index) => (
                   <MenuItem
                     key={index}
@@ -316,8 +309,7 @@ function ActionBody({ lead }) {
                       "&:hover": {
                         backgroundColor: "#e5e5e5a6",
                       },
-                    }}
-                  >
+                    }}>
                     {option}
                   </MenuItem>
                 ))}
@@ -328,8 +320,7 @@ function ActionBody({ lead }) {
               <Typography
                 variant="body1"
                 component="label"
-                htmlFor="custom-textfield"
-              >
+                htmlFor="custom-textfield">
                 Stage Date
               </Typography>
               <TextField
@@ -364,8 +355,7 @@ function ActionBody({ lead }) {
           height: "100%",
           flexDirection: "column",
           paddingTop: "24px",
-        }}
-      >
+        }}>
         <CallGroup callCase={callCase} setCall={setCall} />
         {selectedValue !== "Cancel" &&
           selectedValue !== "Cancel after Meeting" && (
@@ -388,18 +378,15 @@ function ActionBody({ lead }) {
             sx={{
               gridArea: "comment",
               width: "100%",
-            }}
-          >
+            }}>
             <Box
               sx={{
                 width: "100%",
-              }}
-            >
+              }}>
               <Typography
                 variant="body1"
                 component="label"
-                htmlFor="custom-textfield"
-              >
+                htmlFor="custom-textfield">
                 Comment
               </Typography>
 
@@ -481,16 +468,14 @@ function ActionBody({ lead }) {
           display: "flex",
           alignItems: "center",
           justifyContent: "end",
-        }}
-      >
+        }}>
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             width: "60%",
-          }}
-        >
+          }}>
           <Button
             variant="contained"
             sx={{
@@ -503,8 +488,7 @@ function ActionBody({ lead }) {
               fontSize: "1.1rem",
             }}
             disabled={isAdding}
-            onClick={handleSubmit}
-          >
+            onClick={handleSubmit}>
             {isAdding ? (
               <>
                 Adding
@@ -535,8 +519,7 @@ function ActionBody({ lead }) {
                 borderStyle: "solid",
               },
             }}
-            onClick={HandleCancel}
-          >
+            onClick={HandleCancel}>
             Cancel
           </Button>
         </Box>

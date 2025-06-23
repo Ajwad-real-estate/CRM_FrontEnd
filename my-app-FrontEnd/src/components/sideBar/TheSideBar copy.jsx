@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { Sidebar, Menu, MenuItem, SubMenu, } from 'react-pro-sidebar';
-import userImage from '../../assets/user.png';
+import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+import userImage from "../../assets/user.png";
 // import '../../scss/styles.scss';
-import './Topbar.css'
+import "./Topbar.css";
 // import 'react-pro-sidebar/dist/css/styles.css';
 // @import '~react-pro-sidebar/dist/scss/styles.scss';
 
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { tokens } from "../../theme";
+import { tokens } from "../../helpers/redux/theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
@@ -24,7 +24,6 @@ import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import KanbanBoard from "../KanbanBoard";
 import NewKanbanBoard from "../../components/newKanbanBoard/NewKanbanBoard";
 
-
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -36,13 +35,12 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
           color: colors.grey[100],
         }}
         onClick={() => setSelected(title)}
-        icon={icon}
-      >
+        icon={icon}>
         <Typography>{title}</Typography>
       </MenuItem>
     </Link>
-  )
-}
+  );
+};
 
 const TheSideBar = () => {
   const theme = useTheme();
@@ -93,23 +91,11 @@ const TheSideBar = () => {
         "& .ps-menu-button:hover": {
           color: "#868dfb !important",
           background: `${colors.primary[400]} !important`,
-
         },
         "& .ps-menu-button.active": {
           color: "#6870fa !important",
-
         },
-      }}
-    >
-
-
-
-
-
-
-
-
-
+      }}>
       <Sidebar collapsed={isCollapsed}>
         <Menu iconShape="square">
           {/* logo and menu icon */}
@@ -119,15 +105,13 @@ const TheSideBar = () => {
             style={{
               margin: "10px 0 20px 0",
               color: colors.grey[100],
-            }}
-          >
+            }}>
             {!isCollapsed && (
               <Box
                 display="flex"
                 justifyContent="space-between"
                 alignItems="center"
-                ml="15px"
-              >
+                ml="15px">
                 <Typography variant="h3" color={colors.grey[100]}>
                   ADMINIS
                 </Typography>
@@ -140,14 +124,12 @@ const TheSideBar = () => {
 
           {!isCollapsed && (
             <Box mb="25px">
-
               <Box textAlign="center">
                 <Typography
                   variant="h2"
                   color={colors.grey[100]}
                   fontWeight="bold"
-                  sx={{ m: "10px 0 0 0" }}
-                >
+                  sx={{ m: "10px 0 0 0" }}>
                   Ahmed Elsisy
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
@@ -157,7 +139,6 @@ const TheSideBar = () => {
             </Box>
           )}
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
-
             {/* <Typography
        variant="h6"
        color={colors.grey[300]}
@@ -175,8 +156,7 @@ const TheSideBar = () => {
             <Typography
               variant="h6"
               color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
+              sx={{ m: "15px 0 5px 20px" }}>
               Pages To Sales Agent
             </Typography>
             <Item
@@ -184,8 +164,7 @@ const TheSideBar = () => {
               to="/"
               icon={<HomeOutlinedIcon />}
               selected={selected}
-              setSelected={setSelected}
-            ></Item>
+              setSelected={setSelected}></Item>
             <Item
               title="NewKanbanBoard"
               to="/NewNewKanbanBoard"
@@ -204,22 +183,19 @@ const TheSideBar = () => {
               <MenuItem
                 title="Done Deal"
                 icon={<ContactsOutlinedIcon />}
-                onClick={() => navigate("/done_deal")}
-              >
+                onClick={() => navigate("/done_deal")}>
                 Done Deal
               </MenuItem>
               <MenuItem
                 title="archieved"
                 icon={<ContactsOutlinedIcon />}
-                onClick={() => navigate("/archieved")}
-              >
+                onClick={() => navigate("/archieved")}>
                 archieved
               </MenuItem>
               <MenuItem
                 title="Lost"
                 icon={<ContactsOutlinedIcon />}
-                onClick={() => navigate("/lost")}
-              >
+                onClick={() => navigate("/lost")}>
                 Lost
               </MenuItem>
             </SubMenu>
@@ -235,15 +211,13 @@ const TheSideBar = () => {
               <MenuItem
                 title="Option 1"
                 icon={<ContactsOutlinedIcon />}
-                onClick={() => navigate("/option1")}
-              >
+                onClick={() => navigate("/option1")}>
                 Option 1
               </MenuItem>
               <MenuItem
                 title="Option 2"
                 icon={<ContactsOutlinedIcon />}
-                onClick={() => navigate("/option2")}
-              >
+                onClick={() => navigate("/option2")}>
                 Option 2
               </MenuItem>
             </SubMenu>
@@ -280,10 +254,8 @@ const TheSideBar = () => {
             </SubMenu>
             <SubMenu
               label="Other"
-
               icon={<PeopleOutlinedIcon />}
-              style={{ color: colors.grey[100] }}
-            >
+              style={{ color: colors.grey[100] }}>
               <Item
                 title="Done Deal"
                 to="/done_deal"
@@ -347,23 +319,10 @@ const TheSideBar = () => {
               setSelected={setSelected}
             />
 
-
-
-
-
-
-
-
-
-
-
-
-
             <Typography
               variant="h6"
               color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
+              sx={{ m: "15px 0 5px 20px" }}>
               Pages To sales Manager
             </Typography>
             <Item
@@ -371,8 +330,7 @@ const TheSideBar = () => {
               to="/"
               icon={<HomeOutlinedIcon />}
               selected={selected}
-              setSelected={setSelected}
-            ></Item>
+              setSelected={setSelected}></Item>
             <Item
               title="Contact"
               to="/contact"
@@ -443,28 +401,6 @@ const TheSideBar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             {/* <Typography
        variant="h6"
@@ -553,24 +489,10 @@ const TheSideBar = () => {
        selected={selected}
        setSelected={setSelected}
       /> */}
-
-
-
-
-
-
-
           </Box>
-
-
-
         </Menu>
       </Sidebar>
-
-
-
-
-    </Box >
+    </Box>
   );
 };
 

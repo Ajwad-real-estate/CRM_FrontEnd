@@ -1,6 +1,6 @@
 import { useTheme } from "@mui/material";
 import { ResponsiveBar } from "@nivo/bar";
-import { tokens } from "../../theme";
+import { tokens } from "../../helpers/redux/theme";
 
 const BarChart = ({ target, doneDeals, isDashboard = false }) => {
   const theme = useTheme();

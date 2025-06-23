@@ -12,11 +12,7 @@ const AuthWrapper = () => {
     // Check for access token in cookies
     const accessToken = Cookies.get("accessToken");
 
-    if (
-      !accessToken &&
-      !window.location.pathname.includes("/signin") &&
-      !window.location.pathname.includes("/signup")
-    ) {
+    if (!accessToken && !window.location.pathname.includes("/signin")) {
       navigate("/signin");
     }
   }, [navigate]);

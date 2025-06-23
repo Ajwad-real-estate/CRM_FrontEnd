@@ -4,6 +4,8 @@ import Cookies from "js-cookie";
 
 export const createBulkClients = async (clientsData) => {
     try {
+            //   const res = await axios.get(`${apiUrl}/api/clients/getClient`, {
+
         const response = await axios.post(apiUrl + '/api/clients/bulk',
             {
                 clients: clientsData,

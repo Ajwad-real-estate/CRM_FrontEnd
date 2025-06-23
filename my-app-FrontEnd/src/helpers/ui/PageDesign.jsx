@@ -1,5 +1,5 @@
 import { Box, useTheme, useMediaQuery } from "@mui/material";
-import { tokens } from "../theme";
+import { tokens } from "../redux/theme";
 
 function PageDesign({ children }) {
   const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -20,8 +20,7 @@ function PageDesign({ children }) {
           padding: "20px",
           borderRadius: "8px",
           boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-        }}
-      >
+        }}>
         {children}
       </Box>
     </Box>

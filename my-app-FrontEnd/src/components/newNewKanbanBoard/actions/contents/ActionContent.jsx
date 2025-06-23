@@ -6,7 +6,7 @@ import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import ActionBody from "./pageStructure/ActionBody";
 import BusinessIcon from "@mui/icons-material/Business";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
-import { tokens } from "../../../../theme";
+import { tokens } from "../../../../helpers/redux/theme";
 
 function ActionContent({ lead, data, onClose }) {
   const theme = useTheme();
@@ -39,8 +39,7 @@ function ActionContent({ lead, data, onClose }) {
           flexWrap: "wrap", // Enable wrapping
           justifyContent: "space-between", // Adjust alignment between rows
           gap: "20px", // Space between items
-        }}
-      >
+        }}>
         <Box sx={centering}>
           <TextSnippetIcon />
           <Typography variant="p">{lead.title}</Typography>

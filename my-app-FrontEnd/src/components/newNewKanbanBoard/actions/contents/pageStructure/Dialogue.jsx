@@ -6,7 +6,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { Typography, useTheme } from "@mui/material";
-import { tokens } from "../../../../../theme";
+import { tokens } from "../../../../../helpers/redux/theme";
 
 export default function Dialogue({ open, onClose, setAcceptance }) {
   const theme = useTheme();
@@ -36,8 +36,7 @@ export default function Dialogue({ open, onClose, setAcceptance }) {
           boxShadow: "3px 5px 11px #36363668",
           background: colors.primary[400],
         },
-      }}
-    >
+      }}>
       <DialogTitle id="alert-dialog-title" sx={{ textAlign: "center" }}>
         <HelpOutlineIcon sx={{ fontSize: "5rem" }} />
       </DialogTitle>
@@ -50,8 +49,7 @@ export default function Dialogue({ open, onClose, setAcceptance }) {
               fontWeight: "500",
               fontSize: "1.15rem",
               marginBottom: "15px",
-            }}
-          >
+            }}>
             Done Meeting
           </Typography>
           <Typography sx={{ textAlign: "center" }}>
@@ -64,8 +62,7 @@ export default function Dialogue({ open, onClose, setAcceptance }) {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-around",
-        }}
-      >
+        }}>
         <Button
           variant="Contained"
           sx={{
@@ -82,8 +79,7 @@ export default function Dialogue({ open, onClose, setAcceptance }) {
               transform: "scale(0.94)", // Apply scale on active
             },
           }}
-          onClick={onClickYes}
-        >
+          onClick={onClickYes}>
           Yes
         </Button>
         <Button
@@ -102,8 +98,7 @@ export default function Dialogue({ open, onClose, setAcceptance }) {
             },
           }}
           onClick={onClickNo}
-          autoFocus
-        >
+          autoFocus>
           No
         </Button>
       </DialogActions>

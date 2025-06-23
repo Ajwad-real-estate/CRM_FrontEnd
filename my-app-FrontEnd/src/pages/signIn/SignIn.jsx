@@ -12,7 +12,7 @@ import {
   CircularProgress,
   useTheme,
 } from "@mui/material";
-import { tokens } from "../../theme";
+import { tokens } from "../../helpers/redux/theme";
 const apiUrl = import.meta.env.VITE_API_URL;
 import logoBlack from "../../../public/assets/logoBlack.png";
 // import logoWhite from "../../../public/assets/logoWhite.png";

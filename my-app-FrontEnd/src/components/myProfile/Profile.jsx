@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material";
 import axios from "axios";
-import { tokens } from "../../theme";
+import { tokens } from "../../helpers/redux/theme";
 import Cookies from "js-cookie";
 
 const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -215,8 +215,7 @@ const Profile = () => {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
-        }}
-      >
+        }}>
         <CircularProgress />
       </Box>
     );
@@ -242,8 +241,7 @@ const Profile = () => {
             backgroundColor: colors.primary[400],
             p: 3,
             borderRadius: "8px",
-          }}
-        >
+          }}>
           <Typography variant="h4" sx={{ mb: 3, color: colors.grey[100] }}>
             Profile Details
           </Typography>
@@ -270,8 +268,7 @@ const Profile = () => {
                 label="Status"
                 name="status_id"
                 value={formData.status_id}
-                onChange={handleInputChange}
-              >
+                onChange={handleInputChange}>
                 {statuses.map((status) => (
                   <MenuItem key={status.id} value={status.id}>
                     {status.name}
@@ -294,24 +291,21 @@ const Profile = () => {
                 type="submit"
                 variant="contained"
                 color="primary"
-                disabled={isUpdating}
-              >
+                disabled={isUpdating}>
                 {isUpdating ? "Updating..." : "Update Profile"}
               </Button>
               <Button
                 type="button"
                 variant="contained"
                 color="secondary"
-                onClick={toggleEmailForm}
-              >
+                onClick={toggleEmailForm}>
                 {showEmailForm ? "Hide Email Form" : "Change Email"}
               </Button>
               <Button
                 type="button"
                 variant="contained"
                 color="secondary"
-                onClick={togglePasswordForm}
-              >
+                onClick={togglePasswordForm}>
                 {showPasswordForm ? "Hide Password Form" : "Change Password"}
               </Button>
             </Box>
@@ -325,8 +319,7 @@ const Profile = () => {
               backgroundColor: colors.primary[400],
               p: 3,
               borderRadius: "8px",
-            }}
-          >
+            }}>
             <Typography variant="h4" sx={{ mb: 3, color: colors.grey[100] }}>
               Update Email
             </Typography>
@@ -354,8 +347,7 @@ const Profile = () => {
                 variant="contained"
                 color="primary"
                 disabled={isUpdating}
-                sx={{ mt: 2 }}
-              >
+                sx={{ mt: 2 }}>
                 {isUpdating ? "Updating..." : "Update Email"}
               </Button>
             </form>
@@ -369,8 +361,7 @@ const Profile = () => {
               backgroundColor: colors.primary[400],
               p: 3,
               borderRadius: "8px",
-            }}
-          >
+            }}>
             <Typography variant="h4" sx={{ mb: 3, color: colors.grey[100] }}>
               Update Password
             </Typography>
@@ -411,8 +402,7 @@ const Profile = () => {
                 variant="contained"
                 color="primary"
                 disabled={isUpdating}
-                sx={{ mt: 2 }}
-              >
+                sx={{ mt: 2 }}>
                 {isUpdating ? "Updating..." : "Update Password"}
               </Button>
             </form>

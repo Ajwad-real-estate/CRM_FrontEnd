@@ -4,7 +4,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { tokens } from "../../theme";
+import { tokens } from "../../helpers/redux/theme";
 
 const FAQ = () => {
   const theme = useTheme();
@@ -17,9 +17,9 @@ const FAQ = () => {
           <Typography color={colors.greenAccent[500]} variant="h5">
             Basic Terms
           </Typography>
-        </AccordionSummary >
-        <AccordionDetails sx={{display: "flex"}}>
-          <Typography sx={{ width:"33%" }}>
+        </AccordionSummary>
+        <AccordionDetails sx={{ display: "flex" }}>
+          <Typography sx={{ width: "33%" }}>
             <strong>Apartment</strong>: شقة <br />
             <strong>Villa</strong>: فيلا <br />
             <strong>Studio</strong>: ستوديو <br />
@@ -38,7 +38,6 @@ const FAQ = () => {
             <strong>Twin House</strong>: توين هاوس <br />
           </Typography>
           <Typography>
-            
             <strong>Prime Location</strong>: موقع مميز <br />
             <strong>Gated Community</strong>: كمبوند مغلق <br />
             <strong>High ROI</strong>: عائد استثماري مرتفع <br />

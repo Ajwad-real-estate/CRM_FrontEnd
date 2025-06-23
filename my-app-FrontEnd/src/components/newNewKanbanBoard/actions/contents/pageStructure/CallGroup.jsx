@@ -3,7 +3,7 @@ import Radio from "@mui/material/Radio";
 import { Box, Typography, useTheme } from "@mui/material";
 import PhoneCallbackIcon from "@mui/icons-material/PhoneCallback";
 import CallEndIcon from "@mui/icons-material/CallEnd";
-import { tokens } from "../../../../../theme";
+import { tokens } from "../../../../../helpers/redux/theme";
 
 function CallGroup({ setCall, callCase }) {
   const handleChange = (value) => {
@@ -21,8 +21,7 @@ function CallGroup({ setCall, callCase }) {
         justifyContent: "space-around",
         height: "100%",
         gap: "10px",
-      }}
-    >
+      }}>
       {/* First Radio Group */}
       <Box
         onClick={() => handleChange(true)}
@@ -39,8 +38,7 @@ function CallGroup({ setCall, callCase }) {
           background:
             callCase === true ? colors.blueAccent[800] : "transparent",
           border: callCase === true ? "none" : `1px solid ${colors.grey[400]}`,
-        }}
-      >
+        }}>
         <Radio
           checked={callCase === true}
           onChange={() => handleChange(true)}
@@ -60,8 +58,7 @@ function CallGroup({ setCall, callCase }) {
             fontSize: "1.1rem",
             fontWeight: "500",
             color: colors.primary[200],
-          }}
-        >
+          }}>
           Answer
         </Typography>
       </Box>
@@ -81,8 +78,7 @@ function CallGroup({ setCall, callCase }) {
           background:
             callCase === false ? colors.blueAccent[800] : "transparent",
           border: callCase === false ? "none" : `1px solid ${colors.grey[400]}`,
-        }}
-      >
+        }}>
         <Radio
           checked={callCase === false}
           onChange={() => handleChange(false)}
@@ -102,8 +98,7 @@ function CallGroup({ setCall, callCase }) {
             fontSize: "1.1rem",
             fontWeight: "500",
             color: colors.primary[200],
-          }}
-        >
+          }}>
           no answer
         </Typography>
       </Box>

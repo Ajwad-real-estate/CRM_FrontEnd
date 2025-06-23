@@ -11,7 +11,7 @@ import {
   useTheme,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { tokens } from "../../../theme";
+import { tokens } from "../../../helpers/redux/theme";
 
 function AddPhoneNumber({
   handleAdd,
@@ -33,8 +33,7 @@ function AddPhoneNumber({
         justifyContent: "center",
         gap: "26px",
         height: "170px",
-      }}
-    >
+      }}>
       <List
         sx={{
           width: "50%",
@@ -42,8 +41,7 @@ function AddPhoneNumber({
           border: "1px solid",
           height: "100%",
           overflowY: "scroll",
-        }}
-      >
+        }}>
         {numbersList.map((item, index) => (
           <ListItem key={index} sx={{ borderBottom: "1px solid #eee" }}>
             <ListItemText primary={item} />
@@ -71,8 +69,7 @@ function AddPhoneNumber({
           color="primary"
           fullWidth
           onClick={handleAdd}
-          sx={{ mb: 2 }}
-        >
+          sx={{ mb: 2 }}>
           Add Phone Number
         </Button>
       </Box>
