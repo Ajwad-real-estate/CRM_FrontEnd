@@ -32,6 +32,7 @@ export const sidebarItems = [
   {
     type: "item",
     title: "Inventory",
+    to : "/projects",
     icon: "MapOutlinedIcon",
   },
   {

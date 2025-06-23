@@ -21,18 +21,18 @@ import Calendar from "./pages/calendar";
 import Contacts from "./pages/clients";
 
 import FAQ from "./pages/faq";
-import InventoryPage from "./components/inventory/InventoryPage";
-import ProjectDetails from "./components/inventory/ProjectDetails";
+import InventoryPage from "./pages/inventory/InventoryPage";
+import ProjectDetails from "./pages/inventory/ProjectDetails";
 import ToDoListPage from "./components/todolist/MainPage";
 import ItemsList from "./components/todolist/MainPageLayout";
 import { Toaster } from "react-hot-toast";
 
 import SignIn from "./pages/signIn/SignIn";
 import NewNewKanbanBoard from "./components/newNewKanbanBoard/NewKanbanBoard";
-import GetContacts from "./components/getContacts/GetContacts";
+import GetContacts from "./pages/manageTeam/getContacts/GetContacts";
 import { Box } from "@mui/material";
 import NetworkStatus from "./helpers/NetworkStatus";
-import Sales from "./pages/manageTeam/team/salesPage";
+import Sales from "./pages/manageTeam/salesPage";
 import Profile from "./components/myProfile/Profile";
 import ClientDetails from "./pages/clients/ClientDetails";
 import AssignContacts from "./pages/manageTeam/assignContacts/AssignContacts";

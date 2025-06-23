@@ -56,12 +56,15 @@ const clientsApi = {
     }
   },
 
-    // Get unassigned clients
+  // Get unassigned clients
   getUnassignedClients: async () => {
     try {
-      const response = await axios.get(`${apiUrl}/api/clients/getClient?assigned=false`, {
-        headers: getAuthHeaders(),
-      });
+      const response = await axios.get(
+        `${apiUrl}/api/clients/getClient?assigned=false`,
+        {
+          headers: getAuthHeaders(),
+        }
+      );
       return response.data;
     } catch (error) {
       console.error("Error fetching unassigned clients:", error);
@@ -72,16 +75,47 @@ const clientsApi = {
   // Assign clients to agents
   assignClients: async (payload) => {
     try {
-      const response = await axios.put(`${apiUrl}/api/clients/assign`, payload, {
-        headers: {
-          ...getAuthHeaders(),
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.put(
+        `${apiUrl}/api/clients/assign`,
+        payload,
+        {
+          headers: {
+            ...getAuthHeaders(),
+            "Content-Type": "application/json",
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error("Error assigning clients:", error);
       throw error;
+    }
+  },
+
+  // Create multiple clients in bulk
+  createBulkClients: async (clientsData) => {
+    try {
+      const response = await axios.post(
+        `${apiUrl}/api/clients/bulk`,
+        { clients: clientsData },
+        {
+          headers: {
+            ...getAuthHeaders(),
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error(
+        "❌ Error creating bulk clients:",
+        error?.response?.data || error.message
+      );
+      throw {
+        success: false,
+        error: error.response?.data?.message || "Error creating clients",
+        details: error.response?.data,
+      };
     }
   },
 };
