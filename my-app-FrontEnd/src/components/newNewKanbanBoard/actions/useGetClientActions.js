@@ -8,7 +8,7 @@ async function getActionsByClient(clientID) {
 
   try {
     const response = await axios.get(
-      `${apiUrl}/api/actionsHistoryOfClient/${clientID}`,
+      `${apiUrl}/api/actions/actionsHistoryOfClient/${clientID}`,
       {
         headers: {
           Authorization: `Bearer ${Cookies.get("accessToken")}`,

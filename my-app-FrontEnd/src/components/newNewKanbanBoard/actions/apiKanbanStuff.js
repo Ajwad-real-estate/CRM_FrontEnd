@@ -46,7 +46,7 @@ export async function updateClient(clientID, clientData) {
 
 export async function getAllClients() {
   try {
-    const response = await fetch(apiUrl + "/api/clients", {
+    const response = await fetch(apiUrl + "/api/clients/getClient", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
